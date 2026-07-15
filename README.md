@@ -8,7 +8,7 @@ El proyecto ha sido desarrollado utilizando tecnologías web modernas de alto re
 
 *   **Framework Principal:** [Next.js (App Router)](https://nextjs.org/) - Framework de React para aplicaciones web rápidas y optimizadas para SEO.
 *   **Librería UI:** React 18
-*   **Estilos:** CSS3 Puro (Vanilla CSS) con metodologías modernas (Variables CSS, Flexbox, Grid, Glassmorphism, animaciones fluidas).
+*   **Estilos y Tipografía:** CSS3 Puro (Vanilla CSS) con metodologías modernas. La tipografía oficial es **Montserrat**, cargada nativamente y optimizada en el servidor mediante `next/font/google` para evitar latencia (FOUC) y maximizar el rendimiento.
 *   **Iconografía:** [Lucide React](https://lucide.dev/) - Sistema de íconos vectoriales ligeros y limpios.
 *   **Despliegue (CI/CD):** [Vercel](https://vercel.com/) - Plataforma en la nube para despliegue automático desde GitHub.
 *   **Control de Versiones:** Git & GitHub.
@@ -75,6 +75,8 @@ Las directrices estéticas del proyecto están centralizadas en `src/app/globals
   --text-secondary: #A0A0A0; /* Texto gris de apoyo para jerarquía visual */
 }
 ```
+
+La tipografía (Montserrat) está centralizada en `src/app/layout.js`, lo que asegura que envuelva globalmente la etiqueta `<html>` de la aplicación sin depender de llamadas externas lentas.
 
 ---
 *Documentación técnica estructurada para la administración de MPS - 2026.*
