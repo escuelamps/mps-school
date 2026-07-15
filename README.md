@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎸 MPS (Music Performance School) - Proyecto Web
 
-## Getting Started
+Documentación oficial del proyecto web creado para MPS (Music Performance School). Este documento detalla la arquitectura, tecnologías utilizadas, estructura del proyecto y guía de despliegue.
 
-First, run the development server:
+## 💻 Stack Tecnológico
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+El proyecto ha sido desarrollado utilizando tecnologías web modernas de alto rendimiento:
+
+*   **Framework Principal:** [Next.js (App Router)](https://nextjs.org/) - Framework de React para aplicaciones web rápidas y optimizadas para SEO.
+*   **Librería UI:** React 18
+*   **Estilos:** CSS3 Puro (Vanilla CSS) con metodologías modernas (Variables CSS, Flexbox, Grid, Glassmorphism, animaciones fluidas).
+*   **Iconografía:** [Lucide React](https://lucide.dev/) - Sistema de íconos vectoriales ligeros y limpios.
+*   **Despliegue (CI/CD):** [Vercel](https://vercel.com/) - Plataforma en la nube para despliegue automático desde GitHub.
+*   **Control de Versiones:** Git & GitHub.
+*   **Gestión de Dominio:** Hostinger (Alojamiento del dominio `escuelamps.com` enlazado mediante registros DNS (ALIAS/CNAME) a los servidores perimetrales de Vercel).
+
+## 🏗️ Arquitectura y Estructura de Archivos
+
+El proyecto sigue la estructura estándar recomendada por Next.js App Router:
+
+```text
+/mps
+├── public/                 # Archivos estáticos públicos
+│   └── images/             # Fotografías de docentes, logos y mockups de la academia
+├── src/
+│   └── app/                # Carpeta principal del App Router de Next.js
+│       ├── globals.css     # Estilos globales, variables de color (--accent, --rich-black), utilidades responsive y de maquetación.
+│       ├── layout.js       # Estructura principal de la aplicación (HTML base, Metadata de SEO).
+│       ├── page.js         # Página Principal (Home) - Landing page, secciones de programas, sobre nosotros y testimonios.
+│       └── docentes/       
+│           └── page.js     # Página de Docentes - Galería interactiva del staff, con modales detallados de biografía y perfil profesional.
+├── package.json            # Dependencias del proyecto y scripts de ejecución.
+└── next.config.mjs         # Configuración del servidor de Next.js.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Funcionalidades Principales
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1.  **Landing Page Optimizada (Home):**
+    *   Diseño Premium "Dark Mode" utilizando el verde vibrante institucional (`#00DE85`).
+    *   Efectos de *Glassmorphism* (cristal esmerilado) para barras de navegación e interfaces flotantes.
+    *   Secciones de "Programas", "Por qué elegirnos", y "Testimonios" con interacciones de *hover* suaves.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2.  **Sistema de Docentes Interactivo:**
+    *   Directorio visual de profesores con imágenes optimizadas.
+    *   **Modal de Perfil (Sidebar Dinámica):** Al hacer clic en un docente, se despliega una interfaz limpia lateral interactiva con su fotografía, cargo, perfil profesional detallado y enfoque pedagógico.
 
-## Learn More
+3.  **Diseño 100% Responsivo:**
+    *   Adaptación perfecta a dispositivos móviles (Smartphones) y Tablets.
+    *   Menús hamburguesa móviles interactivos programados a medida sin depender de librerías pesadas externas.
+    *   Reestructuración automática de grillas de CSS (`grid-template-columns`) dependiendo del tamaño de pantalla.
 
-To learn more about Next.js, take a look at the following resources:
+4.  **Optimización SEO Avanzada:**
+    *   Metadatos dinámicos generados del lado del servidor para asegurar que motores de búsqueda (Google) indexen correctamente a "MPS Music Performance School".
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Despliegue y Mantenimiento (CI/CD)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El sitio web está completamente automatizado a través de la integración continua entre **GitHub** y **Vercel**.
 
-## Deploy on Vercel
+### Flujo de Trabajo para Actualizaciones:
+1.  **Edición de Código:** Se modifican los archivos locales (Ej. se actualiza un texto en `src/app/docentes/page.js` o se sube una nueva foto a `public/images/`).
+2.  **Commit a Git:** Se guardan los cambios usando `git commit -am "Descripción del cambio"`.
+3.  **Push a GitHub:** Se suben los cambios al repositorio central mediante `git push origin main`.
+4.  **Despliegue Automático:** Vercel detecta la actualización en la rama `main` de GitHub, construye la aplicación y la pone en producción (en vivo) en un promedio de 60 a 90 segundos, actualizando automáticamente el dominio `escuelamps.com`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Sistema de Diseño (Design System)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Las directrices estéticas del proyecto están centralizadas en `src/app/globals.css`. Si la directiva de la escuela desea modificar la paleta de colores en el futuro, la arquitectura permite hacerlo centralizadamente modificando la raíz:
+
+```css
+:root {
+  --rich-black: #050505; /* Fondo principal oscuro profundo */
+  --bg-secondary: #0A0A0A; /* Fondo secundario para tarjetas y modales */
+  --accent: #00DE85; /* Verde neón institucional de MPS */
+  --text-primary: #FFFFFF; /* Texto blanco principal para legibilidad */
+  --text-secondary: #A0A0A0; /* Texto gris de apoyo para jerarquía visual */
+}
+```
+
+---
+*Documentación técnica estructurada para la administración de MPS - 2026.*
