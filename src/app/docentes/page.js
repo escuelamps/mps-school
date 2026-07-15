@@ -57,7 +57,7 @@ export default function DocentesV3() {
               e.currentTarget.style.boxShadow='none';
             }}>
               <div style={{ position: 'relative', height: '300px' }}>
-                <img src={docente.img} alt={docente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={docente.img} alt={docente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: docente.imgPos || 'top center' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))' }}>
                   <span style={{ background: 'var(--accent)', color: 'black', padding: '0.3rem 0.8rem', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 700 }}>
                     {docente.especialidad}
@@ -111,7 +111,7 @@ export default function DocentesV3() {
               </button>
 
               <div style={{ position: 'relative', height: '350px' }}>
-                <img src={selectedDocente.img} alt={selectedDocente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={selectedDocente.img} alt={selectedDocente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: selectedDocente.imgPos || 'top center' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(transparent, var(--bg-secondary))' }}></div>
               </div>
 
