@@ -195,7 +195,7 @@ export default function V3Page() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
             {[
               { nombre: "Andrés Bernal", rol: "Profesor de Piano", img: "/images/andres_bernal_profesor_piano.JPG", desc: "Especialista en piano y desarrollo técnico." },
-              { nombre: "Carlos Velásquez", rol: "Profesor de Actuación", img: "/images/carlos_velasquez_profesor_actuación.JPG", desc: "Actor y pedagogo en expresión corporal." },
+              { nombre: "Carlos Velásquez", rol: "Profesor de Actuación", img: "/images/carlos_velasquez_profesor_actuacion.JPG", desc: "Actor y pedagogo en expresión corporal." },
               { nombre: "Sebastián Vergara", rol: "Producción de Audio", img: "/images/sebastian_vergara_porfesor_guitarra_piano_produccion_audio.JPG", desc: "Especialista en producción de audio digital." },
               { nombre: "Shalom Melo", rol: "Profesora de Violín", img: "/images/shalom_melo_prieto_profesora_violin.JPG", desc: "Violinista enfocada en técnica y musicalidad." }
             ].map((docente, i) => (
