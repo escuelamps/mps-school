@@ -1,22 +1,50 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Lock, LogIn } from 'lucide-react';
+import { auth } from '../../lib/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isRegistering) {
-      console.log('Registration attempt', { name, email, password });
-      alert('Funcionalidad de registro en construcción.');
-    } else {
-      console.log('Login attempt', { email, password });
-      alert('Funcionalidad de login en construcción.');
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (isRegistering) {
+        // Registro
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
+        // Redirigir al inicio o dashboard
+        router.push('/');
+      } else {
+        // Login
+        await signInWithEmailAndPassword(auth, email, password);
+        router.push('/');
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('El correo electrónico ya está registrado.');
+      } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+        setError('Correo o contraseña incorrectos.');
+      } else if (err.code === 'auth/weak-password') {
+        setError('La contraseña debe tener al menos 6 caracteres.');
+      } else {
+        setError('Ocurrió un error inesperado. Inténtalo de nuevo.');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,6 +79,11 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {error && (
+              <div style={{ padding: '1rem', background: 'rgba(255, 68, 68, 0.1)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '8px', color: '#ff4444', fontSize: '0.9rem', textAlign: 'center' }}>
+                {error}
+              </div>
+            )}
             {isRegistering && (
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Nombre Completo</label>
@@ -115,8 +148,8 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary" style={{ padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1.1rem', marginTop: '1rem' }}>
-              <LogIn size={20} /> {isRegistering ? 'Registrarse' : 'Entrar al Portal'}
+            <button type="submit" disabled={loading} className="btn-primary" style={{ padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1.1rem', marginTop: '1rem', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
+              <LogIn size={20} /> {loading ? 'Cargando...' : (isRegistering ? 'Registrarse' : 'Entrar al Portal')}
             </button>
           </form>
 
