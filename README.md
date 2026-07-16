@@ -1,6 +1,6 @@
-# 🎸 MPS (Music Performance School) - Proyecto Web
+# 🎸 MPS (Music and Production School) - Proyecto Web
 
-Documentación oficial del proyecto web creado para MPS (Music Performance School). Este documento detalla la arquitectura, tecnologías utilizadas, estructura del proyecto y guía de despliegue.
+Documentación oficial del proyecto web creado para MPS (Music and Production School). Este documento detalla la arquitectura, tecnologías utilizadas, estructura del proyecto y guía de despliegue.
 
 ## 💻 Stack Tecnológico
 
@@ -50,7 +50,7 @@ El proyecto sigue la estructura estándar recomendada por Next.js App Router:
     *   Reestructuración automática de grillas de CSS (`grid-template-columns`) dependiendo del tamaño de pantalla.
 
 4.  **Optimización SEO Avanzada:**
-    *   Metadatos dinámicos generados del lado del servidor para asegurar que motores de búsqueda (Google) indexen correctamente a "MPS Music Performance School".
+    *   Metadatos dinámicos generados del lado del servidor para asegurar que motores de búsqueda (Google) indexen correctamente a "MPS Music and Production School".
 
 ## 🚀 Despliegue y Mantenimiento (CI/CD)
 
