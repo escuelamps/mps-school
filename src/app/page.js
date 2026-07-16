@@ -270,7 +270,8 @@ export default function V3Page() {
             </p>
             <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
               <h4 style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>Sede Principal</h4>
-              <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Escuela MPS, Bogotá</p>
+              <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Music and Production School</p>
+              <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Dirección: Carrera 17#58a-37 Chapinero, Bogotá</p>
               <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Horario de atención:<br/>Lunes a Viernes: 8:00 AM - 8:00 PM<br/>Sábados: 9:00 AM - 4:00 PM</p>
             </div>
           </div>
