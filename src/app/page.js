@@ -44,6 +44,19 @@ const AccordionItem = ({ title, children, defaultOpen = false }) => {
 
 export default function V3Page() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [showAllTestimonials, setShowAllTestimonials] = useState(false);
+
+  const testimonialsList = [
+    { nombre: "Andrea Restrepo", rol: "Mamá de alumno", texto: "Excelente academia. Llevé a mi hijo de 6 años para clases de piano y la paciencia del profesor es increíble. El material didáctico que usan hace que los niños aprendan jugando y se mantengan motivados.", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" },
+    { nombre: "Carlos Mendoza", rol: "Adulto, clases de guitarra", texto: "Empecé desde cero con la guitarra a mis 35 años y pensé que sería muy difícil. Los profesores de la Escuela MPS tienen un método excelente y las herramientas necesarias para que uno avance a su propio ritmo. Muy recomendados.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80" },
+    { nombre: "Camila Torres", rol: "Alumna a domicilio (Violín)", texto: "Tomo clases de violín a domicilio en la zona de Teusaquillo y resalto mucho el cumplimiento y profesionalismo del docente. Es una comodidad enorme que vayan hasta la casa y se adapten a mis horarios.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
+    { nombre: "Juan Sebastián Gómez", rol: "Alumno de técnica vocal", texto: "Una gran experiencia. El trato humano y la dedicación de los profesores se nota desde la primera clase. Tienen toda la experiencia para guiarte sin importar tu nivel inicial.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
+    { nombre: "Javier", rol: "Estudiante de Nuevo Ingreso", texto: "Muy contento de poder iniciar en esta nueva etapa de aprendizaje, felicitaciones, muy acogedora las instalaciones de la Academia, muchísimos éxitos y esperamos vernos pronto. Mil gracias", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" },
+    { nombre: "Estudiante de Piano", rol: "Clases de Piano", texto: "Quiero expresar mi más sincero agradecimiento a la profesora Laura Pineda y a la Academia de Música MPS. Como estudiante de piano, he encontrado en la profesora Laura una excelente maestra, con amplios conocimientos musicales y una gran capacidad para enseñar. Su paciencia, dedicación y profesionalismo hacen que cada clase sea una experiencia agradable y motivadora. Gracias a su forma de explicar, he podido comprender mejor el instrumento y avanzar paso a paso con confianza. Siempre está dispuesta a resolver dudas y a motivar a sus estudiantes para que sigan mejorando. Recomiendo ampliamente la Academia de Música Mi Primer Sol a cualquier persona que desee aprender música en un ambiente serio, cálido y profesional. Es un lugar donde realmente se preocupan por el aprendizaje y el crecimiento de cada estudiante. ¡Muchas gracias, profesora Laura, por compartir su conocimiento y pasión por la música!", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" },
+    { nombre: "Daniela Vargas", rol: "Estudiante de Producción", texto: "Gracias a los equipos de la escuela pude grabar y mezclar mi primer EP profesional antes de graduarme.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
+    { nombre: "Mateo Rincón", rol: "Egresado de Actuación", texto: "La metodología es 100% práctica. Aprendí a desenvolverme frente a la cámara y hoy en día trabajo en comerciales nacionales.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
+    { nombre: "Valentina Gómez", rol: "Programa Infantil Musical", texto: "Inscribí a mi hija hace dos años en piano y el cambio en su disciplina y creatividad ha sido espectacular. ¡Súper recomendados!", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" }
+  ];
 
   return (
     <>
@@ -236,17 +249,7 @@ export default function V3Page() {
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {[
-              { nombre: "Andrea Restrepo", rol: "Mamá de alumno", texto: "Excelente academia. Llevé a mi hijo de 6 años para clases de piano y la paciencia del profesor es increíble. El material didáctico que usan hace que los niños aprendan jugando y se mantengan motivados.", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" },
-              { nombre: "Carlos Mendoza", rol: "Adulto, clases de guitarra", texto: "Empecé desde cero con la guitarra a mis 35 años y pensé que sería muy difícil. Los profesores de la Escuela MPS tienen un método excelente y las herramientas necesarias para que uno avance a su propio ritmo. Muy recomendados.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80" },
-              { nombre: "Camila Torres", rol: "Alumna a domicilio (Violín)", texto: "Tomo clases de violín a domicilio en la zona de Teusaquillo y resalto mucho el cumplimiento y profesionalismo del docente. Es una comodidad enorme que vayan hasta la casa y se adapten a mis horarios.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
-              { nombre: "Juan Sebastián Gómez", rol: "Alumno de técnica vocal", texto: "Una gran experiencia. El trato humano y la dedicación de los profesores se nota desde la primera clase. Tienen toda la experiencia para guiarte sin importar tu nivel inicial.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
-              { nombre: "Javier", rol: "Estudiante de Nuevo Ingreso", texto: "Muy contento de poder iniciar en esta nueva etapa de aprendizaje, felicitaciones, muy acogedora las instalaciones de la Academia, muchísimos éxitos y esperamos vernos pronto. Mil gracias", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" },
-              { nombre: "Estudiante de Piano", rol: "Clases de Piano", texto: "Quiero expresar mi más sincero agradecimiento a la profesora Laura Pineda y a la Academia de Música MPS. Como estudiante de piano, he encontrado en la profesora Laura una excelente maestra, con amplios conocimientos musicales y una gran capacidad para enseñar. Su paciencia, dedicación y profesionalismo hacen que cada clase sea una experiencia agradable y motivadora. Gracias a su forma de explicar, he podido comprender mejor el instrumento y avanzar paso a paso con confianza. Siempre está dispuesta a resolver dudas y a motivar a sus estudiantes para que sigan mejorando. Recomiendo ampliamente la Academia de Música Mi Primer Sol a cualquier persona que desee aprender música en un ambiente serio, cálido y profesional. Es un lugar donde realmente se preocupan por el aprendizaje y el crecimiento de cada estudiante. ¡Muchas gracias, profesora Laura, por compartir su conocimiento y pasión por la música!", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" },
-              { nombre: "Daniela Vargas", rol: "Estudiante de Producción", texto: "Gracias a los equipos de la escuela pude grabar y mezclar mi primer EP profesional antes de graduarme.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
-              { nombre: "Mateo Rincón", rol: "Egresado de Actuación", texto: "La metodología es 100% práctica. Aprendí a desenvolverme frente a la cámara y hoy en día trabajo en comerciales nacionales.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
-              { nombre: "Valentina Gómez", rol: "Programa Infantil Musical", texto: "Inscribí a mi hija hace dos años en piano y el cambio en su disciplina y creatividad ha sido espectacular. ¡Súper recomendados!", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" }
-            ].map((testimonio, i) => (
+            {testimonialsList.slice(0, showAllTestimonials ? testimonialsList.length : 3).map((testimonio, i) => (
               <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <div style={{ display: 'flex', gap: '0.2rem', color: 'var(--accent)' }}>
@@ -267,6 +270,33 @@ export default function V3Page() {
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <button 
+              onClick={() => setShowAllTestimonials(!showAllTestimonials)}
+              style={{ 
+                background: 'transparent',
+                border: '1px solid var(--accent)',
+                color: 'var(--accent)',
+                padding: '1rem 3rem',
+                borderRadius: '50px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'var(--accent)';
+                e.target.style.color = '#000';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.color = 'var(--accent)';
+              }}
+            >
+              {showAllTestimonials ? 'Ver menos' : 'Ver más historias de éxito'}
+            </button>
           </div>
         </div>
       </section>
