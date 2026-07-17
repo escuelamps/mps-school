@@ -262,7 +262,6 @@ export default function V3Page() {
                 </div>
                 <p className="testimonial-scroll" style={{ color: 'white', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>"{testimonio.texto}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
-                  <img src={testimonio.img} alt={testimonio.nombre} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
                   <div>
                     <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{testimonio.nombre}</h4>
                     <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{testimonio.rol}</p>
