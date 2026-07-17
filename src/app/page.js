@@ -248,8 +248,14 @@ export default function V3Page() {
               { nombre: "Valentina Gómez", rol: "Programa Infantil Musical", texto: "Inscribí a mi hija hace dos años en piano y el cambio en su disciplina y creatividad ha sido espectacular. ¡Súper recomendados!", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" }
             ].map((testimonio, i) => (
               <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
-                <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1.5rem', color: 'var(--accent)' }}>
-                  {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="currentColor" />)}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.2rem', color: 'var(--accent)' }}>
+                    {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="currentColor" />)}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '0.2rem 0.6rem', borderRadius: '12px', fontWeight: '500' }}>
+                    <CheckCircle2 size={12} />
+                    <span>Reseña Certificada</span>
+                  </div>
                 </div>
                 <p style={{ color: 'white', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>"{testimonio.texto}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
