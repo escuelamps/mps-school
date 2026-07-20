@@ -164,7 +164,6 @@ h1, h2, h3, h4, h5, h6 {
 /* Responsive Fixes */
 .mobile-toggle { display: none; cursor: pointer; color: white; }
 .desktop-nav { display: flex; }
-.mobile-menu { display: none; }
 .responsive-grid-2 { 
   display: grid; 
   grid-template-columns: 1fr 1fr; 
@@ -174,7 +173,6 @@ h1, h2, h3, h4, h5, h6 {
   .desktop-nav { display: none !important; }
   .mobile-toggle { display: block !important; }
   .mobile-menu {
-    display: flex !important;
     flex-direction: column;
     background: var(--rich-black);
     padding: 2rem;
