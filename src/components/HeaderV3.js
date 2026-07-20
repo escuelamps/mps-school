@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ContactModal } from '@/components/Modals';
+import { Menu, X } from 'lucide-react';
 
 export default function HeaderV3() {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -62,12 +64,26 @@ export default function HeaderV3() {
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
           <img src="/images/logo2.png" alt="MPS Escuela Logo" style={{ height: '75px', objectFit: 'contain' }} />
         </Link>
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+        <div className="desktop-nav" style={{ gap: '2rem', alignItems: 'center' }}>
           <Link href="/#programas" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Programas</Link>
           <Link href="/#metodologia" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Metodología</Link>
           <Link href="/#docentes" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Docentes</Link>
           <Link href="/#ubicacion" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Ubicación</Link>
           <Link href="/login" className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none' }}>
+            Portal / Login
+          </Link>
+        </div>
+        <div className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </div>
+        
+        {/* Menú Móvil Desplegable */}
+        <div className="mobile-menu" style={{ display: isMobileMenuOpen ? 'flex' : 'none' }}>
+          <Link href="/#programas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Programas</Link>
+          <Link href="/#metodologia" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Metodología</Link>
+          <Link href="/#docentes" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Docentes</Link>
+          <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
+          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none' }}>
             Portal / Login
           </Link>
         </div>

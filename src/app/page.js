@@ -63,11 +63,8 @@ export default function V3Page() {
       <HeaderV3 />
 
       {/* HERO INSTITUCIONAL */}
-      <section style={{ 
+      <section className="responsive-grid-2" style={{ 
         padding: '6rem 5%', 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1fr', 
-        gap: '4rem',
         alignItems: 'center',
         minHeight: '75vh',
         background: 'radial-gradient(circle at 100% 50%, rgba(0,222,133,0.08) 0%, transparent 60%)'
@@ -137,7 +134,7 @@ export default function V3Page() {
           </div>
 
           <AccordionItem title="Área de Música (Niños y Adultos)" defaultOpen={true}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+            <div className="responsive-grid-2" style={{ alignItems: 'center' }}>
               <div>
                 <h4 style={{ color: 'white', fontSize: '1.2rem', marginBottom: '1rem' }}>Especialidades</h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>

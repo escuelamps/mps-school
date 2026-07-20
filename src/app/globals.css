@@ -160,3 +160,39 @@ h1, h2, h3, h4, h5, h6 {
 .testimonial-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 222, 133, 0.6);
 }
+
+/* Responsive Fixes */
+.mobile-toggle { display: none; cursor: pointer; color: white; }
+.desktop-nav { display: flex; }
+.mobile-menu { display: none; }
+.responsive-grid-2 { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+}
+
+@media (max-width: 768px) {
+  .desktop-nav { display: none !important; }
+  .mobile-toggle { display: block !important; }
+  .mobile-menu {
+    display: flex !important;
+    flex-direction: column;
+    background: var(--rich-black);
+    padding: 2rem;
+    gap: 1.5rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+  }
+  .responsive-grid-2 { 
+    grid-template-columns: 1fr !important; 
+    gap: 2rem !important; 
+  }
+  
+  /* Images fix for mobile */
+  img { max-width: 100%; height: auto; }
+  
+  h1 { font-size: 2.5rem !important; }
+}
