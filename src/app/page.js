@@ -140,9 +140,11 @@ export default function V3Page() {
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                   <li>✅ Técnica Vocal y Canto</li>
                   <li>✅ Guitarra (Acústica y Eléctrica)</li>
+                  <li>✅ Bajo</li>
                   <li>✅ Piano y Teclados</li>
-                  <li>✅ Batería y Percusión</li>
+                  <li>✅ Batería, Percusión y Marimba</li>
                   <li>✅ Violín</li>
+                  <li>✅ Instrumentos de Viento (Saxo, Clarinete, Flauta, Traverso)</li>
                 </ul>
               </div>
               <div>
