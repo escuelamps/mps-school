@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28",
@@ -15,4 +16,14 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
-export { app, auth };
+// Initialize Analytics only on the client side
+let analytics = null;
+if (typeof window !== "undefined") {
+  isSupported().then(yes => {
+    if (yes) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
+
+export { app, auth, analytics };

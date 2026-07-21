@@ -1,5 +1,6 @@
 import './globals.css';
 import { Montserrat } from 'next/font/google';
+import FirebaseAnalytics from '@/components/FirebaseAnalytics';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" className={montserrat.className}>
       <body>
+        <FirebaseAnalytics />
         {children}
       </body>
     </html>
