@@ -14,13 +14,13 @@ const AccordionItem = ({ title, children, defaultOpen = false }) => {
         onClick={() => setIsOpen(!isOpen)}
         style={{ 
           width: '100%', padding: '1.5rem', 
-          background: isOpen ? 'rgba(0,222,133,0.1)' : 'rgba(255,255,255,0.02)', 
-          color: 'white', display: 'flex', justifyContent: 'space-between', 
+          background: isOpen ? 'rgba(0,222,133,0.1)' : 'var(--panel-bg)', 
+          color: 'var(--text-primary)', display: 'flex', justifyContent: 'space-between', 
           alignItems: 'center', cursor: 'pointer', border: 'none', 
           fontSize: '1.2rem', fontWeight: 600, transition: 'all 0.3s ease'
         }}
-        onMouseOver={(e) => { if(!isOpen) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
-        onMouseOut={(e) => { if(!isOpen) e.currentTarget.style.background = 'rgba(255,255,255,0.02)' }}
+        onMouseOver={(e) => { if(!isOpen) e.currentTarget.style.background = 'var(--glass-border)' }}
+        onMouseOut={(e) => { if(!isOpen) e.currentTarget.style.background = 'var(--panel-bg)' }}
       >
         <span style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)' }}></div>
@@ -34,7 +34,7 @@ const AccordionItem = ({ title, children, defaultOpen = false }) => {
         overflow: 'hidden',
         transition: 'all 0.4s ease-in-out'
       }}>
-        <div style={{ padding: '2rem 1.5rem', background: 'rgba(0,15,17,0.5)', color: 'var(--text-secondary)', borderTop: '1px solid rgba(255,255,255,0.05)', lineHeight: 1.7 }}>
+        <div style={{ padding: '2rem 1.5rem', background: 'var(--accordion-bg)', color: 'var(--text-secondary)', borderTop: '1px solid var(--glass-border)', lineHeight: 1.7 }}>
           {children}
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function V3Page() {
         background: 'radial-gradient(circle at 100% 50%, rgba(0,222,133,0.08) 0%, transparent 60%)'
       }}>
         <div>
-          <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50px', marginBottom: '1.5rem', fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 600 }}>
+          <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'var(--glass-border)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50px', marginBottom: '1.5rem', fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 600 }}>
             Formación Artística Integral
           </div>
           <h1 style={{ fontSize: 'clamp(3rem, 5vw, 4.5rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: '2rem' }}>
@@ -100,7 +100,7 @@ export default function V3Page() {
       </section>
 
       {/* METODOLOGÍA */}
-      <section id="metodologia" style={{ padding: '5rem 5%', background: 'rgba(0,0,0,0.2)' }}>
+      <section id="metodologia" style={{ padding: '5rem 5%', background: 'var(--section-bg)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Nuestra <span className="text-gradient">Metodología</span></h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3rem' }}>
@@ -109,15 +109,15 @@ export default function V3Page() {
             de aprender arte es viviéndolo desde el primer día.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', textAlign: 'left' }}>
-            <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
               <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>01. Práctica Real</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Prácticas desde el primer semestre en estudios profesionales y teatros.</p>
             </div>
-            <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
               <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>02. Docentes Activos</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Aprende de profesionales que trabajan actualmente en la industria artística.</p>
             </div>
-            <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
               <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>03. Enfoque Humano</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Grupos pequeños para garantizar atención personalizada y crecimiento integral.</p>
             </div>
@@ -126,7 +126,7 @@ export default function V3Page() {
       </section>
 
       {/* PROGRAMAS CON ACORDEÓN */}
-      <section id="programas" style={{ padding: '6rem 5%', background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section id="programas" style={{ padding: '6rem 5%', background: 'var(--panel-bg)', borderTop: '1px solid var(--glass-border)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Oferta <span className="text-gradient">Académica</span></h2>
@@ -136,7 +136,7 @@ export default function V3Page() {
           <AccordionItem title="Área de Música (Niños y Adultos)" defaultOpen={true}>
             <div className="responsive-grid-2" style={{ alignItems: 'center' }}>
               <div>
-                <h4 style={{ color: 'white', fontSize: '1.2rem', marginBottom: '1rem' }}>Especialidades</h4>
+                <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '1rem' }}>Especialidades</h4>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                   <li>✅ Técnica Vocal y Canto</li>
                   <li>✅ Guitarra (Acústica y Eléctrica)</li>
@@ -148,7 +148,7 @@ export default function V3Page() {
                 </ul>
               </div>
               <div>
-                <h4 style={{ color: 'white', fontSize: '1.2rem', marginBottom: '1rem' }}>Metodología</h4>
+                <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '1rem' }}>Metodología</h4>
                 <p>Nuestras clases pueden ser personalizadas o grupales. Para niños (2 a 4 años) aplicamos estimulación temprana e iniciación musical con metodologías lúdicas probadas mundialmente.</p>
                 <Link href="/programas/musica" className="btn-primary" style={{ marginTop: '1rem', padding: '0.5rem 1.5rem', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>Ver más</Link>
               </div>
@@ -185,17 +185,10 @@ export default function V3Page() {
         </div>
       </section>
 
-      {/* CONTACTO */}
-      <section style={{ padding: '6rem 5%', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>¿Preparado para <span className="text-gradient">inscribirte</span>?</h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem' }}>Nuestro equipo de admisiones te está esperando para resolver todas tus dudas.</p>
-        <button onClick={() => setIsContactOpen(true)} className="btn-primary" style={{ padding: '1.2rem 3rem', fontSize: '1.2rem', display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
-          <PhoneCall size={24} /> Contactar a un Asesor
-        </button>
-      </section>
+
 
       {/* DOCENTES */}
-      <section id="docentes" style={{ padding: '6rem 5%', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section id="docentes" style={{ padding: '6rem 5%', borderTop: '1px solid var(--glass-border)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestro <span className="text-gradient">Cuerpo Docente</span></h2>
@@ -211,7 +204,7 @@ export default function V3Page() {
               { nombre: "Sebastián Vergara", rol: "Producción de Audio", img: "/images/sebastian_vergara_porfesor_guitarra_piano_produccion_audio.JPG", desc: "Especialista en producción de audio digital." },
               { nombre: "Shalom Melo", rol: "Profesora de Violín", img: "/images/shalom_melo_prieto_profesora_violin.JPG", desc: "Violinista enfocada en técnica y musicalidad." }
             ].map((docente, i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '16px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.05)', transition: 'transform 0.3s ease' }} onMouseOver={(e)=>e.currentTarget.style.transform='translateY(-10px)'} onMouseOut={(e)=>e.currentTarget.style.transform='translateY(0)'}>
+              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2rem', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--glass-border)', transition: 'transform 0.3s ease' }} onMouseOver={(e)=>e.currentTarget.style.transform='translateY(-10px)'} onMouseOut={(e)=>e.currentTarget.style.transform='translateY(0)'}>
                 <img src={docente.img} alt={docente.nombre} style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 1.5rem auto', border: '3px solid var(--accent)' }} />
                 <h3 style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }}>{docente.nombre}</h3>
                 <h4 style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '1rem' }}>{docente.rol}</h4>
@@ -249,7 +242,7 @@ export default function V3Page() {
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             {testimonialsList.slice(0, showAllTestimonials ? testimonialsList.length : 3).map((testimonio, i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,0.02)', padding: '2.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
+              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--glass-border)', position: 'relative' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <div style={{ display: 'flex', gap: '0.2rem', color: 'var(--accent)' }}>
                     {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="currentColor" />)}
@@ -259,7 +252,7 @@ export default function V3Page() {
                     <span>Reseña Certificada</span>
                   </div>
                 </div>
-                <p className="testimonial-scroll" style={{ color: 'white', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>"{testimonio.texto}"</p>
+                <p className="testimonial-scroll" style={{ color: 'var(--text-primary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>"{testimonio.texto}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
                   <div>
                     <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{testimonio.nombre}</h4>
@@ -300,7 +293,7 @@ export default function V3Page() {
       </section>
 
       {/* UBICACIÓN Y MAPA */}
-      <section id="ubicacion" style={{ padding: '0 0 4rem 0', background: 'rgba(0,0,0,0.2)' }}>
+      <section id="ubicacion" style={{ padding: '0 0 4rem 0', background: 'var(--section-bg)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'center' }}>
           <div style={{ padding: '4rem 5%' }}>
             <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Visita nuestras <span className="text-gradient">Instalaciones</span></h2>
@@ -308,7 +301,7 @@ export default function V3Page() {
               Ven y conoce nuestros estudios de grabación, salas de ensayo insonorizadas y nuestro auditorio principal. 
               El mejor ambiente para desarrollar tu talento está aquí.
             </p>
-            <div style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ background: 'var(--panel-bg)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
               <h4 style={{ color: 'var(--accent)', marginBottom: '0.5rem' }}>Sede Principal</h4>
               <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Music and Production School</p>
               <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Dirección: Carrera 17#58a-37 Chapinero, Bogotá</p>

@@ -1,7 +1,18 @@
+"use client";
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { X, AlertCircle } from 'lucide-react';
 
 export function ModalOverlay({ isOpen, onClose, children }) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+    return () => document.body.classList.remove('modal-open');
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -28,21 +39,21 @@ export function ModalOverlay({ isOpen, onClose, children }) {
 }
 
 export function LoginModal({ isOpen, onClose }) {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
     if (!isOpen) {
       setErrors({});
-      setFormData({ name: '', email: '', password: '' });
-      setIsLogin(true);
+      setAuthError(null);
+      setFormData({ email: '', password: '' });
     }
   }, [isOpen]);
 
   const validate = () => {
     const newErrors = {};
-    if (!isLogin && !formData.name.trim()) newErrors.name = 'El nombre es obligatorio.';
     if (!formData.email.trim()) {
       newErrors.email = 'El correo es obligatorio.';
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
@@ -53,10 +64,29 @@ export function LoginModal({ isOpen, onClose }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setAuthError(null);
+    
     if (validate()) {
-      alert(isLogin ? 'Iniciando sesión...' : 'Creando cuenta...');
+      setLoading(true);
+      try {
+        const { auth } = await import('../lib/firebase');
+        const { signInWithEmailAndPassword } = await import('firebase/auth');
+
+        await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        onClose();
+        alert('¡Sesión iniciada con éxito!');
+      } catch (err) {
+        console.error(err);
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+          setAuthError('Correo o contraseña incorrectos.');
+        } else {
+          setAuthError('Ocurrió un error inesperado. Inténtalo de nuevo.');
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -70,19 +100,13 @@ export function LoginModal({ isOpen, onClose }) {
   return (
     <ModalOverlay isOpen={isOpen} onClose={onClose}>
       <h2 className="text-gradient" style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '2rem' }}>
-        {isLogin ? 'Iniciar Sesión' : 'Registro'}
+        Iniciar Sesión
       </h2>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }} noValidate>
-        {!isLogin && (
-          <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--accent)' }}>Nombre completo</label>
-            <input 
-              name="name" value={formData.name} onChange={handleChange}
-              type="text" 
-              style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: `1px solid ${errors.name ? '#ff6961' : 'rgba(0,222,133,0.3)'}`, color: 'white', outline: 'none' }} 
-            />
-            {errors.name && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '4px' }}><AlertCircle size={14}/> {errors.name}</span>}
+        {authError && (
+          <div style={{ padding: '0.8rem', background: 'rgba(255, 68, 68, 0.1)', border: '1px solid rgba(255, 68, 68, 0.3)', borderRadius: '8px', color: '#ff4444', fontSize: '0.9rem', textAlign: 'center' }}>
+            {authError}
           </div>
         )}
         <div>
@@ -104,23 +128,16 @@ export function LoginModal({ isOpen, onClose }) {
           {errors.password && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '4px' }}><AlertCircle size={14}/> {errors.password}</span>}
         </div>
         
-        <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem', width: '100%' }}>
-          {isLogin ? 'Entrar' : 'Crear Cuenta'}
+        <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '0.5rem', width: '100%', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
+          {loading ? 'Procesando...' : 'Entrar'}
         </button>
       </form>
 
       <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', opacity: 0.8 }}>
-        {isLogin ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
-        <span 
-          style={{ color: 'var(--accent)', cursor: 'pointer', fontWeight: 600 }}
-          onClick={() => {
-            setIsLogin(!isLogin);
-            setErrors({});
-            setFormData({ name: '', email: '', password: '' });
-          }}
-        >
-          {isLogin ? 'Regístrate' : 'Inicia Sesión'}
-        </span>
+        ¿No tienes cuenta?{' '}
+        <Link href="/registro" style={{ color: 'var(--accent)', cursor: 'pointer', fontWeight: 600, textDecoration: 'none' }} onClick={onClose}>
+          Regístrate aquí
+        </Link>
       </p>
     </ModalOverlay>
   );

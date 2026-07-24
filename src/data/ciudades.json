@@ -1,0 +1,40 @@
+{
+  "ciudades": [
+    "Bogotá",
+    "La Calera",
+    "Chía",
+    "Cajicá",
+    "Mosquera",
+    "Funza",
+    "Madrid",
+    "Soacha",
+    "Cota",
+    "Sopó",
+    "Tocancipá",
+    "Zipaquirá",
+    "Otra..."
+  ],
+  "zonas_bogota": [
+    "Usaquén",
+    "Chapinero",
+    "Santa Fe",
+    "San Cristóbal",
+    "Usme",
+    "Tunjuelito",
+    "Bosa",
+    "Kennedy",
+    "Fontibón",
+    "Engativá",
+    "Suba",
+    "Barrios Unidos",
+    "Teusaquillo",
+    "Los Mártires",
+    "Antonio Nariño",
+    "Puente Aranda",
+    "La Candelaria",
+    "Rafael Uribe Uribe",
+    "Ciudad Bolívar",
+    "Sumapaz",
+    "Otro..."
+  ]
+}

@@ -1,12 +1,13 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
-import { ContactModal } from '@/components/Modals';
+import { ContactModal, LoginModal } from '@/components/Modals';
 import { Menu, X } from 'lucide-react';
 
 export default function HeaderV3() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   return (
     <>
@@ -57,21 +58,21 @@ export default function HeaderV3() {
       </div>
 
       {/* HEADER ACADÉMICO */}
-      <nav style={{
+      <nav className="main-nav" style={{
         padding: '1.5rem 5%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,15,17,0.8)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 50
+        borderBottom: '1px solid var(--glass-border)', background: 'var(--nav-bg)', backdropFilter: 'blur(10px)', position: 'sticky', top: 0, zIndex: 50
       }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-          <img src="/images/logo2.png" alt="MPS Escuela Logo" style={{ height: '75px', objectFit: 'contain' }} />
+          <img src="/images/logo2.png" alt="MPS Escuela Logo" style={{ height: '75px', objectFit: 'contain' }} className="nav-logo" />
         </Link>
         <div className="desktop-nav" style={{ gap: '2rem', alignItems: 'center' }}>
-          <Link href="/#programas" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Programas</Link>
-          <Link href="/#metodologia" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Metodología</Link>
-          <Link href="/#docentes" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Docentes</Link>
-          <Link href="/#ubicacion" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: '0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Ubicación</Link>
-          <Link href="/login" className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none' }}>
-            Portal / Login
-          </Link>
+          <Link href="/#programas" className="nav-link">Programas</Link>
+          <Link href="/#metodologia" className="nav-link">Metodología</Link>
+          <Link href="/#docentes" className="nav-link">Docentes</Link>
+          <Link href="/#ubicacion" className="nav-link">Ubicación</Link>
+          <button onClick={() => setIsLoginOpen(true)} className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
+            Iniciar Sesión
+          </button>
         </div>
         <div className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -83,13 +84,14 @@ export default function HeaderV3() {
           <Link href="/#metodologia" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Metodología</Link>
           <Link href="/#docentes" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Docentes</Link>
           <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
-          <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none' }}>
-            Portal / Login
-          </Link>
+          <button onClick={() => {setIsMobileMenuOpen(false); setIsLoginOpen(true);}} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem' }}>
+            Iniciar Sesión
+          </button>
         </div>
       </nav>
 
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
     </>
   );
 }

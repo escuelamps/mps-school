@@ -11,6 +11,113 @@
   --text-primary: var(--anti-flash-white);
   --accent: var(--caribbean-green);
   --accent-hover: var(--mountain-meadow);
+  
+  --btn-text: var(--rich-black);
+  --gradient-start: var(--caribbean-green);
+  --gradient-end: var(--mountain-meadow);
+  
+  --nav-bg: rgba(0,15,17,0.8);
+  --glass-border: rgba(255,255,255,0.05);
+  --section-bg: rgba(0,0,0,0.2);
+  --panel-bg: rgba(255,255,255,0.02);
+  --accordion-bg: rgba(0,15,17,0.5);
+  --text-link: var(--text-secondary);
+}
+
+:root[data-theme='light'] {
+  --bg-primary: var(--anti-flash-white);
+  --bg-secondary: #E2E8F0;
+  --text-primary: var(--rich-black);
+  --accent: var(--bangladesh-green);
+  --accent-hover: var(--dark-green);
+  
+  --btn-text: var(--anti-flash-white);
+  --gradient-start: var(--bangladesh-green);
+  --gradient-end: var(--dark-green);
+  
+  --nav-bg: rgba(241,247,246,0.8);
+  --glass-border: rgba(0,0,0,0.1);
+  --section-bg: rgba(0,0,0,0.03);
+  --panel-bg: rgba(255,255,255,0.8);
+  --accordion-bg: rgba(0,0,0,0.03);
+  --text-link: var(--rich-black);
+}
+
+/* Light mode overrides for glassmorphism */
+:root[data-theme='light'] .glass {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='light'] .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================
+   COMPREHENSIVE LIGHT MODE OVERRIDES
+   For hardcoded inline styles in React
+========================================= */
+
+/* Overrides for text colors */
+:root[data-theme='light'] *[style*="color: white"],
+:root[data-theme='light'] *[style*="color: 'white'"] {
+  color: var(--rich-black) !important;
+}
+
+:root[data-theme='light'] input,
+:root[data-theme='light'] select {
+  color: var(--rich-black) !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Overrides for Header and Nav */
+:root[data-theme='light'] nav[style*="background: rgba(0,15,17,0.8)"] {
+  background: rgba(241, 247, 246, 0.8) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+:root[data-theme='light'] .marquee-container {
+  color: var(--btn-text) !important;
+}
+
+:root[data-theme='light'] .mobile-menu {
+  background: var(--bg-primary) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+/* Overrides for Section Backgrounds */
+:root[data-theme='light'] *[style*="background: rgba(0,0,0,0.2)"] {
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+:root[data-theme='light'] *[style*="background: rgba(0,15,17,0.5)"] {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-top: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+/* Overrides for Cards, Badges, Accordions and Borders */
+:root[data-theme='light'] *[style*="background: rgba(255,255,255,0.02)"] {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
+}
+
+:root[data-theme='light'] *[style*="background: rgba(255,255,255,0.05)"] {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+:root[data-theme='light'] *[style*="border: 1px solid rgba(255,255,255,0.05)"],
+:root[data-theme='light'] *[style*="border: 1px solid rgba(255,255,255,0.1)"] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Overrides for Links hover in Nav */
+:root[data-theme='light'] .desktop-nav a:hover {
+  color: var(--rich-black) !important;
 }
 
 * {
@@ -40,6 +147,16 @@ button {
   background: none;
 }
 
+.nav-link {
+  color: var(--text-link);
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.nav-link:hover {
+  color: var(--accent);
+}
+
 /* Glassmorphism utilities */
 .glass {
   background: rgba(3, 34, 33, 0.4);
@@ -66,7 +183,7 @@ button {
 /* Premium Button */
 .btn-primary {
   background-color: var(--accent);
-  color: var(--rich-black);
+  color: var(--btn-text);
   padding: 0.8rem 2rem;
   border-radius: 50px;
   font-weight: 600;
@@ -109,7 +226,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-gradient {
-  background: linear-gradient(90deg, var(--caribbean-green), var(--mountain-meadow));
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -193,4 +310,9 @@ h1, h2, h3, h4, h5, h6 {
   img { max-width: 100%; height: auto; }
   
   h1 { font-size: 2.5rem !important; }
+}
+
+/* Ocultar botón de WhatsApp cuando un modal está abierto */
+body.modal-open #whatsapp-float {
+  display: none !important;
 }

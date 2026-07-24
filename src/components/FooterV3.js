@@ -24,31 +24,31 @@ export default function FooterV3() {
 
   return (
     <>
-      <footer style={{ padding: '4rem 5% 2rem 5%', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,15,17,0.5)', textAlign: 'center', color: 'var(--text-secondary)' }}>
+      <footer style={{ padding: '4rem 5% 2rem 5%', borderTop: '1px solid var(--glass-border)', background: 'var(--accordion-bg)', textAlign: 'center', color: 'var(--text-secondary)' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', marginBottom: '2rem' }}>
           <img src="/images/logo2.png" alt="MPS Logo" style={{ height: '85px', opacity: 0.8 }} />
           
           {/* REDES SOCIALES */}
           <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
-            <a href="https://www.facebook.com/escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
+            <a href="https://www.facebook.com/escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
               {facebookSvg}
             </a>
-            <a href="https://www.instagram.com/escuelamps/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
+            <a href="https://www.instagram.com/escuelamps/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
               {instagramSvg}
             </a>
-            <a href="https://www.tiktok.com/@escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='white'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
+            <a href="https://www.tiktok.com/@escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', transition: 'color 0.3s' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>
               {tiktokSvg}
             </a>
           </div>
         </div>
 
-        <p style={{ margin: 0, fontSize: '0.9rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '2rem' }}>
+        <p style={{ margin: 0, fontSize: '0.9rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
           © 2026 MPS - Music and Production School. Todos los derechos reservados.
         </p>
       </footer>
 
       {/* BOTÓN WHATSAPP FLOTANTE */}
-      <a href="https://wa.me/573008934407?text=Hola,%20vengo%20de%20la%20página%20web%20y%20quiero%20información%20sobre%20las%20clases" target="_blank" rel="noopener noreferrer" style={{ 
+      <a id="whatsapp-float" href="https://wa.me/573008934407?text=Hola,%20vengo%20de%20la%20página%20web%20y%20quiero%20información%20sobre%20las%20clases" target="_blank" rel="noopener noreferrer" style={{ 
         position: 'fixed', bottom: '30px', right: '30px', zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'center', 
         width: '60px', height: '60px', background: '#25D366', color: 'white', 
