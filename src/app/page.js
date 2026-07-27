@@ -252,7 +252,7 @@ export default function V3Page() {
                     <span>Reseña Certificada</span>
                   </div>
                 </div>
-                <p className="testimonial-scroll" style={{ color: 'var(--text-primary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>"{testimonio.texto}"</p>
+                <p className="testimonial-scroll" style={{ color: 'var(--text-primary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>&quot;{testimonio.texto}&quot;</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
                   <div>
                     <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{testimonio.nombre}</h4>

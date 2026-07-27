@@ -10,10 +10,10 @@ export default function ThemeToggle() {
     // Check local storage or default to dark
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
-      setIsDark(false);
+      setTimeout(() => setIsDark(false), 0);
       document.documentElement.setAttribute('data-theme', 'light');
     } else {
-      setIsDark(true);
+      setTimeout(() => setIsDark(true), 0);
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   }, []);

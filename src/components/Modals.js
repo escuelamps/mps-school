@@ -46,9 +46,11 @@ export function LoginModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (!isOpen) {
-      setErrors({});
-      setAuthError(null);
-      setFormData({ email: '', password: '' });
+      setTimeout(() => {
+        setErrors({});
+        setAuthError(null);
+        setFormData({ email: '', password: '' });
+      }, 0);
     }
   }, [isOpen]);
 
@@ -149,8 +151,10 @@ export function ContactModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (!isOpen) {
-      setErrors({});
-      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => {
+        setErrors({});
+        setFormData({ name: '', email: '', message: '' });
+      }, 0);
     }
   }, [isOpen]);
 
