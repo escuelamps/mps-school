@@ -1,13 +1,6 @@
 import './globals.css';
-import { Montserrat } from 'next/font/google';
 import FirebaseAnalytics from '@/components/FirebaseAnalytics';
 import ThemeToggle from '@/components/ThemeToggle';
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['300', '400', '500', '600', '700', '800'],
-});
 
 export const metadata = {
   title: 'MPS | Music and Production School',
@@ -16,7 +9,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={montserrat.className}>
+    <html lang="es">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+      </head>
       <body>
         <FirebaseAnalytics />
         {children}
