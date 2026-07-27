@@ -4,10 +4,35 @@ import Link from 'next/link';
 import { ContactModal, LoginModal } from '@/components/Modals';
 import { Menu, X } from 'lucide-react';
 
+export function EventModal({ isOpen, onClose }) {
+  if (!isOpen) return null;
+  return (
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <div onClick={onClose} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 15, 17, 0.8)', backdropFilter: 'blur(10px)' }} />
+      <div className="glass-card" style={{ position: 'relative', width: '100%', maxWidth: '400px', padding: '2rem' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+          <X size={24} />
+        </button>
+        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Eventos Disponibles</h3>
+        <Link href="/evento" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>
+          <div style={{ background: 'rgba(0,222,133,0.1)', border: '1px solid var(--accent)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
+            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', background: 'var(--accent)', color: '#000', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem' }}>EVENTO ACTUAL</div>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Noches MPS (Open Mic)</h4>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>Cupos limitados. Haz clic para inscribirte como asistente o músico.</p>
+          </div>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function HeaderV3() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+
+
 
   return (
     <>
@@ -70,7 +95,7 @@ export default function HeaderV3() {
           <Link href="/#metodologia" className="nav-link">Metodología</Link>
           <Link href="/#docentes" className="nav-link">Docentes</Link>
           <Link href="/#ubicacion" className="nav-link">Ubicación</Link>
-          <Link href="/evento" className="nav-link" style={{ color: 'var(--accent)' }}>Open Mic</Link>
+          <button onClick={() => setIsEventModalOpen(true)} className="nav-link" style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1rem', cursor: 'pointer' }}>Eventos</button>
           <button onClick={() => setIsLoginOpen(true)} className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
             Iniciar Sesión
           </button>
@@ -85,7 +110,7 @@ export default function HeaderV3() {
           <Link href="/#metodologia" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Metodología</Link>
           <Link href="/#docentes" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Docentes</Link>
           <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
-          <Link href="/evento" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Open Mic</Link>
+          <button onClick={() => {setIsMobileMenuOpen(false); setIsEventModalOpen(true);}} style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', padding: 0 }}>Eventos</button>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsLoginOpen(true);}} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem' }}>
             Iniciar Sesión
           </button>
@@ -94,6 +119,7 @@ export default function HeaderV3() {
 
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <EventModal isOpen={isEventModalOpen} onClose={() => setIsEventModalOpen(false)} />
     </>
   );
 }
