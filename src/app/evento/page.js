@@ -15,10 +15,11 @@ export default function EventoPage() {
   
   const [formData, setFormData] = useState({
     nombre: '',
-    email: '',
     telefono: '',
-    participa: 'Asistente',
-    instrumento: '',
+    instagram: '',
+    actividad: 'Doblaje',
+    cancion: '',
+    fotoPoster: null,
     comprobante: null
   });
 
@@ -27,9 +28,9 @@ export default function EventoPage() {
   const validate = () => {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'Requerido.';
-    if (!formData.email.trim()) newErrors.email = 'Requerido.';
-    else if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Correo inválido.';
     if (!formData.telefono.trim()) newErrors.telefono = 'Requerido.';
+    if (!formData.instagram.trim()) newErrors.instagram = 'Requerido.';
+    if (!formData.cancion.trim()) newErrors.cancion = 'Requerido.';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -50,16 +51,22 @@ export default function EventoPage() {
       try {
         const payload = {
           nombre: formData.nombre,
-          email: formData.email,
           telefono: formData.telefono,
-          participa: formData.participa,
-          instrumento: formData.participa === 'Musico' ? formData.instrumento : '',
+          instagram: formData.instagram,
+          actividad: formData.actividad,
+          cancion: formData.cancion,
         };
 
         if (formData.comprobante) {
           payload.fileData = await getBase64(formData.comprobante);
           payload.fileName = formData.comprobante.name;
           payload.mimeType = formData.comprobante.type;
+        }
+
+        if (formData.fotoPoster) {
+          payload.fotoPosterData = await getBase64(formData.fotoPoster);
+          payload.fotoPosterName = formData.fotoPoster.name;
+          payload.fotoPosterMimeType = formData.fotoPoster.type;
         }
 
         await fetch("https://script.google.com/macros/s/AKfycbz4eLIEHfBe5Wno9XoMhT5GugUkK8X-qyItH2MXRQGqgAfKDGx0blD8WLAyXGgE664FFg/exec", {
@@ -145,7 +152,7 @@ export default function EventoPage() {
             <ul style={{ paddingLeft: '1.5rem', marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
               <li><strong>Espacio Presentación Artistas:</strong> De 1 a 2 temas (1 para grabación y 1 para muestra).</li>
               <li><strong>Karaoke y Doblaje.</strong></li>
-              <li><strong>Rifa y Sorteo:</strong> Grabación de canción para quien tenga mayor número de likes y comentarios en redes.</li>
+              <li><strong>$20.000 Consumibles:</strong> El valor de tu entrada será 100% consumible durante el evento.</li>
             </ul>
 
             <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.8rem', fontSize: '1.3rem' }}>Premios del Evento:</h3>
@@ -213,31 +220,45 @@ export default function EventoPage() {
             </div>
 
             <div>
-              <label style={labelStyle}>Correo Electrónico *</label>
-              <input name="email" type="email" value={formData.email} onChange={handleChange} style={inputStyle('email')} placeholder="tucorreo@ejemplo.com" />
-              {errors.email && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.email}</span>}
-            </div>
-
-            <div>
               <label style={labelStyle}>Número de Celular (WhatsApp) *</label>
               <input name="telefono" type="number" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
               {errors.telefono && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.telefono}</span>}
             </div>
 
             <div>
-              <label style={labelStyle}>¿Cómo vas a participar?</label>
-              <select name="participa" value={formData.participa} onChange={handleChange} style={inputStyle('participa')}>
-                <option value="Asistente">Voy de público a disfrutar (Asistente)</option>
-                <option value="Musico">Me quiero subir a tocar/cantar (Músico)</option>
+              <label style={labelStyle}>Instagram *</label>
+              <input name="instagram" value={formData.instagram} onChange={handleChange} style={inputStyle('instagram')} placeholder="@tu_usuario" />
+              {errors.instagram && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.instagram}</span>}
+            </div>
+
+            <div>
+              <label style={labelStyle}>Actividad de interés *</label>
+              <select name="actividad" value={formData.actividad} onChange={handleChange} style={inputStyle('actividad')}>
+                <option value="Doblaje">Doblaje</option>
+                <option value="Karaoke">Karaoke</option>
+                <option value="Música en vivo">Música en vivo</option>
               </select>
             </div>
 
-            {formData.participa === 'Musico' && (
-              <div>
-                <label style={labelStyle}>¿Qué instrumento tocas o cantas?</label>
-                <input name="instrumento" value={formData.instrumento} onChange={handleChange} style={inputStyle('instrumento')} placeholder="Ej: Guitarra, Voz, Pista..." />
-              </div>
-            )}
+            <div>
+              <label style={labelStyle}>Formato / ¿Qué canción? (Pista) *</label>
+              <input name="cancion" value={formData.cancion} onChange={handleChange} style={inputStyle('cancion')} placeholder="Nombre de la canción y artista" />
+              {errors.cancion && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.cancion}</span>}
+            </div>
+
+            <div>
+              <label style={labelStyle}>Foto para el poster</label>
+              <input 
+                type="file" 
+                name="fotoPoster" 
+                accept="image/*" 
+                onChange={(e) => setFormData(prev => ({ ...prev, fotoPoster: e.target.files[0] }))} 
+                style={{ ...inputStyle('fotoPoster'), padding: '0.6rem', cursor: 'pointer' }} 
+              />
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
+                Sube una foto tuya para incluirte en el póster del evento.
+              </p>
+            </div>
 
             <div>
               <label style={labelStyle}>Comprobante de Pago</label>
