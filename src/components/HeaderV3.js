@@ -70,6 +70,7 @@ export default function HeaderV3() {
           <Link href="/#metodologia" className="nav-link">Metodología</Link>
           <Link href="/#docentes" className="nav-link">Docentes</Link>
           <Link href="/#ubicacion" className="nav-link">Ubicación</Link>
+          <Link href="/evento" className="nav-link" style={{ color: 'var(--accent)' }}>Open Mic</Link>
           <button onClick={() => setIsLoginOpen(true)} className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
             Iniciar Sesión
           </button>
@@ -84,6 +85,7 @@ export default function HeaderV3() {
           <Link href="/#metodologia" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Metodología</Link>
           <Link href="/#docentes" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Docentes</Link>
           <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
+          <Link href="/evento" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Open Mic</Link>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsLoginOpen(true);}} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem' }}>
             Iniciar Sesión
           </button>
