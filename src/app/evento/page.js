@@ -24,6 +24,25 @@ export default function EventoPage() {
   });
 
   const [errors, setErrors] = useState({});
+  const [captchaNum1, setCaptchaNum1] = useState(0);
+  const [captchaNum2, setCaptchaNum2] = useState(0);
+  const [captchaInput, setCaptchaInput] = useState('');
+
+  useEffect(() => {
+    setCaptchaNum1(Math.floor(Math.random() * 10) + 1);
+    setCaptchaNum2(Math.floor(Math.random() * 10) + 1);
+  }, []);
+
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    if (file && file.size > 15 * 1024 * 1024) {
+      alert(`El archivo es demasiado grande. El tamaño máximo es 15 MB.`);
+      e.target.value = null;
+      setFormData(prev => ({ ...prev, [field]: null }));
+    } else {
+      setFormData(prev => ({ ...prev, [field]: file }));
+    }
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -31,6 +50,11 @@ export default function EventoPage() {
     if (!formData.telefono.trim()) newErrors.telefono = 'Requerido.';
     if (!formData.instagram.trim()) newErrors.instagram = 'Requerido.';
     if (!formData.cancion.trim()) newErrors.cancion = 'Requerido.';
+    if (!captchaInput.trim()) {
+      newErrors.captcha = 'Requerido.';
+    } else if (parseInt(captchaInput) !== captchaNum1 + captchaNum2) {
+      newErrors.captcha = 'Respuesta incorrecta.';
+    }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -252,11 +276,11 @@ export default function EventoPage() {
                 type="file" 
                 name="fotoPoster" 
                 accept="image/*" 
-                onChange={(e) => setFormData(prev => ({ ...prev, fotoPoster: e.target.files[0] }))} 
+                onChange={(e) => handleFileChange(e, 'fotoPoster')} 
                 style={{ ...inputStyle('fotoPoster'), padding: '0.6rem', cursor: 'pointer' }} 
               />
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
-                Sube una foto tuya para incluirte en el póster del evento.
+                Sube una foto tuya para incluirte en el póster del evento (Máx. 15 MB).
               </p>
             </div>
 
@@ -266,12 +290,25 @@ export default function EventoPage() {
                 type="file" 
                 name="comprobante" 
                 accept="image/*,.pdf" 
-                onChange={(e) => setFormData(prev => ({ ...prev, comprobante: e.target.files[0] }))} 
+                onChange={(e) => handleFileChange(e, 'comprobante')} 
                 style={{ ...inputStyle('comprobante'), padding: '0.6rem', cursor: 'pointer' }} 
               />
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
-                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-b).
+                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-b). Máx. 15 MB.
               </p>
+            </div>
+
+            <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <label style={{ ...labelStyle, marginBottom: '0.5rem', display: 'block' }}>Verificación (Anti-bot) *</label>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.8rem' }}>¿Cuánto es {captchaNum1} + {captchaNum2}?</p>
+              <input 
+                type="number" 
+                value={captchaInput} 
+                onChange={(e) => setCaptchaInput(e.target.value)} 
+                style={inputStyle('captcha')} 
+                placeholder="Escribe el resultado" 
+              />
+              {errors.captcha && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.captcha}</span>}
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', width: '100%', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
