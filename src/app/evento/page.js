@@ -294,7 +294,7 @@ export default function EventoPage() {
                 style={{ ...inputStyle('comprobante'), padding: '0.6rem', cursor: 'pointer' }} 
               />
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
-                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-b). Máx. 15 MB.
+                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-B). Máx. 15 MB.
               </p>
             </div>
 
@@ -318,7 +318,7 @@ export default function EventoPage() {
             <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
               <img src="/images/qr.jpg" alt="QR Nequi" style={{ width: '180px', height: '180px', objectFit: 'contain', margin: '0 auto 1rem auto', display: 'block', borderRadius: '8px' }} />
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>
-                También puedes pagar con llave bre-b <br/>
+                También puedes pagar con llave Bre-B <br/>
                 <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>0087697624</strong> <br/>
                 a nombre de Laura Pineda
               </p>
