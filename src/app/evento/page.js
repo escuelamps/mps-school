@@ -194,7 +194,9 @@ export default function EventoPage() {
               </div>
               <div>
                 <h3 style={{ color: 'var(--text-primary)', margin: 0, fontSize: '1.1rem' }}>Boleta</h3>
-                <p style={{ color: 'var(--accent)', margin: 0, fontWeight: 'bold', fontSize: '1.1rem' }}>$20.000 (Pagos vía Nequi)</p>
+                <p style={{ color: 'var(--accent)', margin: 0, fontWeight: 'bold', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  $20.000 (Pagos vía <img src="/images/nequi-logo.png" alt="Nequi" style={{ height: '14px', objectFit: 'contain' }} /> o <img src="/images/bre-b-logo.png" alt="Bre-B" style={{ height: '14px', objectFit: 'contain' }} />)
+                </p>
               </div>
             </div>
 
@@ -293,8 +295,8 @@ export default function EventoPage() {
                 onChange={(e) => handleFileChange(e, 'comprobante')} 
                 style={{ ...inputStyle('comprobante'), padding: '0.6rem', cursor: 'pointer' }} 
               />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                Puedes subir una captura de pantalla de tu transferencia (pagos vía <img src="/images/nequi-logo.png" alt="Nequi" style={{ height: '14px' }} /> o <img src="/images/bre-b-logo.png" alt="Bre-B" style={{ height: '14px' }} />). Máx. 15 MB.
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
+                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-B). Máx. 15 MB.
               </p>
             </div>
 
