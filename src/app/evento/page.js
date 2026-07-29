@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle2, Calendar, MapPin, Clock, Mic2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Calendar, MapPin, Clock, Mic2, Key } from 'lucide-react';
 import Link from 'next/link';
 
 export default function EventoPage() {
@@ -324,8 +324,10 @@ export default function EventoPage() {
               <img src="/images/qr.png" alt="QR Nequi" style={{ width: '180px', height: '180px', objectFit: 'contain', margin: '0 auto 1rem auto', display: 'block', borderRadius: '8px' }} />
               
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>
-                También puedes pagar con llave <img src="/images/bre-b-logo.png" alt="Bre-B" style={{ height: '14px', objectFit: 'contain', verticalAlign: 'middle' }} /> <br/>
-                <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>0087697624</strong> <br/>
+                También puedes pagar con llave Bre-B <br/>
+                <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <Key size={16} /> 0087697624
+                </strong> <br/>
                 a nombre de Laura Pineda
               </p>
             </div>
