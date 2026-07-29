@@ -293,8 +293,8 @@ export default function EventoPage() {
                 onChange={(e) => handleFileChange(e, 'comprobante')} 
                 style={{ ...inputStyle('comprobante'), padding: '0.6rem', cursor: 'pointer' }} 
               />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
-                Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-B). Máx. 15 MB.
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                Puedes subir una captura de pantalla de tu transferencia (pagos vía <img src="/images/nequi-logo.png" alt="Nequi" style={{ height: '14px' }} /> o <img src="/images/bre-b-logo.png" alt="Bre-B" style={{ height: '14px' }} />). Máx. 15 MB.
               </p>
             </div>
 
@@ -316,15 +316,11 @@ export default function EventoPage() {
             </button>
 
             <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-              <img src="/images/nequi-logo.png" alt="Nequi" style={{ height: '35px', objectFit: 'contain', margin: '0 auto 1rem auto', display: 'block' }} />
               <p style={{ color: 'var(--text-primary)', fontSize: '1.05rem', fontWeight: 'bold', marginBottom: '1rem' }}>
                 Escanea este código en tu app de Nequi para realizar el pago
               </p>
               <img src="/images/qr.png" alt="QR Nequi" style={{ width: '180px', height: '180px', objectFit: 'contain', margin: '0 auto 1rem auto', display: 'block', borderRadius: '8px' }} />
               
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-                <img src="/images/bre-b-logo.png" alt="Bre-B" style={{ height: '30px', objectFit: 'contain' }} />
-              </div>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>
                 También puedes pagar con llave Bre-B <br/>
                 <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem' }}>0087697624</strong> <br/>
