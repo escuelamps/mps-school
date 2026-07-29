@@ -117,7 +117,14 @@ export default function RegistroPage() {
         // Paso 2
         params.append('entry.1585339906', formData.estudianteNombre);
         params.append('entry.1600496359', formData.estudianteDocumento);
-        params.append('entry.1062232074', formData.fechaNacimiento);
+        
+        if (formData.fechaNacimiento) {
+          const [y, m, d] = formData.fechaNacimiento.split('-');
+          params.append('entry.1062232074_year', y);
+          params.append('entry.1062232074_month', m);
+          params.append('entry.1062232074_day', d);
+        }
+        
         params.append('entry.1213056784', formData.instrumento);
         params.append('entry.748271263', formData.instrumentoComplementario || 'Ninguno');
         
@@ -130,7 +137,14 @@ export default function RegistroPage() {
         
         // Paso 4
         params.append('entry.976621532', formData.paqueteHoras);
-        params.append('entry.1163506886', formData.fechaPago);
+        
+        if (formData.fechaPago) {
+          const [y, m, d] = formData.fechaPago.split('-');
+          params.append('entry.1163506886_year', y);
+          params.append('entry.1163506886_month', m);
+          params.append('entry.1163506886_day', d);
+        }
+
 
         await fetch(GOOGLE_FORM_ACTION, {
           method: 'POST',
