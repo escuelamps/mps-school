@@ -50,6 +50,8 @@ export default function EventoPage() {
     if (!formData.telefono.trim()) newErrors.telefono = 'Requerido.';
     if (!formData.instagram.trim()) newErrors.instagram = 'Requerido.';
     if (!formData.cancion.trim()) newErrors.cancion = 'Requerido.';
+    if (!formData.comprobante) newErrors.comprobante = 'Requerido.';
+    
     if (!captchaInput.trim()) {
       newErrors.captcha = 'Requerido.';
     } else if (parseInt(captchaInput) !== captchaNum1 + captchaNum2) {
@@ -287,7 +289,7 @@ export default function EventoPage() {
             </div>
 
             <div>
-              <label style={labelStyle}>Comprobante de Pago</label>
+              <label style={labelStyle}>Comprobante de Pago *</label>
               <input 
                 type="file" 
                 name="comprobante" 
@@ -295,6 +297,7 @@ export default function EventoPage() {
                 onChange={(e) => handleFileChange(e, 'comprobante')} 
                 style={{ ...inputStyle('comprobante'), padding: '0.6rem', cursor: 'pointer' }} 
               />
+              {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
                 Puedes subir una captura de pantalla de tu transferencia (Nequi / Bre-B). Máx. 15 MB.
               </p>
