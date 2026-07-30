@@ -47,7 +47,14 @@ export default function EventoPage() {
   const validate = () => {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'Requerido.';
-    if (!formData.telefono.trim()) newErrors.telefono = 'Requerido.';
+    
+    const telefonoNumeros = formData.telefono.replace(/\D/g, '');
+    if (!formData.telefono.trim()) {
+      newErrors.telefono = 'Requerido.';
+    } else if (telefonoNumeros.length !== 10) {
+      newErrors.telefono = 'Número de 10 dígitos';
+    }
+    
     if (!formData.instagram.trim()) newErrors.instagram = 'Requerido.';
     if (!formData.cancion.trim()) newErrors.cancion = 'Requerido.';
     if (!formData.comprobante) newErrors.comprobante = 'Requerido.';
@@ -95,7 +102,7 @@ export default function EventoPage() {
           payload.fotoPosterMimeType = formData.fotoPoster.type;
         }
 
-        await fetch("https://script.google.com/macros/s/AKfycbz4eLIEHfBe5Wno9XoMhT5GugUkK8X-qyItH2MXRQGqgAfKDGx0blD8WLAyXGgE664FFg/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbyRKy41heLK7y7PATttSQJ5PfrennNR8Piik5CkbjgVI2Wwi7Ky_SLGury9sJFRMCC5Kg/exec", {
           method: "POST",
           body: JSON.stringify(payload),
           mode: "no-cors"
