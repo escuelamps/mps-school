@@ -52,6 +52,11 @@ El proyecto sigue la estructura estándar recomendada por Next.js App Router:
 4.  **Optimización SEO Avanzada:**
     *   Metadatos dinámicos generados del lado del servidor para asegurar que motores de búsqueda (Google) indexen correctamente a "MPS Music and Production School".
 
+5.  **Integración con Google Sheets (Forms Headless):**
+    *   Formularios de registro web conectados de forma directa a Google Sheets mediante *Google Apps Script*.
+    *   Subida y procesamiento automático de imágenes (comprobantes de pago y pósters) directamente a carpetas privadas de Google Drive.
+    *   Validaciones estrictas en el cliente (Ej: exigencia de 10 dígitos en campos telefónicos) para asegurar la integridad de los datos antes de insertarlos en el Excel.
+
 ## 🚀 Despliegue y Mantenimiento (CI/CD)
 
 El sitio web está completamente automatizado a través de la integración continua entre **GitHub** y **Vercel**.
