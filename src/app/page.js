@@ -189,17 +189,7 @@ export default function V3Page() {
       <section style={{ padding: '6rem 5%', background: 'var(--bg-secondary)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestras <span className="text-gradient">Reseñas en Google</span></h2>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
-              <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>5.0</span>
-              <div style={{ display: 'flex', color: '#fbbc04' }}>
-                {[1,2,3,4,5].map(star => <Star key={star} size={24} fill="currentColor" stroke="none" />)}
-              </div>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>(16 opiniones)</span>
-            </div>
-            <a href="https://www.google.com/search?q=escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: '#4285f4', textDecoration: 'none', fontWeight: 500 }}>
-              Ver todas las opiniones en Google Maps
-            </a>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestras <span className="text-gradient">reseñas</span></h2>
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
