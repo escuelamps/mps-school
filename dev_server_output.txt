@@ -1,0 +1,19 @@
+
+> mps@0.1.0 dev
+> next dev
+
+⚠ Port 3000 is in use by process 3315, using available port 3001 instead.
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://25.45.197.162:3001
+- Environments: .env.local
+✓ Ready in 554ms
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          3315
+- Dir:          /Users/sammycuartas/Documents/Documentos - MacBook de Sammy/asao/projects/mps
+- Log:          .next/dev/logs/next-development.log
+
+Run kill 3315 to stop it.
+[?25h

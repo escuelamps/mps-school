@@ -69,13 +69,21 @@ export default function HeaderV3() {
       {/* MARQUEE */}
       <div className="marquee-container">
         <div className="marquee-content">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <div key={i} className="marquee-item">
-              <span>INICIACIÓN MUSICAL</span>
+              <span>FORMACIÓN MUSICAL</span>
               <span>•</span>
               <span>PRODUCCIÓN</span>
               <span>•</span>
-              <span>ACTUACIÓN</span>
+              <span>EXPRESIÓN CORPORAL</span>
+              <span>•</span>
+              <span>FORMACIÓN ACTORAL</span>
+              <span>•</span>
+              <span>EVENTOS</span>
+              <span>•</span>
+              <span>FOTOGRAFÍA</span>
+              <span>•</span>
+              <span>SALA DE ENSAYOS</span>
               <span>•</span>
             </div>
           ))}
@@ -92,8 +100,7 @@ export default function HeaderV3() {
         </Link>
         <div className="desktop-nav" style={{ gap: '2rem', alignItems: 'center' }}>
           <Link href="/#programas" className="nav-link">Programas</Link>
-          <Link href="/#metodologia" className="nav-link">Metodología</Link>
-          <Link href="/#docentes" className="nav-link">Docentes</Link>
+          <Link href="/#quienes-somos" className="nav-link">Quiénes Somos</Link>
           <Link href="/#ubicacion" className="nav-link">Ubicación</Link>
           <button onClick={() => setIsEventModalOpen(true)} className="nav-link" style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1rem', cursor: 'pointer' }}>Eventos</button>
           <button onClick={() => setIsLoginOpen(true)} className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
@@ -107,8 +114,7 @@ export default function HeaderV3() {
         {/* Menú Móvil Desplegable */}
         <div className="mobile-menu" style={{ display: isMobileMenuOpen ? 'flex' : 'none' }}>
           <Link href="/#programas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Programas</Link>
-          <Link href="/#metodologia" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Metodología</Link>
-          <Link href="/#docentes" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Docentes</Link>
+          <Link href="/#quienes-somos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Quiénes Somos</Link>
           <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsEventModalOpen(true);}} style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', padding: 0 }}>Eventos</button>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsLoginOpen(true);}} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem' }}>

@@ -99,28 +99,50 @@ export default function V3Page() {
         </div>
       </section>
 
-      {/* METODOLOGÍA */}
-      <section id="metodologia" style={{ padding: '5rem 5%', background: 'var(--section-bg)' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Nuestra <span className="text-gradient">Metodología</span></h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3rem' }}>
-            En MPS no solo enseñamos técnicas, formamos artistas integrales. Combinamos la teoría rigurosa con la 
-            práctica constante en ensambles, estudios de grabación y escenarios reales. Creemos que la mejor forma 
-            de aprender arte es viviéndolo desde el primer día.
+      {/* QUIÉNES SOMOS & DOCENTES */}
+      <section id="quienes-somos" style={{ padding: '5rem 5%', background: 'var(--section-bg)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Quiénes <span className="text-gradient">Somos</span></h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '4rem', maxWidth: '800px', margin: '0 auto 4rem auto' }}>
+            En Music and Production School (MPS) somos una familia apasionada por el arte. 
+            Nos dedicamos a formar artistas integrales, combinando la teoría con la práctica constante en escenarios y estudios reales. 
+            Creemos que la mejor forma de aprender es viviéndolo desde el primer día.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', textAlign: 'left' }}>
-            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>01. Práctica Real</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Prácticas desde el primer semestre en estudios profesionales y teatros.</p>
-            </div>
-            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>02. Docentes Activos</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Aprende de profesionales que trabajan actualmente en la industria artística.</p>
-            </div>
-            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
-              <h3 style={{ color: 'var(--accent)', marginBottom: '1rem' }}>03. Enfoque Humano</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Grupos pequeños para garantizar atención personalizada y crecimiento integral.</p>
-            </div>
+          
+          <h3 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Nuestro <span className="text-gradient">Equipo Docente</span></h3>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 3rem auto' }}>
+            Aprende directamente de profesionales activos en la industria musical, actoral y audiovisual de Colombia.
+          </p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+            {[
+              { nombre: "Andrés Bernal", rol: "Profesor de Piano", img: "/images/andres_bernal_profesor_piano.JPG", desc: "Especialista en piano y desarrollo técnico." },
+              { nombre: "Carlos Velásquez", rol: "Profesor de Actuación", img: "/images/carlos_velasquez_profesor_actuacion.JPG", desc: "Actor y pedagogo en expresión corporal." },
+              { nombre: "Sebastián Vergara", rol: "Producción de Audio", img: "/images/sebastian_vergara_porfesor_guitarra_piano_produccion_audio.JPG", desc: "Especialista en producción de audio digital." },
+              { nombre: "Shalom Melo", rol: "Profesora de Violín", img: "/images/shalom_melo_prieto_profesora_violin.JPG", desc: "Violinista enfocada en técnica y musicalidad." }
+            ].map((docente, i) => (
+              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2rem', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--glass-border)', transition: 'transform 0.3s ease' }} onMouseOver={(e)=>e.currentTarget.style.transform='translateY(-10px)'} onMouseOut={(e)=>e.currentTarget.style.transform='translateY(0)'}>
+                <img src={docente.img} alt={docente.nombre} style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 1.5rem auto', border: '3px solid var(--accent)' }} />
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }}>{docente.nombre}</h3>
+                <h4 style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '1rem' }}>{docente.rol}</h4>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>{docente.desc}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div style={{ textAlign: 'center' }}>
+            <Link href="/docentes" style={{ 
+              display: 'inline-block', 
+              padding: '0.8rem 2rem', 
+              border: '1px solid var(--accent)', 
+              color: 'var(--accent)', 
+              borderRadius: '50px', 
+              textDecoration: 'none', 
+              fontWeight: 600,
+              transition: 'all 0.3s'
+            }} onMouseOver={(e)=>{e.currentTarget.style.background='var(--accent)'; e.currentTarget.style.color='black'}} onMouseOut={(e)=>{e.currentTarget.style.background='transparent'; e.currentTarget.style.color='var(--accent)'}}>
+              Ver Todo el Equipo Docente
+            </Link>
           </div>
         </div>
       </section>
@@ -187,48 +209,7 @@ export default function V3Page() {
 
 
 
-      {/* DOCENTES */}
-      <section id="docentes" style={{ padding: '6rem 5%', borderTop: '1px solid var(--glass-border)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestro <span className="text-gradient">Cuerpo Docente</span></h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-              Aprende directamente de profesionales activos en la industria musical, actoral y audiovisual de Colombia.
-            </p>
-          </div>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
-            {[
-              { nombre: "Andrés Bernal", rol: "Profesor de Piano", img: "/images/andres_bernal_profesor_piano.JPG", desc: "Especialista en piano y desarrollo técnico." },
-              { nombre: "Carlos Velásquez", rol: "Profesor de Actuación", img: "/images/carlos_velasquez_profesor_actuacion.JPG", desc: "Actor y pedagogo en expresión corporal." },
-              { nombre: "Sebastián Vergara", rol: "Producción de Audio", img: "/images/sebastian_vergara_porfesor_guitarra_piano_produccion_audio.JPG", desc: "Especialista en producción de audio digital." },
-              { nombre: "Shalom Melo", rol: "Profesora de Violín", img: "/images/shalom_melo_prieto_profesora_violin.JPG", desc: "Violinista enfocada en técnica y musicalidad." }
-            ].map((docente, i) => (
-              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2rem', borderRadius: '16px', textAlign: 'center', border: '1px solid var(--glass-border)', transition: 'transform 0.3s ease' }} onMouseOver={(e)=>e.currentTarget.style.transform='translateY(-10px)'} onMouseOut={(e)=>e.currentTarget.style.transform='translateY(0)'}>
-                <img src={docente.img} alt={docente.nombre} style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 1.5rem auto', border: '3px solid var(--accent)' }} />
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.3rem' }}>{docente.nombre}</h3>
-                <h4 style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '1rem' }}>{docente.rol}</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>{docente.desc}</p>
-              </div>
-            ))}
-          </div>
-          
-          <div style={{ textAlign: 'center' }}>
-            <Link href="/docentes" style={{ 
-              display: 'inline-block', 
-              padding: '0.8rem 2rem', 
-              border: '1px solid var(--accent)', 
-              color: 'var(--accent)', 
-              borderRadius: '50px', 
-              textDecoration: 'none', 
-              fontWeight: 600,
-              transition: 'all 0.3s'
-            }} onMouseOver={(e)=>{e.currentTarget.style.background='var(--accent)'; e.currentTarget.style.color='black'}} onMouseOut={(e)=>{e.currentTarget.style.background='transparent'; e.currentTarget.style.color='var(--accent)'}}>
-              Ver Todo el Equipo Docente
-            </Link>
-          </div>
-        </div>
-      </section>
+
 
       {/* TESTIMONIOS */}
       <section style={{ padding: '6rem 5%', background: 'var(--bg-secondary)' }}>
