@@ -5,7 +5,43 @@ import Link from 'next/link';
 import FooterV3 from '@/components/FooterV3';
 import HeaderV3 from '@/components/HeaderV3';
 
-export default function DocentesV3() {
+const AccordionItem = ({ title, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <div style={{ border: '1px solid rgba(255,255,255,0.1)', marginBottom: '1rem', borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s ease' }}>
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        style={{ 
+          width: '100%', padding: '1.5rem', 
+          background: isOpen ? 'rgba(0,222,133,0.1)' : 'var(--panel-bg)', 
+          color: 'var(--text-primary)', display: 'flex', justifyContent: 'space-between', 
+          alignItems: 'center', cursor: 'pointer', border: 'none', 
+          fontSize: '1.2rem', fontWeight: 600, transition: 'all 0.3s ease'
+        }}
+        onMouseOver={(e) => { if(!isOpen) e.currentTarget.style.background = 'var(--glass-border)' }}
+        onMouseOut={(e) => { if(!isOpen) e.currentTarget.style.background = 'var(--panel-bg)' }}
+      >
+        <span style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)' }}></div>
+          {title}
+        </span>
+        <span style={{ fontSize: '1.5rem', color: 'var(--accent)', fontWeight: 300 }}>{isOpen ? '−' : '+'}</span>
+      </button>
+      <div style={{ 
+        maxHeight: isOpen ? '3000px' : '0', 
+        opacity: isOpen ? 1 : 0,
+        overflow: 'hidden',
+        transition: 'all 0.4s ease-in-out'
+      }}>
+        <div style={{ padding: '2rem 1.5rem', background: 'var(--accordion-bg)', color: 'var(--text-secondary)', borderTop: '1px solid var(--glass-border)', lineHeight: 1.7 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function QuienesSomosPage() {
   const [selectedDocente, setSelectedDocente] = useState(null);
 
   const docentes = [
@@ -21,60 +57,95 @@ export default function DocentesV3() {
     { nombre: "Shalom Melo Prieto", rol: "Profesora de Violín", img: "/images/shalom_melo_prieto_profesora_violin.JPG", desc: "Violinista con gran sensibilidad y paciencia para enseñar a todos los niveles.", especialidad: "Violín", bio: "Shalom es Maestra en Artes Musicales con énfasis en Violín de la Facultad de Artes ASAB de la Universidad Distrital Francisco José de Caldas. Desde muy pequeña inició su formación musical y ha construido una destacada trayectoria participando en importantes festivales, ensambles y proyectos sinfónicos, compartiendo escenario con la Orquesta Filarmónica de Bogotá, el Mariachi Vargas de Tecalitlán y el maestro Jorge Velosa. Actualmente también integra la Nuevo Mundo Orquesta Latinoamericana, con la que realizó su primera gira internacional en Canadá. Como docente de nuestra academia, Shalom acompaña a cada estudiante con una metodología cercana, paciente y motivadora, adaptando el aprendizaje a las necesidades y ritmo de cada alumno. Sus clases fortalecen la técnica, la sensibilidad musical y la confianza, permitiendo que niños, jóvenes y adultos disfruten del proceso de aprender un instrumento desde el primer día. Su pasión por las músicas tradicionales, la interpretación en ensambles y la formación artística hacen que cada sesión sea una experiencia enriquecedora, donde la disciplina, la creatividad y el amor por la música se convierten en los principales protagonistas. 🎻🎶✨" }
   ];
 
+  const catedras = [
+    {
+      titulo: "Cátedra de Instrumentos Musicales",
+      nombresDocentes: ["Andrés Bernal", "Andrés Felipe Pardo", "Jhonnathan Wagner", "Shalom Melo Prieto", "Carlos Macía", "Jenny Rojas", "Sebastián Vergara"]
+    },
+    {
+      titulo: "Cátedra de Canto y Técnica Vocal",
+      nombresDocentes: ["Laura Ximena Mendoza", "Jenny Rojas", "Carlos Macía"]
+    },
+    {
+      titulo: "Cátedra de Producción y Composición",
+      nombresDocentes: ["Sebastián Vergara", "Andrés Felipe Pardo"]
+    },
+    {
+      titulo: "Cátedra de Artes Escénicas e Industria",
+      nombresDocentes: ["Carlos Velásquez", "Kevin Peña"]
+    }
+  ];
+
+  const getDocentesPorCatedra = (nombres) => {
+    return nombres.map(n => docentes.find(d => d.nombre === n)).filter(Boolean);
+  };
+
+  const DocenteGrid = ({ listaDocentes }) => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2.5rem' }}>
+      {listaDocentes.map((docente, i) => (
+        <div key={i} style={{ 
+          background: 'rgba(255,255,255,0.02)', 
+          borderRadius: '20px', 
+          overflow: 'hidden', 
+          border: '1px solid rgba(255,255,255,0.05)', 
+          transition: 'all 0.3s ease',
+          display: 'flex',
+          flexDirection: 'column',
+          cursor: 'pointer'
+        }} 
+        onClick={() => setSelectedDocente(docente)}
+        onMouseOver={(e)=>{
+          e.currentTarget.style.transform='translateY(-5px)';
+          e.currentTarget.style.boxShadow='0 10px 20px rgba(0,222,133,0.1)';
+        }} 
+        onMouseOut={(e)=>{
+          e.currentTarget.style.transform='translateY(0)';
+          e.currentTarget.style.boxShadow='none';
+        }}>
+          <div style={{ position: 'relative', height: '250px' }}>
+            <img src={docente.img} alt={docente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: docente.imgPos || 'top center' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))' }}>
+              <span style={{ background: 'var(--accent)', color: 'black', padding: '0.3rem 0.8rem', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 700 }}>
+                {docente.especialidad}
+              </span>
+            </div>
+          </div>
+          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.2rem' }}>{docente.nombre}</h3>
+            <h4 style={{ color: 'var(--accent)', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: 500 }}>{docente.rol}</h4>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, flex: 1 }}>{docente.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--rich-black)', paddingBottom: '4rem' }}>
       <HeaderV3 />
 
-      {/* HERO DOCENTES */}
-      <section style={{ padding: '4rem 5%', textAlign: 'center', background: 'radial-gradient(circle at 50% 0%, rgba(0,222,133,0.1) 0%, transparent 60%)' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem' }}>Conoce a nuestros <span className="text-gradient">Profesores</span></h1>
-        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
-          La Escuela MPS cuenta con un grupo selecto de instructores. Todos son profesionales activos en la industria con años de experiencia pedagógica y artística.
+      {/* HERO QUIÉNES SOMOS */}
+      <section style={{ padding: '6rem 5% 4rem 5%', textAlign: 'center', background: 'radial-gradient(circle at 50% 0%, rgba(0,222,133,0.1) 0%, transparent 60%)' }}>
+        <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem' }}>Quiénes <span className="text-gradient">Somos</span></h1>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto', lineHeight: 1.8 }}>
+          En Music and Production School (MPS) somos una familia apasionada por el arte. 
+          Nos dedicamos a formar artistas integrales, combinando la teoría con la práctica constante en escenarios y estudios reales. 
+          Creemos que la mejor forma de aprender es viviéndolo desde el primer día.
         </p>
       </section>
 
-      {/* GRID DE DOCENTES COMPLETO */}
-      <section style={{ padding: '2rem 5%', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2.5rem' }}>
-          {docentes.map((docente, i) => (
-            <div key={i} style={{ 
-              background: 'rgba(255,255,255,0.02)', 
-              borderRadius: '20px', 
-              overflow: 'hidden', 
-              border: '1px solid rgba(255,255,255,0.05)', 
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              flexDirection: 'column',
-              cursor: 'pointer'
-            }} 
-            onClick={() => setSelectedDocente(docente)}
-            onMouseOver={(e)=>{
-              e.currentTarget.style.transform='translateY(-10px)';
-              e.currentTarget.style.boxShadow='0 20px 40px rgba(0,222,133,0.1)';
-            }} 
-            onMouseOut={(e)=>{
-              e.currentTarget.style.transform='translateY(0)';
-              e.currentTarget.style.boxShadow='none';
-            }}>
-              <div style={{ position: 'relative', height: '300px' }}>
-                <img src={docente.img} alt={docente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: docente.imgPos || 'top center' }} />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))' }}>
-                  <span style={{ background: 'var(--accent)', color: 'black', padding: '0.3rem 0.8rem', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 700 }}>
-                    {docente.especialidad}
-                  </span>
-                </div>
-              </div>
-              <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}>{docente.nombre}</h3>
-                <h4 style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 500 }}>{docente.rol}</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, flex: 1 }}>{docente.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* CÁTEDRAS ACORDEÓN */}
+      <section style={{ padding: '2rem 5%', maxWidth: '1000px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: '2rem', textAlign: 'center', marginBottom: '3rem' }}>Nuestras <span className="text-gradient">Cátedras</span> y Docentes</h2>
+        
+        {catedras.map((catedra, index) => (
+          <AccordionItem key={index} title={catedra.titulo} defaultOpen={index === 0}>
+            <DocenteGrid listaDocentes={getDocentesPorCatedra(catedra.nombresDocentes)} />
+          </AccordionItem>
+        ))}
       </section>
 
-      {/* SLIDE-OVER SIDEBAR */}
+      {/* SLIDE-OVER SIDEBAR PARA DETALLE DE DOCENTE */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
         background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(5px)',

@@ -47,15 +47,22 @@ export default function V3Page() {
   const [showAllTestimonials, setShowAllTestimonials] = useState(false);
 
   const testimonialsList = [
-    { nombre: "Andrea Restrepo", rol: "Mamá de alumno", texto: "Excelente academia. Llevé a mi hijo de 6 años para clases de piano y la paciencia del profesor es increíble. El material didáctico que usan hace que los niños aprendan jugando y se mantengan motivados.", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" },
-    { nombre: "Carlos Mendoza", rol: "Adulto, clases de guitarra", texto: "Empecé desde cero con la guitarra a mis 35 años y pensé que sería muy difícil. Los profesores de la Escuela MPS tienen un método excelente y las herramientas necesarias para que uno avance a su propio ritmo. Muy recomendados.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80" },
-    { nombre: "Camila Torres", rol: "Alumna a domicilio (Violín)", texto: "Tomo clases de violín a domicilio en la zona de Teusaquillo y resalto mucho el cumplimiento y profesionalismo del docente. Es una comodidad enorme que vayan hasta la casa y se adapten a mis horarios.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
-    { nombre: "Juan Sebastián Gómez", rol: "Alumno de técnica vocal", texto: "Una gran experiencia. El trato humano y la dedicación de los profesores se nota desde la primera clase. Tienen toda la experiencia para guiarte sin importar tu nivel inicial.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
-    { nombre: "Javier", rol: "Estudiante de Nuevo Ingreso", texto: "Muy contento de poder iniciar en esta nueva etapa de aprendizaje, felicitaciones, muy acogedora las instalaciones de la Academia, muchísimos éxitos y esperamos vernos pronto. Mil gracias", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" },
-    { nombre: "Estudiante de Piano", rol: "Clases de Piano", texto: "Quiero expresar mi más sincero agradecimiento a la profesora Laura Pineda y a la Academia de Música MPS. Como estudiante de piano, he encontrado en la profesora Laura una excelente maestra, con amplios conocimientos musicales y una gran capacidad para enseñar. Su paciencia, dedicación y profesionalismo hacen que cada clase sea una experiencia agradable y motivadora. Gracias a su forma de explicar, he podido comprender mejor el instrumento y avanzar paso a paso con confianza. Siempre está dispuesta a resolver dudas y a motivar a sus estudiantes para que sigan mejorando. Recomiendo ampliamente la Academia de Música Mi Primer Sol a cualquier persona que desee aprender música en un ambiente serio, cálido y profesional. Es un lugar donde realmente se preocupan por el aprendizaje y el crecimiento de cada estudiante. ¡Muchas gracias, profesora Laura, por compartir su conocimiento y pasión por la música!", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" },
-    { nombre: "Daniela Vargas", rol: "Estudiante de Producción", texto: "Gracias a los equipos de la escuela pude grabar y mezclar mi primer EP profesional antes de graduarme.", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" },
-    { nombre: "Mateo Rincón", rol: "Egresado de Actuación", texto: "La metodología es 100% práctica. Aprendí a desenvolverme frente a la cámara y hoy en día trabajo en comerciales nacionales.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" },
-    { nombre: "Valentina Gómez", rol: "Programa Infantil Musical", texto: "Inscribí a mi hija hace dos años en piano y el cambio en su disciplina y creatividad ha sido espectacular. ¡Súper recomendados!", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" }
+    { nombre: "JHON ALEXANDER PACHECO DUARTE", rol: "Hace 25 semanas", texto: "Hola buenas tardes Quiero contarles que la experiencia de hoy fue excelente mi hijo quedó muy contento 🫶👏🏻👏🏻👏🏻" },
+    { nombre: "Sofi Rojas", rol: "23 may 2025", texto: "Mi más sincero agradecimiento a la Academia *Mi primer Sol* por todo lo que ha hecho por mí. Su paciencia y dedicación son verdaderamente inspiradoras. Agradezco enormemente su empeño en encontrar métodos de aprendizaje que se adapten a mis necesidades y su habilidad para hacer que cada clase sea interesante y enriquecedora." },
+    { nombre: "Yeny Delgadillo", rol: "23 may 2025", texto: "Es una escuela musical maravillosa, excelente la profesora Laurita, nos encanta como enseña!" },
+    { nombre: "juc Al", rol: "20 may 2025", texto: "Mi hija a aprendido muchísimo con la.profe laura ... estoy feliz por.los.avances .. y seguiré con esta escuela" },
+    { nombre: "MARCELA TORRES", rol: "20 may 2025", texto: "Excelentes clases tanto virtuales como presenciales, Laura muy buena profesora sabe como enseñar a los niños es muy amable y amorosa con ellos, estamos felices" },
+    { nombre: "juancho lopez", rol: "16 may 2025", texto: "Gran escuela, profesores de alta calidad me ayudaron a maximizar mis habilidades musicales" },
+    { nombre: "Carolina Perez", rol: "16 may 2025", texto: "" },
+    { nombre: "Javier Bonilla", rol: "16 may 2025", texto: "La mejor escuela, retomar la música es lo mejor" },
+    { nombre: "Carlos Florez", rol: "16 may 2025", texto: "Excelentes profesionales, con una metodología única para cada estudiante" },
+    { nombre: "ELBER CAMILO CORTES MORALES", rol: "16 may 2025", texto: "Mi hijo toma clase con ellos, aprende de una forma interactiva y creativa, se siente el amor y el gusto con el que hacen su trabajo" },
+    { nombre: "Kelly Vargas Rojas", rol: "16 may 2025", texto: "" },
+    { nombre: "Mariana González", rol: "16 may 2025", texto: "Excelente escuela. La mejor profesora del mundo! Super paciente, se ajusta a mis horarios y a mis gustos musicales. Muy recomendada!!" },
+    { nombre: "Cheo Piano", rol: "16 may 2025", texto: "Una enseñanza personalizada, innovadora. Felicitaciones. 👏" },
+    { nombre: "Laura Stefania Quintero Castro", rol: "15 may 2025", texto: "Excelente escuela de música, los profesores son muy dedicados con el proceso de cada estudiante y se esfuerzan por enseñar con amor y dedicación." },
+    { nombre: "Karolina Perez", rol: "15 may 2025", texto: "" },
+    { nombre: "Jorge Andrés García Castillo", rol: "15 may 2025", texto: "La escuela mi primer sol es el lugar indicado para comenzar a aprender el instrumento musical que siempre haz querido aprender los profesores cuentan con la experiencia, herramientas y todo el material para tu aprendizaje. Allí encontrarás clases de iniciación musical, guitarra, piano, batería entro otros instrumentos. También tienen diferentes modalidades de clase tanto presencial como virtual no esperes más contáctate con ellos y comienza tu camino musical!!" }
   ];
 
   return (
@@ -103,11 +110,14 @@ export default function V3Page() {
       <section id="quienes-somos" style={{ padding: '5rem 5%', background: 'var(--section-bg)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>Quiénes <span className="text-gradient">Somos</span></h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: '800px', margin: '0 auto' }}>
             En Music and Production School (MPS) somos una familia apasionada por el arte. 
             Nos dedicamos a formar artistas integrales, combinando la teoría con la práctica constante en escenarios y estudios reales. 
             Creemos que la mejor forma de aprender es viviéndolo desde el primer día.
           </p>
+          <Link href="/quienes-somos" className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+            Conoce a nuestro equipo <ArrowRight size={20} />
+          </Link>
         </div>
       </section>
 
@@ -179,31 +189,47 @@ export default function V3Page() {
       <section style={{ padding: '6rem 5%', background: 'var(--bg-secondary)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Historias de <span className="text-gradient">Éxito</span></h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-              Nuestros estudiantes son nuestra mejor carta de presentación. Conoce sus experiencias.
-            </p>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Nuestras <span className="text-gradient">Reseñas en Google</span></h2>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
+              <span style={{ fontSize: '2rem', fontWeight: 'bold' }}>5.0</span>
+              <div style={{ display: 'flex', color: '#fbbc04' }}>
+                {[1,2,3,4,5].map(star => <Star key={star} size={24} fill="currentColor" stroke="none" />)}
+              </div>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>(16 opiniones)</span>
+            </div>
+            <a href="https://www.google.com/search?q=escuelamps" target="_blank" rel="noopener noreferrer" style={{ color: '#4285f4', textDecoration: 'none', fontWeight: 500 }}>
+              Ver todas las opiniones en Google Maps
+            </a>
           </div>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {testimonialsList.slice(0, showAllTestimonials ? testimonialsList.length : 3).map((testimonio, i) => (
-              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--glass-border)', position: 'relative' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', gap: '0.2rem', color: 'var(--accent)' }}>
-                    {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="currentColor" />)}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', padding: '0.2rem 0.6rem', borderRadius: '12px', fontWeight: '500' }}>
-                    <CheckCircle2 size={12} />
-                    <span>Reseña Certificada</span>
-                  </div>
-                </div>
-                <p className="testimonial-scroll" style={{ color: 'var(--text-primary)', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem', fontStyle: 'italic' }}>&quot;{testimonio.texto}&quot;</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1.5rem' }}>
+            {testimonialsList.slice(0, showAllTestimonials ? testimonialsList.length : 6).map((testimonio, i) => (
+              <div key={i} style={{ background: 'var(--panel-bg)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--glass-border)', position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  {testimonio.img ? (
+                    <img src={testimonio.img} alt={testimonio.nombre} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                      {testimonio.nombre.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div>
-                    <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem' }}>{testimonio.nombre}</h4>
-                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{testimonio.rol}</p>
+                    <h4 style={{ margin: '0 0 0.1rem 0', fontSize: '0.95rem' }}>{testimonio.nombre}</h4>
+                    <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{testimonio.rol}</p>
+                  </div>
+                  <div style={{ marginLeft: 'auto' }}>
+                    <svg viewBox="0 0 48 48" width="20" height="20">
+                      <path fill="#4285F4" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20C44 22.659 43.862 21.35 43.611 20.083z"/>
+                      <path fill="#34A853" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"/>
+                      <path fill="#FBBC05" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+                      <path fill="#EA4335" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571c.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24C44 22.659 43.862 21.35 43.611 20.083z"/>
+                    </svg>
                   </div>
                 </div>
+                <div style={{ display: 'flex', gap: '0.1rem', color: '#fbbc04', marginBottom: '1rem' }}>
+                  {[1,2,3,4,5].map(star => <Star key={star} size={14} fill="currentColor" stroke="none" />)}
+                </div>
+                <p className="testimonial-scroll" style={{ color: 'var(--text-primary)', fontSize: '0.95rem', lineHeight: 1.5 }}>{testimonio.texto}</p>
               </div>
             ))}
           </div>
