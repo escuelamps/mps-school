@@ -13,30 +13,14 @@ export function EventModal({ isOpen, onClose }) {
         <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
           <X size={24} />
         </button>
-        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Cartelera de Eventos</h3>
-        
-        <Link href="/evento" onClick={onClose} style={{ textDecoration: 'none', display: 'block', marginBottom: '1.5rem' }}>
+        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Eventos Disponibles</h3>
+        <Link href="/evento" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>
           <div style={{ background: 'rgba(0,222,133,0.1)', border: '1px solid var(--accent)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', background: 'var(--accent)', color: '#000', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem' }}>PRÓXIMO EVENTO</div>
+            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', background: 'var(--accent)', color: '#000', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem' }}>EVENTO ACTUAL</div>
             <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Noches MPS (Open Mic)</h4>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>Cupos limitados. Haz clic para inscribirte como asistente o músico.</p>
           </div>
         </Link>
-
-        <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', padding: '1.5rem', borderRadius: '12px' }}>
-          <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', background: 'var(--bg-secondary)', color: 'var(--text-secondary)', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>EVENTOS ANTERIORES</div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ color: 'var(--accent)' }}>•</span> Recital de Mitad de Año (Julio)
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ color: 'var(--accent)' }}>•</span> Taller de Producción (Junio)
-            </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ color: 'var(--accent)' }}>•</span> Noche Acústica MPS (Mayo)
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   );
