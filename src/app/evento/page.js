@@ -6,12 +6,6 @@ import Link from 'next/link';
 export default function EventoPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [pageLoaded, setPageLoaded] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setPageLoaded(true), 2500);
-    return () => clearTimeout(timer);
-  }, []);
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -125,16 +119,7 @@ export default function EventoPage() {
     if (errors[name]) setErrors({ ...errors, [name]: '' });
   };
 
-  if (!pageLoaded) {
-    return (
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 9999, background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-        <img src="/images/eveno-mps.jpeg" alt="Loading Noches MPS" className="img-glow" style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain', opacity: 0.9, marginBottom: '2rem' }} />
-        <div style={{ color: 'var(--accent)', fontSize: '1.2rem', fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase', textShadow: '0 2px 10px rgba(0,0,0,0.8)', textAlign: 'center' }}>
-          Cargando Evento...
-        </div>
-      </div>
-    );
-  }
+
 
   if (success) {
     return (

@@ -211,6 +211,12 @@ export default function RegistroPage() {
 
   return (
     <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)', padding: '2rem' }}>
+      <style dangerouslySetInnerHTML={{__html: `
+        select option {
+          background-color: #1a1a1a;
+          color: white;
+        }
+      `}} />
       <Link href="/" style={{ position: 'absolute', top: '2rem', left: '2rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
         <ArrowLeft size={20} /> Volver
       </Link>

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ContactModal, LoginModal } from '@/components/Modals';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Calendar, Clock } from 'lucide-react';
 
 export function EventModal({ isOpen, onClose }) {
   if (!isOpen) return null;
@@ -13,14 +13,29 @@ export function EventModal({ isOpen, onClose }) {
         <button onClick={onClose} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
           <X size={24} />
         </button>
-        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Eventos Disponibles</h3>
-        <Link href="/evento" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>
-          <div style={{ background: 'rgba(0,222,133,0.1)', border: '1px solid var(--accent)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
-            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', background: 'var(--accent)', color: '#000', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '1rem' }}>EVENTO ACTUAL</div>
-            <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem' }}>Noches MPS (Open Mic)</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>Cupos limitados. Haz clic para inscribirte como asistente o músico.</p>
-          </div>
-        </Link>
+        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Eventos MPS</h3>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* Opción 1: Próximos Eventos */}
+          <Link href="/evento" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>
+            <div style={{ background: 'rgba(0,222,133,0.1)', border: '1px solid var(--accent)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
+              <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Calendar size={20} color="var(--accent)" /> Próximos Eventos
+              </h4>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>Descubre los próximos eventos.</p>
+            </div>
+          </Link>
+
+          {/* Opción 2: Eventos Anteriores */}
+          <Link href="#" onClick={(e) => { e.preventDefault(); alert('Próximamente tendremos nuestra galería de eventos anteriores.'); }} style={{ textDecoration: 'none', display: 'block' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
+              <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Calendar size={20} color="#ffffff" /> Eventos Anteriores
+              </h4>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>Revive los mejores momentos de nuestros shows.</p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );
