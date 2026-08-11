@@ -9,6 +9,7 @@
   --bg-primary: var(--rich-black);
   --bg-secondary: var(--dark-green);
   --text-primary: var(--anti-flash-white);
+  --text-secondary: rgba(255, 255, 255, 0.7);
   --accent: var(--caribbean-green);
   --accent-hover: var(--mountain-meadow);
   
@@ -28,6 +29,7 @@
   --bg-primary: var(--anti-flash-white);
   --bg-secondary: #E2E8F0;
   --text-primary: var(--rich-black);
+  --text-secondary: rgba(0, 0, 0, 0.7);
   --accent: var(--bangladesh-green);
   --accent-hover: var(--dark-green);
   
@@ -41,6 +43,10 @@
   --panel-bg: rgba(255,255,255,0.8);
   --accordion-bg: rgba(0,0,0,0.03);
   --text-link: var(--rich-black);
+}
+
+:root[data-theme='light'] .theme-invert {
+  filter: invert(1);
 }
 
 /* Light mode overrides for glassmorphism */

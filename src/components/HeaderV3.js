@@ -27,7 +27,7 @@ export function EventModal({ isOpen, onClose }) {
           </Link>
 
           {/* Opción 2: Eventos Anteriores */}
-          <Link href="#" onClick={(e) => { e.preventDefault(); alert('Próximamente tendremos nuestra galería de eventos anteriores.'); }} style={{ textDecoration: 'none', display: 'block' }}>
+          <Link href="/eventos-anteriores" onClick={onClose} style={{ textDecoration: 'none', display: 'block' }}>
             <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', padding: '1.5rem', borderRadius: '12px', transition: 'transform 0.2s ease', cursor: 'pointer' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
               <h4 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Calendar size={20} color="#ffffff" /> Eventos Anteriores
