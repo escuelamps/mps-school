@@ -96,11 +96,16 @@ export async function POST(request) {
 
         // LÓGICA DEL BOT (Árbol de decisión usando Firestore para persistencia de estado)
         const chatRef = doc(db, 'whatsapp_chats', from);
-        const chatSnap = await getDoc(chatRef);
+        let chatSnap = null;
         let state = 'MENU_PRINCIPAL';
         
-        if (chatSnap.exists() && chatSnap.data().botState) {
-          state = chatSnap.data().botState;
+        try {
+          chatSnap = await getDoc(chatRef);
+          if (chatSnap.exists() && chatSnap.data().botState) {
+            state = chatSnap.data().botState;
+          }
+        } catch (dbError) {
+          console.error("Error leyendo de Firestore (¿BD no creada?):", dbError);
         }
 
         // Si escriben 'menu', 'hola', 'salir', reiniciamos
@@ -110,7 +115,11 @@ export async function POST(request) {
 
         // Función rápida para actualizar estado en DB
         const setBotState = async (newState) => {
-          await setDoc(chatRef, { botState: newState }, { merge: true });
+          try {
+            await setDoc(chatRef, { botState: newState }, { merge: true });
+          } catch (dbError) {
+            console.error("Error guardando estado en Firestore:", dbError);
+          }
         };
 
         switch (state) {
