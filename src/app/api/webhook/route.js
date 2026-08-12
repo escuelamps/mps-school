@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'escuelamps_secreto_2026';
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
-const PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+const PHONE_ID = process.env.WHATSAPP_PHONE_ID || process.env.WHATSAPP_PHONE;
 
 // Memoria temporal para guardar el estado de cada usuario (en producción usaríamos una base de datos)
 const userSessions = new Map();
