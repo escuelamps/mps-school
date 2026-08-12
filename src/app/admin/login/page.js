@@ -71,7 +71,7 @@ export default function AdminLogin() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="login-input"
-                  placeholder="lpineda"
+                  placeholder="usuario"
                 />
               </div>
             </div>
