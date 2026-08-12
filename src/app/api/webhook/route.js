@@ -1,13 +1,37 @@
 import { NextResponse } from 'next/server';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'escuelamps_secreto_2026';
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_ID = process.env.WHATSAPP_PHONE_ID || process.env.WHATSAPP_PHONE;
 
-// Memoria temporal para guardar el estado de cada usuario (en producción usaríamos una base de datos)
-const userSessions = new Map();
+// Función auxiliar para guardar mensajes en Firestore
+async function saveMessageToFirestore(phone, text, sender) {
+  try {
+    const chatRef = doc(db, 'whatsapp_chats', phone);
+    
+    // Actualizar el documento principal del chat con el último mensaje
+    await setDoc(chatRef, {
+      lastMessage: text,
+      lastMessageTime: serverTimestamp(),
+      phone: phone,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
 
-async function sendMessage(to, text) {
+    // Guardar el mensaje individual en la subcolección
+    const messagesRef = collection(chatRef, 'messages');
+    await addDoc(messagesRef, {
+      text: text,
+      sender: sender, // 'user' o 'bot' o 'admin'
+      timestamp: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error saving message to Firestore:', error);
+  }
+}
+
+async function sendMessage(to, text, sender = 'bot') {
   if (!WHATSAPP_TOKEN || !PHONE_ID) {
     console.error('Falta WHATSAPP_TOKEN o PHONE_ID en .env.local');
     return;
@@ -26,7 +50,13 @@ async function sendMessage(to, text) {
         text: { body: text }
       })
     });
-    if (!res.ok) console.error('Error de Meta API:', await res.text());
+    
+    if (!res.ok) {
+      console.error('Error de Meta API:', await res.text());
+    } else {
+      // Si se envió exitosamente, guardarlo en Firestore
+      await saveMessageToFirestore(to, text, sender);
+    }
   } catch (error) {
     console.error('Fetch error:', error);
   }
@@ -61,37 +91,51 @@ export async function POST(request) {
         
         console.log(`📩 Mensaje de ${from}: ${msg_body}`);
 
-        // LÓGICA DEL BOT (Árbol de decisión)
-        let state = userSessions.get(from) || 'MENU_PRINCIPAL';
+        // Guardar mensaje entrante del usuario en Firestore
+        await saveMessageToFirestore(from, msg_body, 'user');
+
+        // LÓGICA DEL BOT (Árbol de decisión usando Firestore para persistencia de estado)
+        const chatRef = doc(db, 'whatsapp_chats', from);
+        const chatSnap = await getDoc(chatRef);
+        let state = 'MENU_PRINCIPAL';
+        
+        if (chatSnap.exists() && chatSnap.data().botState) {
+          state = chatSnap.data().botState;
+        }
 
         // Si escriben 'menu', 'hola', 'salir', reiniciamos
         if (msg_body.toLowerCase().match(/^(hola|menu|menú|salir|volver|inicio)$/)) {
           state = 'MENU_PRINCIPAL';
         }
 
+        // Función rápida para actualizar estado en DB
+        const setBotState = async (newState) => {
+          await setDoc(chatRef, { botState: newState }, { merge: true });
+        };
+
         switch (state) {
           case 'MENU_PRINCIPAL':
             await sendMessage(from, "¡Hola! 🎵 Bienvenido a la Escuela de Música MPS.\n\n¿En qué te podemos ayudar hoy? Responde con el número de tu opción:\n\n1️⃣ Oferta Académica y Programas\n2️⃣ Tarifas y Horarios\n3️⃣ Proceso de Inscripción\n4️⃣ Hablar con un asesor humano");
-            userSessions.set(from, 'ESPERANDO_OPCION_PRINCIPAL');
+            await setBotState('ESPERANDO_OPCION_PRINCIPAL');
             break;
 
           case 'ESPERANDO_OPCION_PRINCIPAL':
             if (msg_body === '1') {
               await sendMessage(from, "🎸 *Nuestra Oferta Académica*\nSelecciona el área de tu interés:\n\n1. Área de Música (Instrumentos y Canto)\n2. Producción Musical & DJ\n3. Actuación / Artes Escénicas\n4. Fotografía y Eventos\n\n*(Escribe 0 para volver al menú principal)*");
-              userSessions.set(from, 'ESPERANDO_PROGRAMA');
+              await setBotState('ESPERANDO_PROGRAMA');
             } else if (msg_body === '2') {
               await sendMessage(from, "Para darte la información exacta de precios y horarios, ¿el estudiante es niño o adulto?\n\n1. Niño (2 a 12 años)\n2. Joven o Adulto (13+ años)");
-              userSessions.set(from, 'ESPERANDO_EDAD');
+              await setBotState('ESPERANDO_EDAD');
             } else if (msg_body === '3') {
               await sendMessage(from, "📝 *Proceso de Inscripción*\n\n¡Inscribirte es muy fácil! No requieres conocimientos previos.\n1. Llena nuestro formulario en la web.\n2. Realiza el pago de la matrícula.\n3. ¡Comienza tus clases!\n\n👉 Enlace: https://escuelamps.com/inscripcion\n\n*(Escribe 'menu' para volver)*");
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
             } else if (msg_body === '4') {
               await sendMessage(from, "👤 Un asesor humano de la Escuela MPS ha sido notificado y te responderá por aquí mismo en unos minutos. ¡Gracias por tu paciencia!");
-              userSessions.set(from, 'PAUSADO_ASESOR_HUMANO');
+              await setBotState('PAUSADO_ASESOR_HUMANO');
             } else if (msg_body === '0') {
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
               await sendMessage(from, "¿En qué más te puedo ayudar?\n1. Programas\n2. Tarifas\n3. Inscripción\n4. Asesor");
-              userSessions.set(from, 'ESPERANDO_OPCION_PRINCIPAL');
+              await setBotState('ESPERANDO_OPCION_PRINCIPAL');
             } else {
               await sendMessage(from, "⚠️ Por favor responde con un número del 1 al 4.");
             }
@@ -100,12 +144,12 @@ export async function POST(request) {
           case 'ESPERANDO_PROGRAMA':
             if (msg_body === '1') {
               await sendMessage(from, "🎹 *Área de Música*\n¿Qué instrumento te interesa?\n\n1. Técnica Vocal y Canto\n2. Guitarra\n3. Bajo\n4. Piano y Teclados\n5. Batería y Percusión\n6. Violín\n7. Instrumentos de Viento\n\n*(Escribe 0 para volver)*");
-              userSessions.set(from, 'ESPERANDO_INSTRUMENTO');
+              await setBotState('ESPERANDO_INSTRUMENTO');
             } else if (['2', '3', '4'].includes(msg_body)) {
               await sendMessage(from, `Genial, has elegido la opción ${msg_body}. Puedes ver todos los detalles, módulos y profesores de esta cátedra directamente en nuestra página web:\n\n👉 https://escuelamps.com/quienes-somos\n\n*(Escribe 'menu' para volver al inicio)*`);
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
             } else if (msg_body === '0') {
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
               await sendMessage(from, "Volviendo al menú principal... Escribe 'hola'.");
             } else {
               await sendMessage(from, "⚠️ Por favor responde con un número del 1 al 4.");
@@ -115,9 +159,9 @@ export async function POST(request) {
           case 'ESPERANDO_INSTRUMENTO':
             if (['1','2','3','4','5','6','7'].includes(msg_body)) {
               await sendMessage(from, "🎵 ¡Excelente elección! Nuestras clases son 100% prácticas.\n\nPuedes ver toda la info de esta cátedra aquí: https://escuelamps.com/quienes-somos\n\n¿Quieres saber los horarios y precios?\nResponde: *menu* y luego elige la opción 2.");
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
             } else if (msg_body === '0') {
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
               await sendMessage(from, "Escribe 'hola' para ver el menú principal nuevamente.");
             } else {
               await sendMessage(from, "⚠️ Selecciona un instrumento del 1 al 7.");
@@ -127,10 +171,10 @@ export async function POST(request) {
           case 'ESPERANDO_EDAD':
             if (msg_body === '1') {
               await sendMessage(from, "👶 *Planes Infantiles (2 a 12 años)*\nContamos con estimulación temprana e iniciación musical. Horarios flexibles en las tardes y sábados en la mañana.\nValor mensualidad: $150.000 COP.\n\nPara agendar tu primera clase, escribe '4' (Asesor humano) o 'menu'.");
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
             } else if (msg_body === '2') {
               await sendMessage(from, "👨‍🎤 *Planes Jóvenes y Adultos*\nClases personalizadas o grupales. Horarios de lunes a sábado según disponibilidad.\nValor mensualidad: $180.000 COP.\n\nPara agendar tu primera clase, escribe '4' (Asesor humano) o 'menu'.");
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
             } else {
               await sendMessage(from, "⚠️ Por favor responde '1' para Niño o '2' para Adulto.");
             }
@@ -138,15 +182,16 @@ export async function POST(request) {
 
           case 'PAUSADO_ASESOR_HUMANO':
             // El bot se queda callado para dejar que el humano hable
-            // Si el admin quiere reiniciar al usuario, el usuario tendría que enviar una palabra clave oculta
+            // Si el admin quiere reiniciar al usuario, el admin cambiaría el estado a MENU_PRINCIPAL en la DB
+            // O el usuario envía la palabra oculta
             if (msg_body === 'REINICIAR_BOT') {
-              userSessions.set(from, 'MENU_PRINCIPAL');
+              await setBotState('MENU_PRINCIPAL');
               await sendMessage(from, "Bot reiniciado.");
             }
             break;
 
           default:
-            userSessions.set(from, 'MENU_PRINCIPAL');
+            await setBotState('MENU_PRINCIPAL');
             break;
         }
       }
