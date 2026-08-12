@@ -45,7 +45,7 @@ export default function AdminLogin() {
 
       <div className="login-content">
         <div className="login-icon-box">
-          <Lock size={32} color="#818cf8" />
+          <Lock size={32} color="#00DE85" />
         </div>
         
         <h2 className="login-title">Acceso Restringido</h2>
