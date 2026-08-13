@@ -1,18 +1,53 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, onSnapshot, doc, setDoc } from 'firebase/firestore';
-import { Send, User, Bot, Power, PowerOff, Phone } from 'lucide-react';
+import { Send, User, Bot, Power, PowerOff, Phone, LogOut } from 'lucide-react';
 import '../admin.css';
 
 export default function ChatsDashboard() {
+  const router = useRouter();
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
+
+  // Lógica de inactividad (1 hora)
+  useEffect(() => {
+    let inactivityTimer;
+    
+    const logout = async () => {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        router.push('/admin/login');
+        router.refresh();
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      // 1 hora en milisegundos: 60 * 60 * 1000 = 3600000
+      inactivityTimer = setTimeout(logout, 3600000);
+    };
+
+    // Eventos que reinician el temporizador
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(event => document.addEventListener(event, resetTimer));
+    
+    // Iniciar temporizador al montar
+    resetTimer();
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(event => document.removeEventListener(event, resetTimer));
+    };
+  }, [router]);
 
   useEffect(() => {
     const q = query(collection(db, 'whatsapp_chats'), orderBy('lastMessageTime', 'desc'));
@@ -87,8 +122,21 @@ export default function ChatsDashboard() {
       <div className="dash-sidebar">
         <div className="dash-header">
           <h1 className="dash-title">Chats MPS</h1>
-          <div className="live-badge">
-            <span className="live-dot"></span> En vivo
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div className="live-badge">
+              <span className="live-dot"></span> En vivo
+            </div>
+            <button 
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                router.push('/admin/login');
+                router.refresh();
+              }}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              title="Cerrar sesión"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         </div>
         
