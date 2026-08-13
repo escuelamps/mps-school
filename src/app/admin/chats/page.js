@@ -245,8 +245,10 @@ export default function ChatsDashboard() {
                 <textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Escribe un mensaje..."
+                  placeholder={selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? "Escribe un mensaje..." : "Debes pausar el bot (arriba a la derecha) para poder escribir."}
                   className="chat-textarea"
+                  disabled={selectedChat.botState !== 'PAUSADO_ASESOR_HUMANO'}
+                  style={{ opacity: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 1 : 0.6, cursor: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'text' : 'not-allowed' }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -256,8 +258,9 @@ export default function ChatsDashboard() {
                 />
                 <button
                   type="submit"
-                  disabled={!newMessage.trim() || isSending}
+                  disabled={selectedChat.botState !== 'PAUSADO_ASESOR_HUMANO' || !newMessage.trim() || isSending}
                   className="send-btn"
+                  style={{ opacity: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 1 : 0.4, cursor: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'pointer' : 'not-allowed' }}
                 >
                   <Send size={20} />
                 </button>
