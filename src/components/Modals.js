@@ -1,9 +1,17 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { X, AlertCircle } from 'lucide-react';
+import HabeasDataConsent from './HabeasDataConsent';
 
 export function ModalOverlay({ isOpen, onClose, children }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('modal-open');
@@ -13,9 +21,9 @@ export function ModalOverlay({ isOpen, onClose, children }) {
     return () => document.body.classList.remove('modal-open');
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div style={{
       position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
       zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -34,7 +42,8 @@ export function ModalOverlay({ isOpen, onClose, children }) {
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -148,6 +157,7 @@ export function LoginModal({ isOpen, onClose }) {
 export function ContactModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
+  const [habeasAccepted, setHabeasAccepted] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -167,6 +177,7 @@ export function ContactModal({ isOpen, onClose }) {
       newErrors.email = 'Ingresa un correo válido.';
     }
     if (!formData.message.trim()) newErrors.message = 'El mensaje no puede estar vacío.';
+    if (!habeasAccepted) newErrors.habeas = true;
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -221,12 +232,24 @@ export function ContactModal({ isOpen, onClose }) {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--accent)' }}>Mensaje</label>
           <textarea 
             name="message" value={formData.message} onChange={handleChange}
-            rows="3" 
-            style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: `1px solid ${errors.message ? '#ff6961' : 'rgba(0,222,133,0.3)'}`, color: 'white', outline: 'none', resize: 'none' }}
-          ></textarea>
+            rows={4} 
+            style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: `1px solid ${errors.message ? '#ff6961' : 'rgba(0,222,133,0.3)'}`, color: 'white', outline: 'none', resize: 'vertical' }} 
+          />
           {errors.message && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '4px' }}><AlertCircle size={14}/> {errors.message}</span>}
         </div>
-        <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem', width: '100%' }}>Enviar Mensaje</button>
+        
+        <HabeasDataConsent 
+          checked={habeasAccepted}
+          onChange={(e) => {
+            setHabeasAccepted(e.target.checked);
+            if (errors.habeas) setErrors({ ...errors, habeas: false });
+          }}
+          hasError={errors.habeas}
+        />
+
+        <button type="submit" className="btn-primary" style={{ marginTop: '0.5rem' }}>
+          Enviar Mensaje
+        </button>
       </form>
     </ModalOverlay>
   );

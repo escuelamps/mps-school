@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle2, Calendar, MapPin, Clock, Mic2, Key, Upload } from 'lucide-react';
 import Link from 'next/link';
+import HabeasDataConsent from '@/components/HabeasDataConsent';
 
 export default function EventoPage() {
   const [loading, setLoading] = useState(false);
@@ -12,6 +13,8 @@ export default function EventoPage() {
     telefono: '',
     comprobante: null,
   });
+  
+  const [habeasAccepted, setHabeasAccepted] = useState(false);
 
   const [errors, setErrors] = useState({});
   const [captchaNum1, setCaptchaNum1] = useState(0);
@@ -52,6 +55,8 @@ export default function EventoPage() {
     } else if (parseInt(captchaInput) !== captchaNum1 + captchaNum2) {
       newErrors.captcha = 'Respuesta incorrecta.';
     }
+    
+    if (!habeasAccepted) newErrors.habeas = true;
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -284,6 +289,15 @@ export default function EventoPage() {
               />
               {errors.captcha && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.captcha}</span>}
             </div>
+            
+            <HabeasDataConsent 
+              checked={habeasAccepted}
+              onChange={(e) => {
+                setHabeasAccepted(e.target.checked);
+                if (errors.habeas) setErrors({ ...errors, habeas: false });
+              }}
+              hasError={errors.habeas}
+            />
 
             <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', width: '100%', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
               {loading ? 'Reservando...' : 'Confirmar Asistencia'}

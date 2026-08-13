@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { AlertCircle, ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import dataCiudades from '../../data/ciudades.json';
+import HabeasDataConsent from '@/components/HabeasDataConsent';
 
 export default function RegistroPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const [habeasAccepted, setHabeasAccepted] = useState(false);
   
   // State for all 20+ fields
   const [formData, setFormData] = useState({
@@ -68,6 +70,7 @@ export default function RegistroPage() {
     if (step === 4) {
       if (!formData.password) newErrors.password = 'Requerido.';
       else if (formData.password.length < 6) newErrors.password = 'Mínimo 6 caracteres.';
+      if (!habeasAccepted) newErrors.habeas = true;
     }
     
     setErrors(newErrors);
@@ -423,6 +426,17 @@ export default function RegistroPage() {
                   <input name="password" type="password" value={formData.password} onChange={handleChange} style={inputStyle('password')} placeholder="Mínimo 6 caracteres" />
                   {errors.password && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.password}</span>}
                 </div>
+              </div>
+              
+              <div style={{ gridColumn: '1 / -1' }}>
+                <HabeasDataConsent 
+                  checked={habeasAccepted}
+                  onChange={(e) => {
+                    setHabeasAccepted(e.target.checked);
+                    if (errors.habeas) setErrors({ ...errors, habeas: false });
+                  }}
+                  hasError={errors.habeas}
+                />
               </div>
             </div>
           )}
