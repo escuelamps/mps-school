@@ -49,7 +49,7 @@ export default function V3Page() {
   const testimonialsList = [
     { nombre: "JHON ALEXANDER PACHECO DUARTE", rol: "Hace 25 semanas", texto: "Hola buenas tardes Quiero contarles que la experiencia de hoy fue excelente mi hijo quedó muy contento 🫶👏🏻👏🏻👏🏻" },
     { nombre: "Sofi Rojas", rol: "23 may 2025", texto: "Mi más sincero agradecimiento a la Academia *Mi primer Sol* por todo lo que ha hecho por mí. Su paciencia y dedicación son verdaderamente inspiradoras. Agradezco enormemente su empeño en encontrar métodos de aprendizaje que se adapten a mis necesidades y su habilidad para hacer que cada clase sea interesante y enriquecedora." },
-    { nombre: "Yeny Delgadillo", rol: "23 may 2025", texto: "Es una escuela musical maravillosa, excelente la profesora Laurita, nos encanta como enseña!" },
+    { nombre: "Yeny Delgadillo", rol: "23 may 2025", texto: "Es una escuela maravillosa, excelente la profesora Laurita, nos encanta como enseña!" },
     { nombre: "juc Al", rol: "20 may 2025", texto: "Mi hija a aprendido muchísimo con la.profe laura ... estoy feliz por.los.avances .. y seguiré con esta escuela" },
     { nombre: "MARCELA TORRES", rol: "20 may 2025", texto: "Excelentes clases tanto virtuales como presenciales, Laura muy buena profesora sabe como enseñar a los niños es muy amable y amorosa con ellos, estamos felices" },
     { nombre: "juancho lopez", rol: "16 may 2025", texto: "Gran escuela, profesores de alta calidad me ayudaron a maximizar mis habilidades musicales" },

@@ -124,7 +124,7 @@ export async function POST(request) {
 
         switch (state) {
           case 'MENU_PRINCIPAL':
-            await sendMessage(from, "¡Hola! 🎵 Bienvenido a la Escuela de Música MPS.\n\n¿En qué te podemos ayudar hoy? Responde con el número de tu opción:\n\n1️⃣ Oferta Académica y Programas\n2️⃣ Tarifas y Horarios\n3️⃣ Proceso de Inscripción\n4️⃣ Hablar con un asesor humano");
+            await sendMessage(from, "¡Hola! 🎵 Bienvenido a la Escuela MPS.\n\n¿En qué te podemos ayudar hoy? Responde con el número de tu opción:\n\n1️⃣ Oferta Académica y Programas\n2️⃣ Tarifas y Horarios\n3️⃣ Proceso de Inscripción\n4️⃣ Hablar con un asesor humano");
             await setBotState('ESPERANDO_OPCION_PRINCIPAL');
             break;
 

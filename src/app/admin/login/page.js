@@ -50,7 +50,7 @@ export default function AdminLogin() {
         </div>
         
         <h2 className="login-title">Acceso Restringido</h2>
-        <p className="login-subtitle">Escuela Musical MPS - Dashboard de Marketing</p>
+        <p className="login-subtitle">Escuela MPS - Dashboard de Marketing</p>
         
         <div className="login-card">
           <form onSubmit={handleSubmit}>
