@@ -6,7 +6,7 @@ export async function POST(request) {
     
     // Check against Vercel environment variables (or local .env.local)
     const validUsername = process.env.ADMIN_USERNAME || 'lpineda';
-    const validPassword = process.env.ADMIN_PASSWORD || '1qaZXsw"3';
+    const validPassword = process.env.ADMIN_PASSWORD || 'escuelamps2026*';
     
     if (username === validUsername && password === validPassword) {
       // Create response
