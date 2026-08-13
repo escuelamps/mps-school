@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, onSnapshot, doc, setDoc } from 'firebase/firestore';
-import { Send, User, Bot, Power, PowerOff, Phone, LogOut } from 'lucide-react';
+import { Send, User, Bot, Power, PowerOff, Phone, LogOut, BellRing, MessageCircle } from 'lucide-react';
 import '../admin.css';
 
 export default function ChatsDashboard() {
@@ -14,6 +14,8 @@ export default function ChatsDashboard() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [newChatIds, setNewChatIds] = useState(new Set());
+  const prevChatsRef = useRef([]);
   const messagesEndRef = useRef(null);
 
   // Lógica de inactividad (1 hora)
@@ -52,14 +54,36 @@ export default function ChatsDashboard() {
   useEffect(() => {
     const q = query(collection(db, 'whatsapp_chats'), orderBy('lastMessageTime', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const chatsData = [];
-      snapshot.forEach((doc) => {
-        chatsData.push({ id: doc.id, ...doc.data() });
+      const chatsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setNewChatIds(prev => {
+        const nextNewIds = new Set(prev);
+        if (prevChatsRef.current.length > 0) {
+          chatsData.forEach(chat => {
+            const isExisting = prevChatsRef.current.find(c => c.id === chat.id);
+            if (!isExisting) {
+              nextNewIds.add(chat.id);
+            }
+          });
+        }
+        return nextNewIds;
       });
+      
+      prevChatsRef.current = chatsData;
       setChats(chatsData);
+
+      if (selectedChat) {
+        const updatedSelectedChat = chatsData.find(c => c.id === selectedChat.id);
+        if (updatedSelectedChat && updatedSelectedChat.botState !== selectedChat.botState) {
+          setSelectedChat(updatedSelectedChat);
+        }
+      }
     });
     return () => unsubscribe();
-  }, []);
+  }, [selectedChat]);
 
   useEffect(() => {
     if (!selectedChat) return;
@@ -78,6 +102,15 @@ export default function ChatsDashboard() {
 
     return () => unsubscribe();
   }, [selectedChat]);
+
+  const handleSelectChat = (chat) => {
+    setSelectedChat(chat);
+    setNewChatIds(prev => {
+      const updated = new Set(prev);
+      updated.delete(chat.id);
+      return updated;
+    });
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -149,12 +182,18 @@ export default function ChatsDashboard() {
             chats.map((chat) => (
               <div 
                 key={chat.id}
-                onClick={() => setSelectedChat(chat)}
+                onClick={() => handleSelectChat(chat)}
                 className={`chat-item ${selectedChat?.id === chat.id ? 'active' : ''}`}
               >
                 <div className="chat-item-header">
-                  <div className="chat-phone">
+                  <div className="chat-phone" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <Phone size={14} color="#94a3b8" /> {chat.phone}
+                    {chat.botState === 'PAUSADO_ASESOR_HUMANO' && (
+                      <BellRing size={16} color="#ef4444" style={{ animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} title="Requiere asesor" />
+                    )}
+                    {newChatIds.has(chat.id) && chat.botState !== 'PAUSADO_ASESOR_HUMANO' && (
+                      <MessageCircle size={16} color="#3b82f6" title="Nuevo chat" />
+                    )}
                   </div>
                   <span className="chat-time">{formatTime(chat.lastMessageTime)}</span>
                 </div>
