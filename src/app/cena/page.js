@@ -1,0 +1,347 @@
+"use client";
+import { useState, useEffect } from 'react';
+import { ArrowLeft, CheckCircle2, MapPin, Clock, Key, Upload, Utensils, Coffee, Wine, Beer, Pizza } from 'lucide-react';
+import Link from 'next/link';
+import HabeasDataConsent from '@/components/HabeasDataConsent';
+
+const OPCIONES_MENU = [
+  { id: 'vino', label: 'Vino Caliente 2X1', price: 15000, icon: <Wine size={20} /> },
+  { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} /> },
+  { id: 'hamburguesa_papas', label: 'Hamburguesa con papas', price: 18000, icon: <Pizza size={20} /> },
+  { id: 'nachos', label: 'Nachos', price: 15000, icon: <Utensils size={20} /> },
+  { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <Coffee size={20} /> },
+  { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 3000, icon: <Beer size={20} /> },
+  { id: 'agua', label: 'Agua', price: 3000, icon: <Coffee size={20} /> },
+];
+
+export default function CenaPage() {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    nombre: '',
+    telefono: '',
+    mesa: '',
+    opcionesSeleccionadas: [],
+    comprobante: null,
+  });
+  
+  const [habeasAccepted, setHabeasAccepted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [captchaNum1, setCaptchaNum1] = useState(0);
+  const [captchaNum2, setCaptchaNum2] = useState(0);
+  const [captchaInput, setCaptchaInput] = useState('');
+
+  useEffect(() => {
+    setCaptchaNum1(Math.floor(Math.random() * 10) + 1);
+    setCaptchaNum2(Math.floor(Math.random() * 10) + 1);
+  }, []);
+
+  const handleFileChange = (e, field = 'comprobante') => {
+    const file = e.target.files[0];
+    if (file && file.size > 15 * 1024 * 1024) {
+      alert(`El archivo es demasiado grande. El tamaño máximo es 15 MB.`);
+      e.target.value = null;
+      setFormData(prev => ({ ...prev, [field]: null }));
+    } else {
+      setFormData(prev => ({ ...prev, [field]: file }));
+    }
+  };
+
+  const handleCheckboxChange = (id) => {
+    setFormData(prev => {
+      const isSelected = prev.opcionesSeleccionadas.includes(id);
+      let nuevasOpciones = [];
+      if (isSelected) {
+        nuevasOpciones = prev.opcionesSeleccionadas.filter(item => item !== id);
+      } else {
+        nuevasOpciones = [...prev.opcionesSeleccionadas, id];
+      }
+      
+      if (errors.opcionesSeleccionadas && nuevasOpciones.length > 0) {
+        setErrors(e => ({...e, opcionesSeleccionadas: ''}));
+      }
+      
+      return { ...prev, opcionesSeleccionadas: nuevasOpciones };
+    });
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.nombre.trim()) newErrors.nombre = 'Requerido.';
+    
+    const telefonoNumeros = formData.telefono.replace(/\D/g, '');
+    if (!formData.telefono.trim()) {
+      newErrors.telefono = 'Requerido.';
+    } else if (telefonoNumeros.length !== 10) {
+      newErrors.telefono = 'Número de 10 dígitos';
+    }
+
+    if (!formData.mesa.trim()) {
+      newErrors.mesa = 'Requerido.';
+    } else if (isNaN(Number(formData.mesa))) {
+      newErrors.mesa = 'Debe ser un número.';
+    }
+
+    if (formData.opcionesSeleccionadas.length === 0) {
+      newErrors.opcionesSeleccionadas = 'Selecciona al menos una opción.';
+    }
+    
+    if (!formData.comprobante) newErrors.comprobante = 'Requerido.';
+    
+    if (!captchaInput.trim()) {
+      newErrors.captcha = 'Requerido.';
+    } else if (parseInt(captchaInput) !== captchaNum1 + captchaNum2) {
+      newErrors.captcha = 'Respuesta incorrecta.';
+    }
+    
+    if (!habeasAccepted) newErrors.habeas = true;
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const getBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = error => reject(error);
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (validate()) {
+      setLoading(true);
+      try {
+        let comprobanteUrl = '';
+        
+        const seleccionTexto = formData.opcionesSeleccionadas.map(id => {
+          return OPCIONES_MENU.find(opt => opt.id === id).label;
+        }).join(', ');
+
+        // 1. LÓGICA DE FIREBASE (Para el tiempo real del Panel)
+        if (formData.comprobante) {
+          const { storage, db } = await import('@/lib/firebase');
+          const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
+          const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+
+          const fileRef = ref(storage, `comprobantes_cenas/${Date.now()}_${formData.comprobante.name}`);
+          const uploadResult = await uploadBytes(fileRef, formData.comprobante);
+          comprobanteUrl = await getDownloadURL(uploadResult.ref);
+
+          await addDoc(collection(db, 'cenas'), {
+            nombre: formData.nombre,
+            telefono: formData.telefono,
+            mesa: formData.mesa,
+            opcionCena: seleccionTexto,
+            comprobanteUrl: comprobanteUrl,
+            estado: 'Pendiente',
+            createdAt: serverTimestamp()
+          });
+        }
+
+        // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
+        const payload = {
+          nombre: formData.nombre,
+          telefono: formData.telefono,
+          mesa: formData.mesa,
+          opcionCena: seleccionTexto,
+          sheetName: 'Cena' 
+        };
+
+        if (formData.comprobante) {
+          payload.fileData = await getBase64(formData.comprobante);
+          payload.fileName = formData.comprobante.name;
+          payload.mimeType = formData.comprobante.type;
+        }
+
+        await fetch("https://script.google.com/macros/s/AKfycbw6HcZFMHuTYj54kD4yx7fhF2JrDKukICKAUbaYE_64uq3OMqEeKyQ_bc-yq1-DmE2x/exec", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          mode: "no-cors"
+        });
+        
+        setSuccess(true);
+      } catch (err) {
+        console.error("Error al guardar:", err);
+        alert("Hubo un problema procesando tu reserva. Intenta de nuevo.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors({ ...errors, [name]: '' });
+  };
+
+  // Calcular el total
+  const total = formData.opcionesSeleccionadas.reduce((sum, id) => {
+    const option = OPCIONES_MENU.find(o => o.id === id);
+    return sum + (option ? option.price : 0);
+  }, 0);
+
+  if (success) {
+    return (
+      <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)', padding: '2rem' }}>
+        <div className="glass-card" style={{ maxWidth: '500px', width: '100%', textAlign: 'center', padding: '3rem 2rem' }}>
+          <div style={{ width: '80px', height: '80px', background: 'rgba(0, 222, 133, 0.2)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem auto' }}>
+            <CheckCircle2 size={40} color="var(--accent)" />
+          </div>
+          <h2 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>¡Pedido Exitoso!</h2>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem' }}>
+            Hemos recibido tu pedido y el comprobante de pago. En breve lo llevaremos a tu mesa.
+          </p>
+          <Link href="/" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+            Volver al inicio
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  const inputStyle = (name) => ({
+    width: '100%', padding: '0.8rem', borderRadius: '8px', 
+    background: 'var(--panel-bg)', 
+    border: `1px solid ${errors[name] ? '#ff6961' : 'var(--glass-border)'}`, 
+    color: 'var(--text-primary)', outline: 'none'
+  });
+  const labelStyle = { display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: '600' };
+
+  return (
+    <main style={{ minHeight: '100vh', background: 'linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%)', padding: '2rem 5% 6rem 5%', position: 'relative' }}>
+      <Link href="/" style={{ position: 'absolute', top: '2rem', left: '2rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+        <ArrowLeft size={20} /> Volver
+      </Link>
+
+      <div style={{ maxWidth: '1100px', margin: '4rem auto 0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
+        <div style={{ width: '100%', maxWidth: '800px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0,222,133,0.1)', color: 'var(--accent)', padding: '0.5rem 1rem', borderRadius: '20px', marginBottom: '1rem', fontWeight: 'bold' }}>
+            <Utensils size={18} /> Menú del Evento
+          </div>
+          <h1 className="text-gradient" style={{ fontSize: '3rem', lineHeight: '1.1', marginBottom: '1.5rem' }}>
+            Haz tu pedido
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', marginBottom: '2.5rem' }}>
+            Selecciona cada una de las opciones que deseas disfrutar hoy:
+          </p>
+        </div>
+
+        <div className="glass-card" style={{ padding: '2.5rem', width: '100%', maxWidth: '800px' }}>
+          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            
+            {/* Opciones en cajas */}
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+                {OPCIONES_MENU.map((opcion) => {
+                  const isSelected = formData.opcionesSeleccionadas.includes(opcion.id);
+                  return (
+                    <label key={opcion.id} style={{ 
+                      display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.2rem', 
+                      background: isSelected ? 'rgba(0, 222, 133, 0.1)' : 'var(--panel-bg)', 
+                      borderRadius: '12px', 
+                      border: `2px solid ${isSelected ? 'var(--accent)' : 'var(--glass-border)'}`, 
+                      cursor: 'pointer', transition: 'all 0.2s' 
+                    }}>
+                      <input 
+                        type="checkbox" 
+                        style={{ display: 'none' }}
+                        checked={isSelected}
+                        onChange={() => handleCheckboxChange(opcion.id)}
+                      />
+                      <div style={{ 
+                        width: '24px', height: '24px', borderRadius: '6px', 
+                        border: `2px solid ${isSelected ? 'var(--accent)' : '#94a3b8'}`,
+                        background: isSelected ? 'var(--accent)' : 'transparent',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                      }}>
+                        {isSelected && <CheckCircle2 size={16} color="#000F11" />}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <h3 style={{ margin: '0 0 0.3rem 0', color: 'var(--text-primary)', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          {opcion.icon} {opcion.label}
+                        </h3>
+                        <p style={{ margin: 0, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.1rem' }}>
+                          ${opcion.price.toLocaleString('es-CO')}
+                        </p>
+                      </div>
+                    </label>
+                  )
+                })}
+              </div>
+              {errors.opcionesSeleccionadas && <span style={{ color: '#ff6961', fontSize: '0.9rem', marginTop: '1rem', display: 'block' }}>{errors.opcionesSeleccionadas}</span>}
+              
+              {formData.opcionesSeleccionadas.length > 0 && (
+                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px dashed var(--glass-border)', textAlign: 'right' }}>
+                  <h3 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1.2rem' }}>Total a pagar: <span style={{ color: 'var(--accent)' }}>${total.toLocaleString('es-CO')}</span></h3>
+                </div>
+              )}
+            </div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid var(--glass-border)', margin: '1rem 0' }} />
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+              <div>
+                <label style={labelStyle}>Escribe el número de tu mesa *</label>
+                <input name="mesa" type="number" value={formData.mesa} onChange={handleChange} style={inputStyle('mesa')} placeholder="Ej: 5" min="1" />
+                <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>para recibir tu pedido</p>
+                {errors.mesa && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.mesa}</span>}
+              </div>
+
+              <div>
+                <label style={labelStyle}>Nombre Completo *</label>
+                <input name="nombre" value={formData.nombre} onChange={handleChange} style={inputStyle('nombre')} placeholder="Tu nombre" />
+                {errors.nombre && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.nombre}</span>}
+              </div>
+
+              <div>
+                <label style={labelStyle}>Teléfono (WhatsApp) *</label>
+                <input name="telefono" type="number" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
+                {errors.telefono && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.telefono}</span>}
+              </div>
+            </div>
+
+            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
+              <h3 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '1.2rem' }}>Escanea el QR para realizar tu pago por Nequi<br/>o paga vía Bre-B con la llave <strong style={{color:'var(--accent)'}}>@MIPRIMERSOL</strong></h3>
+              <div style={{ width: '200px', height: '200px', background: '#fff', padding: '10px', borderRadius: '12px', margin: '0 auto 1.5rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src="/images/qr.png" alt="QR Code" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+              </div>
+              
+              <div style={{ textAlign: 'left' }}>
+                <label style={{ ...labelStyle, marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Upload size={18} /> Sube tu Comprobante de Pago *
+                </label>
+                <input 
+                  type="file" 
+                  name="comprobante"
+                  onChange={handleFileChange} 
+                  accept="image/*,application/pdf"
+                  style={{ width: '100%', color: 'var(--text-secondary)' }}
+                />
+                {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
+              </div>
+            </div>
+
+            <HabeasDataConsent 
+              checked={habeasAccepted}
+              onChange={(e) => {
+                setHabeasAccepted(e.target.checked);
+                if (errors.habeas) setErrors({ ...errors, habeas: false });
+              }}
+              hasError={errors.habeas}
+            />
+
+            <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', width: '100%', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer', fontSize: '1.2rem', padding: '1rem' }}>
+              {loading ? 'Procesando...' : 'Confirmar Pedido'}
+            </button>
+          </form>
+        </div>
+        
+      </div>
+    </main>
+  );
+}

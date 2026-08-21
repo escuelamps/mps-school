@@ -160,6 +160,13 @@ export default function ChatsDashboard() {
               <span className="live-dot"></span> En vivo
             </div>
             <button 
+              onClick={() => router.push('/admin/reservas')}
+              style={{ background: 'none', border: 'none', color: '#00DE85', cursor: 'pointer', display: 'flex', alignItems: 'center', fontWeight: 'bold' }}
+              title="Ir a Reservas"
+            >
+              Reservas
+            </button>
+            <button 
               onClick={async () => {
                 await fetch('/api/auth/logout', { method: 'POST' });
                 router.push('/admin/login');

@@ -148,47 +148,34 @@ export default function EventoPage() {
             <Mic2 size={18} /> Evento Especial
           </div>
           <h1 className="text-gradient" style={{ fontSize: '3.5rem', lineHeight: '1.1', marginBottom: '1.5rem' }}>
-            NOCHES MPS
+            NOCHES MPS: CONCIERTO DE PIANO
           </h1>
           
           <div style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', marginBottom: '2.5rem', lineHeight: '1.6' }}>
             <p style={{ marginBottom: '1.5rem' }}>
-              <strong>Una noche para sanar, cantar y ayudar ✨🌙</strong><br/><br/>
-              Este viernes 14 de agosto, a partir de las 6:30 p. m., llega una nueva sesión de Noches MPS, un espacio creado para encontrarnos alrededor de la música, el bienestar y, esta vez, también la solidaridad.
+              <strong>Una velada mágica alrededor del piano ✨🎹</strong><br/><br/>
+              Este sábado 22 de agosto, a partir de las 6:30 p. m., acompáñanos en una nueva sesión de Noches MPS dedicada a disfrutar de las más bellas melodías en vivo.
             </p>
 
-            <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.8rem', fontSize: '1.3rem' }}>🎶 SESIÓN DE SONIDO TERAPÉUTICO</h3>
+            <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.8rem', fontSize: '1.3rem' }}>🎶 CONCIERTO DE PIANO</h3>
             <p style={{ marginBottom: '1.5rem' }}>
-              Comenzaremos la noche con una experiencia de relajación y conexión a través del sonido y las vibraciones, creando un espacio para hacer una pausa, respirar y regalarnos un momento de bienestar.
-            </p>
-
-            <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.8rem', fontSize: '1.3rem' }}>🎤 OPEN MIC & KARAOKE</h3>
-            <p style={{ marginBottom: '1.5rem' }}>
-              Al finalizar la sesión, abriremos el micrófono para que los asistentes puedan cantar, compartir y disfrutar de la música. Podrás subir al escenario, interpretar tu canción favorita o simplemente acompañarnos y disfrutar de la noche.
-            </p>
-            
-            <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.8rem', fontSize: '1.3rem' }}>💛 UNA NOCHE CON PROPÓSITO</h3>
-            <p style={{ marginBottom: '1.5rem' }}>
-              El aporte solidario es desde $20.000 por persona.<br/><br/>
-              Quienes deseen y tengan la posibilidad de hacerlo, podrán realizar un aporte mayor de manera voluntaria y generosa. Un porcentaje de lo recaudado será destinado a apoyar a las personas afectadas por el terremoto ocurrido el 10 de agosto de 2026.<br/><br/>
-              Porque en MPS creemos que la música no solo nos conecta: también puede convertirse en una herramienta para acompañar y ayudar a quienes más lo necesitan.
+              Relájate y déjate llevar por las notas musicales en un ambiente íntimo y acogedor. Una experiencia diseñada para conectar con el arte y la tranquilidad.
             </p>
 
             <div style={{ background: 'rgba(0,222,133,0.1)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(0,222,133,0.2)' }}>
               <p style={{ margin: 0, fontWeight: 'bold', color: 'var(--text-primary)' }}>
-                📅 Viernes 14 de agosto<br/>
+                📅 Sábado 22 de agosto<br/>
                 ⏰ 6:30 p. m.<br/>
-                🎶 Sonido Terapéutico + Open Mic + Karaoke<br/>
-                💛 Aporte solidario desde $20.000 en adelante y si quieres traer pañales, leche, elementos de aseo.
+                🎶 Concierto de Piano en Vivo<br/>
+                🎟️ Valor de la Entrada: $20.000
               </p>
             </div>
             
             <p style={{ marginTop: '1.5rem', fontStyle: 'italic', color: 'var(--text-primary)' }}>
               ✨ NOCHES MPS<br/>
               Una noche para encontrarnos.<br/>
-              Una noche para cantar.<br/>
-              Una noche para ayudar.<br/><br/>
-              Te esperamos. 🎶💛
+              Una noche para la música.<br/><br/>
+              Te esperamos. 🎹💛
             </p>
           </div>
 
@@ -212,7 +199,7 @@ export default function EventoPage() {
               </div>
               <div>
                 <h3 style={{ color: 'var(--text-primary)', margin: 0, fontSize: '1.1rem' }}>Inscripciones Abiertas</h3>
-                <p style={{ color: '#ff6961', margin: 0, fontWeight: '500' }}>Fecha límite: Viernes 14 de agosto, 6:30 PM</p>
+                <p style={{ color: '#ff6961', margin: 0, fontWeight: '500' }}>Fecha límite: Sábado 22 de agosto, 6:30 PM</p>
               </div>
             </div>
 
@@ -262,7 +249,7 @@ export default function EventoPage() {
 
             <div style={{ background: 'var(--panel-bg)', padding: '1.5rem', borderRadius: '12px', border: `1px solid ${errors.comprobante ? '#ff6961' : 'var(--glass-border)'}` }}>
               <label style={{ ...labelStyle, marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Upload size={18} /> Comprobante de Aporte Solidario *
+                <Upload size={18} /> Comprobante de Pago *
               </label>
               <input 
                 type="file" 
@@ -273,7 +260,7 @@ export default function EventoPage() {
               />
               {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.3rem' }}>
-                Puedes subir una captura de pantalla de tu transferencia (Bre-B). Máx. 15 MB.
+                Sube el pantallazo de tu transferencia. Máx. 15 MB.
               </p>
             </div>
 
@@ -305,13 +292,12 @@ export default function EventoPage() {
 
             <div style={{ marginTop: '1rem', padding: '1.5rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>
-                Puedes realizar tu aporte solidario con llave Bre-B <br/>
+                Paga tu boleta usando la llave Bre-B <br/>
                 <strong style={{ color: 'var(--text-primary)', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
                   <Key size={16} /> @miprimersol
                 </strong>
               </p>
             </div>
-
           </form>
         </div>
         

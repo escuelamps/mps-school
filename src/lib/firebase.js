@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
@@ -13,7 +14,7 @@ const firebaseConfig = {
   measurementId: "G-3GBQL0BZG1"
 };
 
-// Initialize Firebase only if it hasn't been initialized already (useful for Next.js hot reloading)
+// Initialize Firebase only if it hasn't been initialized already
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
@@ -27,6 +28,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-const db = getFirestore(app);
+const db = initializeFirestore(app, { experimentalForceLongPolling: true });
+const storage = getStorage(app);
 
-export { app, auth, db, analytics };
+export { app, auth, db, storage, analytics };
