@@ -1,8 +1,7 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle2, MapPin, Clock, Key, Upload, Utensils, Coffee, Wine, Beer, Pizza } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza } from 'lucide-react';
 import Link from 'next/link';
-import HabeasDataConsent from '@/components/HabeasDataConsent';
 
 const OPCIONES_MENU = [
   { id: 'vino', label: 'Vino Caliente 2X1', price: 15000, icon: <Wine size={20} /> },
@@ -20,22 +19,12 @@ export default function CenaPage() {
   
   const [formData, setFormData] = useState({
     nombre: '',
-    telefono: '',
     mesa: '',
     opcionesSeleccionadas: [],
     comprobante: null,
   });
   
-  const [habeasAccepted, setHabeasAccepted] = useState(false);
   const [errors, setErrors] = useState({});
-  const [captchaNum1, setCaptchaNum1] = useState(0);
-  const [captchaNum2, setCaptchaNum2] = useState(0);
-  const [captchaInput, setCaptchaInput] = useState('');
-
-  useEffect(() => {
-    setCaptchaNum1(Math.floor(Math.random() * 10) + 1);
-    setCaptchaNum2(Math.floor(Math.random() * 10) + 1);
-  }, []);
 
   const handleFileChange = (e, field = 'comprobante') => {
     const file = e.target.files[0];
@@ -70,13 +59,6 @@ export default function CenaPage() {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'Requerido.';
     
-    const telefonoNumeros = formData.telefono.replace(/\D/g, '');
-    if (!formData.telefono.trim()) {
-      newErrors.telefono = 'Requerido.';
-    } else if (telefonoNumeros.length !== 10) {
-      newErrors.telefono = 'Número de 10 dígitos';
-    }
-
     if (!formData.mesa.trim()) {
       newErrors.mesa = 'Requerido.';
     } else if (isNaN(Number(formData.mesa))) {
@@ -88,14 +70,6 @@ export default function CenaPage() {
     }
     
     if (!formData.comprobante) newErrors.comprobante = 'Requerido.';
-    
-    if (!captchaInput.trim()) {
-      newErrors.captcha = 'Requerido.';
-    } else if (parseInt(captchaInput) !== captchaNum1 + captchaNum2) {
-      newErrors.captcha = 'Respuesta incorrecta.';
-    }
-    
-    if (!habeasAccepted) newErrors.habeas = true;
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -132,7 +106,6 @@ export default function CenaPage() {
 
           await addDoc(collection(db, 'cenas'), {
             nombre: formData.nombre,
-            telefono: formData.telefono,
             mesa: formData.mesa,
             opcionCena: seleccionTexto,
             comprobanteUrl: comprobanteUrl,
@@ -144,7 +117,6 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           nombre: formData.nombre,
-          telefono: formData.telefono,
           mesa: formData.mesa,
           opcionCena: seleccionTexto,
           sheetName: 'Cena' 
@@ -297,12 +269,6 @@ export default function CenaPage() {
                 <input name="nombre" value={formData.nombre} onChange={handleChange} style={inputStyle('nombre')} placeholder="Tu nombre" />
                 {errors.nombre && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.nombre}</span>}
               </div>
-
-              <div>
-                <label style={labelStyle}>Teléfono (WhatsApp) *</label>
-                <input name="telefono" type="number" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
-                {errors.telefono && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.telefono}</span>}
-              </div>
             </div>
 
             <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
@@ -325,15 +291,6 @@ export default function CenaPage() {
                 {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
               </div>
             </div>
-
-            <HabeasDataConsent 
-              checked={habeasAccepted}
-              onChange={(e) => {
-                setHabeasAccepted(e.target.checked);
-                if (errors.habeas) setErrors({ ...errors, habeas: false });
-              }}
-              hasError={errors.habeas}
-            />
 
             <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: '1rem', width: '100%', opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer', fontSize: '1.2rem', padding: '1rem' }}>
               {loading ? 'Procesando...' : 'Confirmar Pedido'}
