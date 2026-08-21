@@ -213,7 +213,7 @@ export default function CenaPage() {
                   const isSelected = formData.opcionesSeleccionadas.includes(opcion.id);
                   return (
                     <label key={opcion.id} style={{ 
-                      display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.2rem', 
+                      display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '1rem', 
                       background: isSelected ? 'rgba(0, 222, 133, 0.1)' : 'var(--panel-bg)', 
                       borderRadius: '12px', 
                       border: `2px solid ${isSelected ? 'var(--accent)' : 'var(--glass-border)'}`, 
@@ -229,19 +229,21 @@ export default function CenaPage() {
                         width: '24px', height: '24px', borderRadius: '6px', 
                         border: `2px solid ${isSelected ? 'var(--accent)' : '#94a3b8'}`,
                         background: isSelected ? 'var(--accent)' : 'transparent',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0
                       }}>
                         {isSelected && <CheckCircle2 size={16} color="#000F11" />}
                       </div>
-                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                         {opcion.image && (
-                          <img src={opcion.image} alt={opcion.label} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                          <img src={opcion.image} alt={opcion.label} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                         )}
-                        <div>
-                          <h3 style={{ margin: '0 0 0.3rem 0', color: 'var(--text-primary)', fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            {opcion.icon} {opcion.label}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <h3 style={{ margin: '0 0 0.2rem 0', color: 'var(--text-primary)', fontSize: '1rem', display: 'flex', alignItems: 'flex-start', gap: '0.4rem', lineHeight: '1.2' }}>
+                            <span style={{ flexShrink: 0, marginTop: '2px' }}>{opcion.icon}</span> 
+                            <span style={{ wordBreak: 'break-word' }}>{opcion.label}</span>
                           </h3>
-                          <p style={{ margin: 0, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1.1rem' }}>
+                          <p style={{ margin: 0, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1rem' }}>
                             ${opcion.price.toLocaleString('es-CO')}
                           </p>
                         </div>
@@ -276,22 +278,23 @@ export default function CenaPage() {
               </div>
             </div>
 
-            <div style={{ padding: '2rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
-              <h3 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '1.2rem' }}>Escanea el QR para realizar tu pago por Nequi<br/>o paga vía Bre-B con la llave <strong style={{color:'var(--accent)'}}>@MIPRIMERSOL</strong></h3>
+            <div style={{ padding: '1.5rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', textAlign: 'center' }}>
+              <h3 style={{ color: 'var(--text-primary)', marginBottom: '1rem', fontSize: '1.1rem', lineHeight: '1.4' }}>Escanea el QR para realizar tu pago por Nequi<br/>o paga vía Bre-B con la llave <strong style={{color:'var(--accent)', wordBreak: 'break-all'}}>@MIPRIMERSOL</strong></h3>
               <div style={{ width: '200px', height: '200px', background: '#fff', padding: '10px', borderRadius: '12px', margin: '0 auto 1.5rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src="/images/qr.png" alt="QR Code" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
               </div>
               
               <div style={{ textAlign: 'left' }}>
-                <label style={{ ...labelStyle, marginBottom: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Upload size={18} /> Sube tu Comprobante de Pago *
+                <label style={{ ...labelStyle, marginBottom: '0.8rem', display: 'flex', alignItems: 'flex-start', gap: '8px', lineHeight: '1.3' }}>
+                  <span style={{ flexShrink: 0, marginTop: '2px' }}><Upload size={18} /></span> 
+                  <span>Sube tu Comprobante de Pago *</span>
                 </label>
                 <input 
                   type="file" 
                   name="comprobante"
                   onChange={handleFileChange} 
                   accept="image/*,application/pdf"
-                  style={{ width: '100%', color: 'var(--text-secondary)' }}
+                  style={{ width: '100%', color: 'var(--text-secondary)', fontSize: '0.9rem' }}
                 />
                 {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
               </div>
