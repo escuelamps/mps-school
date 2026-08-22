@@ -168,7 +168,7 @@ export default function AdminPage() {
 
   // SI ESTÁ LOGUEADO: Mostrar Hub
   return (
-    <div className="dash-container" style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <div className="dash-container" style={{ background: 'var(--bg-primary)', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div style={{ position: 'absolute', top: '2rem', right: '2rem' }}>
         <button 
           onClick={handleLogout}
@@ -178,10 +178,10 @@ export default function AdminPage() {
         </button>
       </div>
 
-      <h1 style={{ fontFamily: 'Outfit', fontSize: '2.5rem', marginBottom: '1rem', color: '#000F11' }}>
+      <h1 style={{ fontFamily: 'Outfit', fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>
         Hola, <span style={{ color: 'var(--accent, #00DE85)' }}>{username}</span>
       </h1>
-      <p style={{ color: '#64748b', marginBottom: '3rem', fontSize: '1.1rem' }}>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: '3rem', fontSize: '1.1rem' }}>
         ¿A qué módulo deseas entrar hoy?
       </p>
 
@@ -190,8 +190,8 @@ export default function AdminPage() {
         <div 
           onClick={() => router.push('/admin/reservas')}
           style={{
-            background: '#fff',
-            border: '1px solid #e2e8f0',
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
             borderRadius: '16px',
             padding: '2.5rem 2rem',
             width: '320px',
@@ -209,16 +209,16 @@ export default function AdminPage() {
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <Calendar size={32} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#000F11' }}>Agenda MPS</h2>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Gestión de citas, profesores, comprobantes Nequi e Inteligencia Artificial.</p>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Gestión de citas, profesores, comprobantes Nequi e Inteligencia Artificial.</p>
         </div>
 
         {/* Card WhatsApp Bot */}
         <div 
           onClick={() => router.push('/admin/chats')}
           style={{
-            background: '#fff',
-            border: '1px solid #e2e8f0',
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
             borderRadius: '16px',
             padding: '2.5rem 2rem',
             width: '320px',
@@ -236,16 +236,16 @@ export default function AdminPage() {
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <MessageSquare size={32} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#000F11' }}>WhatsApp Bot</h2>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Supervisión de chats en vivo, control del bot de ventas y atención humana.</p>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>WhatsApp Bot</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Supervisión de chats en vivo, control del bot de ventas y atención humana.</p>
         </div>
 
         {/* Card Cenas MPS (Visible para todos) */}
         <div 
           onClick={() => router.push('/admin/cenas')}
           style={{
-            background: '#fff',
-            border: '1px solid #e2e8f0',
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
             borderRadius: '16px',
             padding: '2.5rem 2rem',
             width: '320px',
@@ -263,8 +263,8 @@ export default function AdminPage() {
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#fee2e2', color: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
           </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#000F11' }}>Cenas MPS</h2>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Cenas MPS</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
         </div>
 
         {/* Card Contabilidad (Sólo lpineda) */}
@@ -272,8 +272,8 @@ export default function AdminPage() {
           <div 
             onClick={() => router.push('/admin/contabilidad')}
             style={{
-              background: '#fff',
-              border: '1px solid #e2e8f0',
+              background: 'var(--panel-bg)',
+              border: '1px solid var(--glass-border)',
               borderRadius: '16px',
               padding: '2.5rem 2rem',
               width: '320px',
@@ -291,8 +291,8 @@ export default function AdminPage() {
             <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#fef08a', color: '#854d0e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
               <Wallet size={32} />
             </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#000F11' }}>Contabilidad</h2>
-            <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Control financiero, revisión de ingresos y gestión contable de MPS.</p>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control financiero, revisión de ingresos y gestión contable de MPS.</p>
           </div>
         )}
 
