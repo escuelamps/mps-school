@@ -8,10 +8,10 @@ const OPCIONES_MENU = [
   { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-sin-papa.jpeg' },
   { id: 'hamburguesa_papas', label: 'Hamburguesa con papas', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
   { id: 'nachos', label: 'Nachos', price: 15000, icon: <Utensils size={20} />, image: '/images/mps-nachos.jpeg' },
-  { id: 'papas_paquete', label: 'Papas paquete', price: 3000, icon: <Utensils size={20} /> },
-  { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <Coffee size={20} /> },
+  { id: 'papas_paquete', label: 'Snacks en paquetes', price: 3000, icon: <Utensils size={20} /> },
+  { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <GlassWater size={20} /> },
   { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 6000, icon: <Beer size={20} /> },
-  { id: 'pony_malta', label: 'Pony Malta', price: 2500, icon: <Coffee size={20} /> },
+  { id: 'pony_malta', label: 'Pony Malta', price: 2500, icon: <GlassWater size={20} /> },
   { id: 'agua', label: 'Agua', price: 3000, icon: <GlassWater size={20} /> },
 ];
 
