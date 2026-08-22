@@ -4,12 +4,12 @@ import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza } 
 import Link from 'next/link';
 
 const OPCIONES_MENU = [
-  { id: 'vino', label: 'Vino Caliente 2X1', price: 15000, icon: <Wine size={20} />, image: '/images/mps-vino.jpeg' },
+  { id: 'vino', label: 'Vino Caliente 2X1', price: 25000, icon: <Wine size={20} />, image: '/images/mps-vino.jpeg' },
   { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
   { id: 'hamburguesa_papas', label: 'Hamburguesa con papas', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
   { id: 'nachos', label: 'Nachos', price: 15000, icon: <Utensils size={20} />, image: '/images/mps-nachos.jpeg' },
   { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <Coffee size={20} /> },
-  { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 3000, icon: <Beer size={20} /> },
+  { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 6000, icon: <Beer size={20} /> },
   { id: 'agua', label: 'Agua', price: 3000, icon: <Coffee size={20} /> },
 ];
 
@@ -22,6 +22,7 @@ export default function CenaPage() {
     mesa: '',
     opcionesSeleccionadas: [],
     comprobante: null,
+    pagoEfectivo: false,
   });
   
   const [errors, setErrors] = useState({});
@@ -69,7 +70,7 @@ export default function CenaPage() {
       newErrors.opcionesSeleccionadas = 'Selecciona al menos una opción.';
     }
     
-    if (!formData.comprobante) newErrors.comprobante = 'Requerido.';
+    // NOTA: El comprobante ya no es obligatorio, por lo tanto quitamos la validación
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -95,30 +96,32 @@ export default function CenaPage() {
         }).join(', ');
 
         // 1. LÓGICA DE FIREBASE (Para el tiempo real del Panel)
-        if (formData.comprobante) {
-          const { storage, db } = await import('@/lib/firebase');
-          const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
-          const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+        const { db, storage } = await import('@/lib/firebase');
+        const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+        const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
 
+        if (formData.comprobante) {
           const fileRef = ref(storage, `comprobantes_cenas/${Date.now()}_${formData.comprobante.name}`);
           const uploadResult = await uploadBytes(fileRef, formData.comprobante);
           comprobanteUrl = await getDownloadURL(uploadResult.ref);
-
-          await addDoc(collection(db, 'cenas'), {
-            nombre: formData.nombre,
-            mesa: formData.mesa,
-            opcionCena: seleccionTexto,
-            comprobanteUrl: comprobanteUrl,
-            estado: 'Pendiente',
-            createdAt: serverTimestamp()
-          });
         }
+
+        await addDoc(collection(db, 'cenas'), {
+          nombre: formData.nombre,
+          mesa: formData.mesa,
+          opcionCena: seleccionTexto,
+          comprobanteUrl: comprobanteUrl,
+          pagoEfectivo: formData.pagoEfectivo,
+          estado: formData.pagoEfectivo ? 'Efectivo (Pendiente)' : (comprobanteUrl ? 'Pendiente' : 'Sin Pago'),
+          createdAt: serverTimestamp()
+        });
 
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           nombre: formData.nombre,
           mesa: formData.mesa,
           opcionCena: seleccionTexto,
+          pagoEfectivo: formData.pagoEfectivo ? "Sí" : "No",
           sheetName: 'Cena' 
         };
 
@@ -165,7 +168,7 @@ export default function CenaPage() {
           </div>
           <h2 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>¡Pedido Exitoso!</h2>
           <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem' }}>
-            Hemos recibido tu pedido y el comprobante de pago. En breve lo llevaremos a tu mesa.
+            Hemos recibido tu pedido. En breve lo llevaremos a tu mesa.
           </p>
           <Link href="/" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
             Volver al inicio
@@ -283,20 +286,34 @@ export default function CenaPage() {
               <div style={{ width: '200px', height: '200px', background: '#fff', padding: '10px', borderRadius: '12px', margin: '0 auto 1.5rem auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src="/images/qr.png" alt="QR Code" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
               </div>
+
+              {/* Pago en efectivo */}
+              <div style={{ textAlign: 'left', marginBottom: '1.5rem', padding: '1rem', background: formData.pagoEfectivo ? 'rgba(0, 222, 133, 0.1)' : 'transparent', borderRadius: '8px', border: `1px solid ${formData.pagoEfectivo ? 'var(--accent)' : 'transparent'}`, transition: 'all 0.2s' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', cursor: 'pointer' }}>
+                  <input 
+                    type="checkbox"
+                    name="pagoEfectivo"
+                    checked={formData.pagoEfectivo}
+                    onChange={(e) => setFormData(prev => ({ ...prev, pagoEfectivo: e.target.checked }))}
+                    style={{ width: '1.2rem', height: '1.2rem', accentColor: 'var(--accent)' }}
+                  />
+                  <span style={{ color: 'var(--text-primary)', fontSize: '1.05rem', fontWeight: '500' }}>Pagaremos en efectivo en la mesa</span>
+                </label>
+              </div>
               
-              <div style={{ textAlign: 'left' }}>
+              <div style={{ textAlign: 'left', opacity: formData.pagoEfectivo ? 0.5 : 1, transition: 'all 0.2s' }}>
                 <label style={{ ...labelStyle, marginBottom: '0.8rem', display: 'flex', alignItems: 'flex-start', gap: '8px', lineHeight: '1.3' }}>
                   <span style={{ flexShrink: 0, marginTop: '2px' }}><Upload size={18} /></span> 
-                  <span>Sube tu Comprobante de Pago *</span>
+                  <span>Sube tu Comprobante de Pago (Opcional)</span>
                 </label>
                 <input 
                   type="file" 
                   name="comprobante"
                   onChange={handleFileChange} 
                   accept="image/*,application/pdf"
+                  disabled={formData.pagoEfectivo}
                   style={{ width: '100%', color: 'var(--text-secondary)', fontSize: '0.9rem' }}
                 />
-                {errors.comprobante && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.comprobante}</span>}
               </div>
             </div>
 
