@@ -56,39 +56,24 @@ export default function CenasAdmin() {
               <ArrowLeft size={18} /> Volver al panel principal
             </Link>
             <h1 style={{ fontSize: '2rem', color: '#000F11', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Utensils color="#b91c1c" /> Gestión de Cenas
+              <Utensils color="#b91c1c" /> Gestión de Pedidos
             </h1>
-            <p style={{ color: '#64748b', margin: '0.5rem 0 0 0' }}>Supervisa las reservas en tiempo real.</p>
+            <p style={{ color: '#64748b', margin: '0.5rem 0 0 0' }}>Supervisa los pedidos de las mesas en tiempo real.</p>
           </div>
           
           <div style={{ background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', gap: '2rem' }}>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Total Reservas</p>
+              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Total Pedidos</p>
               <h2 style={{ margin: 0, color: '#000F11', fontSize: '1.8rem' }}>{reservas.length}</h2>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Menú Res</p>
-              <h2 style={{ margin: 0, color: '#b91c1c', fontSize: '1.8rem' }}>{reservas.filter(r => r.opcionCena?.includes('Res')).length}</h2>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Menú Veggie</p>
-              <h2 style={{ margin: 0, color: '#15803d', fontSize: '1.8rem' }}>{reservas.filter(r => r.opcionCena?.includes('Vegetariano')).length}</h2>
+              <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Pagos Pendientes</p>
+              <h2 style={{ margin: 0, color: '#ca8a04', fontSize: '1.8rem' }}>{reservas.filter(r => r.estado !== 'Aprobado' && r.estado !== 'Pagado').length}</h2>
             </div>
           </div>
         </header>
 
         <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', overflow: 'hidden' }}>
-          
-          {/* AVISO HÍBRIDO */}
-          <div style={{ background: '#f0fdf4', borderBottom: '1px solid #bbf7d0', padding: '1rem 1.5rem', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <span style={{ fontSize: '1.2rem' }}>🟢</span>
-            <div>
-              <p style={{ margin: 0, color: '#166534', fontWeight: 'bold', fontSize: '0.95rem' }}>Sistema Híbrido Activo (Tiempo Real)</p>
-              <p style={{ margin: 0, color: '#15803d', fontSize: '0.85rem' }}>
-                Este panel extrae los datos de Firebase al instante. Al mismo tiempo, el sistema está enviando una copia oculta a Google Sheets para la administración de la escuela.
-              </p>
-            </div>
-          </div>
 
           <div style={{ padding: '1.5rem', borderBottom: '1px solid #e2e8f0', display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ position: 'relative', flex: 1 }}>
@@ -108,7 +93,7 @@ export default function CenasAdmin() {
               <tr>
                 <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Invitado</th>
                 <th style={{ padding: '1rem 1.5rem', textAlign: 'center', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Mesa</th>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Menú Elegido</th>
+                <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Pedido</th>
                 <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Estado del Pago</th>
                 <th style={{ padding: '1rem 1.5rem', textAlign: 'center', color: '#64748b', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid #e2e8f0' }}>Acción</th>
               </tr>
@@ -117,7 +102,7 @@ export default function CenasAdmin() {
               {loading ? (
                 <tr>
                   <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
-                    Sincronizando con Firebase en tiempo real...
+                    Cargando pedidos...
                   </td>
                 </tr>
               ) : filtradas.map(reserva => (
@@ -131,8 +116,8 @@ export default function CenasAdmin() {
                   <td style={{ padding: '1rem 1.5rem' }}>
                     <span style={{ 
                       padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: '500',
-                      background: reserva.opcionCena?.includes('Res') ? '#fee2e2' : '#dcfce7',
-                      color: reserva.opcionCena?.includes('Res') ? '#b91c1c' : '#15803d'
+                      background: '#f1f5f9',
+                      color: '#334155'
                     }}>
                       {reserva.opcionCena}
                     </span>
@@ -140,10 +125,10 @@ export default function CenasAdmin() {
                   <td style={{ padding: '1rem 1.5rem' }}>
                     <span style={{ 
                       display: 'inline-flex', alignItems: 'center', gap: '5px',
-                      color: reserva.estado === 'Aprobado' ? '#15803d' : '#ca8a04',
+                      color: (reserva.estado === 'Aprobado' || reserva.estado === 'Pagado') ? '#15803d' : '#ca8a04',
                       fontWeight: '500', fontSize: '0.9rem'
                     }}>
-                      {reserva.estado === 'Aprobado' ? <CheckCircle2 size={16} /> : <Clock size={16} />}
+                      {(reserva.estado === 'Aprobado' || reserva.estado === 'Pagado') ? <CheckCircle2 size={16} /> : <Clock size={16} />}
                       {reserva.estado || 'Pendiente'}
                     </span>
                   </td>
@@ -160,8 +145,8 @@ export default function CenasAdmin() {
               ))}
               {!loading && filtradas.length === 0 && (
                 <tr>
-                  <td colSpan="4" style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
-                    No hay reservas aún. Haz una prueba desde /cena y la verás aparecer aquí al instante.
+                  <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
+                    No hay pedidos registrados aún.
                   </td>
                 </tr>
               )}
