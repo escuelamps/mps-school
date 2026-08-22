@@ -66,11 +66,11 @@ export default function CenasAdmin() {
   const filtradas = activas.filter(r => r.nombre?.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '2rem' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: 'clamp(1rem, 5vw, 2rem)' }}>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         
-        <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
-          <div>
+        <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '2rem' }}>
+          <div style={{ flex: '1 1 300px' }}>
             <Link href="/admin" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: '1rem' }}>
               <ArrowLeft size={18} /> Volver al panel principal
             </Link>
@@ -80,7 +80,7 @@ export default function CenasAdmin() {
             <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0' }}>Supervisa los pedidos de las mesas en tiempo real.</p>
           </div>
           
-          <div style={{ background: 'var(--panel-bg)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', gap: '2rem' }}>
+          <div style={{ background: 'var(--panel-bg)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', gap: '2rem', flexWrap: 'wrap', flex: '1 1 auto', justifyContent: 'center' }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Total Pedidos</p>
               <h2 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1.8rem' }}>{activas.length}</h2>
@@ -107,7 +107,8 @@ export default function CenasAdmin() {
             </div>
           </div>
           
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
             <thead style={{ background: 'var(--section-bg)' }}>
               <tr>
                 <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Invitado</th>
@@ -182,6 +183,7 @@ export default function CenasAdmin() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 

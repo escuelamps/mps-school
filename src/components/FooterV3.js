@@ -40,6 +40,15 @@ export default function FooterV3() {
               {tiktokSvg}
             </a>
           </div>
+          {/* MAPA DEL SITIO */}
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <a href="/" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Inicio</a>
+            <a href="/programas" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Programas</a>
+            <a href="/quienes-somos" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Quiénes Somos</a>
+            <a href="/evento" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Eventos</a>
+            <a href="/cena" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Cena Especial</a>
+            <a href="/login" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Portal Estudiantil</a>
+          </div>
         </div>
 
         <p style={{ margin: 0, fontSize: '0.9rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
