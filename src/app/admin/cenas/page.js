@@ -44,7 +44,23 @@ export default function CenasAdmin() {
     };
   }, []);
 
-  const filtradas = reservas.filter(r => r.nombre?.toLowerCase().includes(searchTerm.toLowerCase()));
+  const handleCerrarPedido = async (id) => {
+    if (window.confirm('¿Deseas cerrar este pedido?')) {
+      try {
+        const { db } = await import('@/lib/firebase');
+        const { doc, updateDoc } = await import('firebase/firestore');
+        await updateDoc(doc(db, 'cenas', id), {
+          cerrado: true
+        });
+      } catch (err) {
+        console.error("Error al cerrar el pedido:", err);
+        alert("Error al cerrar el pedido.");
+      }
+    }
+  };
+
+  const activas = reservas.filter(r => !r.cerrado);
+  const filtradas = activas.filter(r => r.nombre?.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', padding: '2rem' }}>
@@ -64,11 +80,11 @@ export default function CenasAdmin() {
           <div style={{ background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0', display: 'flex', gap: '2rem' }}>
             <div style={{ textAlign: 'center' }}>
               <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Total Pedidos</p>
-              <h2 style={{ margin: 0, color: '#000F11', fontSize: '1.8rem' }}>{reservas.length}</h2>
+              <h2 style={{ margin: 0, color: '#000F11', fontSize: '1.8rem' }}>{activas.length}</h2>
             </div>
             <div style={{ textAlign: 'center' }}>
               <p style={{ margin: 0, color: '#64748b', fontSize: '0.9rem' }}>Pagos Pendientes</p>
-              <h2 style={{ margin: 0, color: '#ca8a04', fontSize: '1.8rem' }}>{reservas.filter(r => r.estado !== 'Aprobado' && r.estado !== 'Pagado').length}</h2>
+              <h2 style={{ margin: 0, color: '#ca8a04', fontSize: '1.8rem' }}>{activas.filter(r => r.estado !== 'Aprobado' && r.estado !== 'Pagado').length}</h2>
             </div>
           </div>
         </header>
@@ -140,6 +156,17 @@ export default function CenasAdmin() {
                     ) : (
                       <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Sin recibo</span>
                     )}
+                  </td>
+                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem', color: '#475569', fontWeight: '500', background: '#f8fafc', padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={false} 
+                        onChange={() => handleCerrarPedido(reserva.id)} 
+                        style={{ width: '16px', height: '16px', accentColor: 'var(--accent)' }}
+                      />
+                      Entregado / Cancelado
+                    </label>
                   </td>
                 </tr>
               ))}
