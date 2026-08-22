@@ -1,16 +1,16 @@
 "use client";
 import { useState } from 'react';
-import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza, GlassWater } from 'lucide-react';
 import Link from 'next/link';
 
 const OPCIONES_MENU = [
   { id: 'vino', label: 'Vino Caliente 2X1', price: 25000, icon: <Wine size={20} />, image: '/images/mps-vino.jpeg' },
-  { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
+  { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-sin-papa.jpeg' },
   { id: 'hamburguesa_papas', label: 'Hamburguesa con papas', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
   { id: 'nachos', label: 'Nachos', price: 15000, icon: <Utensils size={20} />, image: '/images/mps-nachos.jpeg' },
   { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <Coffee size={20} /> },
   { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 6000, icon: <Beer size={20} /> },
-  { id: 'agua', label: 'Agua', price: 3000, icon: <Coffee size={20} /> },
+  { id: 'agua', label: 'Agua', price: 3000, icon: <GlassWater size={20} /> },
 ];
 
 export default function CenaPage() {
