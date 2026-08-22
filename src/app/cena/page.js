@@ -112,6 +112,7 @@ export default function CenaPage() {
           opcionCena: seleccionTexto,
           comprobanteUrl: comprobanteUrl,
           pagoEfectivo: formData.pagoEfectivo,
+          total: total,
           estado: formData.pagoEfectivo ? 'Efectivo (Pendiente)' : (comprobanteUrl ? 'Pendiente' : 'Sin Pago'),
           createdAt: serverTimestamp()
         });
@@ -119,11 +120,12 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           sheetName: 'Cena',
-          headers: ["Fecha", "Nombre", "Mesa", "Opción", "Pago en Efectivo", "Recibo"],
+          headers: ["Fecha", "Nombre", "Mesa", "Opción", "Total", "Pago en Efectivo", "Recibo"],
           rowData: [
             formData.nombre,
             formData.mesa || "Sin mesa",
             seleccionTexto,
+            `$${total.toLocaleString('es-CO')}`,
             formData.pagoEfectivo ? "Sí" : "No",
             formData.comprobante ? "{FILE_URL}" : "Sin comprobante"
           ]
