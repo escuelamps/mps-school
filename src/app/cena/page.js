@@ -119,6 +119,7 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           nombre: formData.nombre,
+          telefono: 'N/A', // Restaurado porque el Apps Script puede estar fallando al buscar esta variable
           mesa: formData.mesa,
           opcionCena: seleccionTexto,
           pagoEfectivo: formData.pagoEfectivo ? "Sí" : "No",
