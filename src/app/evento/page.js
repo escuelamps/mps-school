@@ -77,6 +77,7 @@ export default function EventoPage() {
       try {
         const payload = {
           sheetName: 'Evento',
+          headers: ["Fecha", "Nombre", "Teléfono", "Recibo"],
           rowData: [
             formData.nombre,
             formData.telefono,

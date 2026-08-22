@@ -119,6 +119,7 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           sheetName: 'Cena',
+          headers: ["Fecha", "Nombre", "Mesa", "Opción", "Pago en Efectivo", "Recibo"],
           rowData: [
             formData.nombre,
             formData.mesa || "Sin mesa",
