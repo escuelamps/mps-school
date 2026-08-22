@@ -123,7 +123,8 @@ export default function CenaPage() {
             formData.nombre,
             formData.mesa || "Sin mesa",
             seleccionTexto,
-            formData.pagoEfectivo ? "Sí" : "No"
+            formData.pagoEfectivo ? "Sí" : "No",
+            formData.comprobante ? "{FILE_URL}" : "Sin comprobante"
           ]
         };
 

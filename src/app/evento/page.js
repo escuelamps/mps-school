@@ -79,7 +79,8 @@ export default function EventoPage() {
           sheetName: 'Evento',
           rowData: [
             formData.nombre,
-            formData.telefono
+            formData.telefono,
+            formData.comprobante ? "{FILE_URL}" : "Sin comprobante"
           ]
         };
 
