@@ -125,7 +125,7 @@ export default function CenaPage() {
             formData.nombre,
             formData.mesa || "Sin mesa",
             seleccionTexto,
-            `$${total.toLocaleString('es-CO')}`,
+            total,
             formData.pagoEfectivo ? "Sí" : "No",
             formData.comprobante ? "{FILE_URL}" : "Sin comprobante"
           ]
