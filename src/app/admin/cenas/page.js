@@ -7,6 +7,7 @@ export default function CenasAdmin() {
   const [searchTerm, setSearchTerm] = useState('');
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pedidoACerrar, setPedidoACerrar] = useState(null);
 
   useEffect(() => {
     let unsubscribe;
@@ -44,17 +45,19 @@ export default function CenasAdmin() {
     };
   }, []);
 
-  const handleCerrarPedido = async (id) => {
-    if (window.confirm('¿Deseas cerrar este pedido?')) {
+  const confirmarCierre = async () => {
+    if (pedidoACerrar) {
       try {
         const { db } = await import('@/lib/firebase');
         const { doc, updateDoc } = await import('firebase/firestore');
-        await updateDoc(doc(db, 'cenas', id), {
+        await updateDoc(doc(db, 'cenas', pedidoACerrar), {
           cerrado: true
         });
+        setPedidoACerrar(null);
       } catch (err) {
         console.error("Error al cerrar el pedido:", err);
         alert("Error al cerrar el pedido.");
+        setPedidoACerrar(null);
       }
     }
   };
@@ -162,7 +165,7 @@ export default function CenasAdmin() {
                       <input 
                         type="checkbox" 
                         checked={false} 
-                        onChange={() => handleCerrarPedido(reserva.id)} 
+                        onChange={() => setPedidoACerrar(reserva.id)} 
                         style={{ width: '16px', height: '16px', accentColor: 'var(--accent)' }}
                       />
                       Entregado / Cancelado
@@ -181,6 +184,36 @@ export default function CenasAdmin() {
           </table>
         </div>
       </div>
+
+      {/* Custom Modal */}
+      {pedidoACerrar && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+          <div style={{ background: '#fff', padding: '2rem', borderRadius: '16px', maxWidth: '400px', width: '90%', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+            <div style={{ width: '60px', height: '60px', background: '#dcfce7', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
+              <CheckCircle2 size={30} color="#15803d" />
+            </div>
+            <h3 style={{ fontSize: '1.5rem', color: '#0f172a', margin: '0 0 1rem 0' }}>¿Confirmar Acción?</h3>
+            <p style={{ fontSize: '1.1rem', color: '#475569', marginBottom: '2rem' }}>
+              ¿El pedido fue entregado y cancelado?
+            </p>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button 
+                onClick={() => setPedidoACerrar(null)} 
+                style={{ flex: 1, padding: '0.8rem', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#f8fafc', color: '#475569', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                No, aún no
+              </button>
+              <button 
+                onClick={confirmarCierre} 
+                style={{ flex: 1, padding: '0.8rem', borderRadius: '8px', border: 'none', background: '#000F11', color: '#00DE85', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                Sí, confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
