@@ -76,8 +76,11 @@ export default function EventoPage() {
       setLoading(true);
       try {
         const payload = {
-          nombre: formData.nombre,
-          telefono: formData.telefono,
+          sheetName: 'Evento',
+          rowData: [
+            formData.nombre,
+            formData.telefono
+          ]
         };
 
         if (formData.comprobante) {
