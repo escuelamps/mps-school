@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import './admin.css';
+import { auth } from '@/lib/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -41,10 +43,18 @@ export default function AdminPage() {
     setIsLoggingIn(true);
 
     try {
+      // 1. Iniciar sesión con Firebase Auth
+      const email = loginUsername.includes('@') ? loginUsername : `${loginUsername}@escuelamps.com`;
+      const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
+      
+      // 2. Obtener el Token de Seguridad
+      const token = await userCredential.user.getIdToken();
+
+      // 3. Enviar el Token al servidor Next.js para crear la sesión (cookie)
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
+        body: JSON.stringify({ token }),
       });
 
       const data = await res.json();
@@ -53,16 +63,28 @@ export default function AdminPage() {
         setUsername(data.username);
         router.refresh();
       } else {
-        setError(data.message || 'Credenciales inválidas');
+        setError(data.message || 'Credenciales inválidas o no eres administrador');
+        // Cerrar sesión en Firebase si el servidor rechaza (ej. no es admin)
+        await auth.signOut();
       }
     } catch (err) {
-      setError('Error de conexión. Intenta de nuevo.');
+      console.error(err);
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Correo o contraseña incorrectos.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('El formato del correo es inválido.');
+      } else {
+        setError('Error de conexión. Intenta de nuevo.');
+      }
     } finally {
       setIsLoggingIn(false);
     }
   };
 
   const handleLogout = async () => {
+    try {
+      await auth.signOut();
+    } catch(e) { console.error("Firebase logout error", e); }
     await fetch('/api/auth/logout', { method: 'POST' });
     setUsername(null);
     setLoginUsername('');
@@ -209,8 +231,35 @@ export default function AdminPage() {
           <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
             <Calendar size={32} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Gestión de citas, profesores, comprobantes Nequi e Inteligencia Artificial.</p>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Reservas y Pagos</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Aprobación de comprobantes Nequi leídos por Inteligencia Artificial.</p>
+        </div>
+
+        {/* Card Gestión de Agenda (Nueva) */}
+        <div 
+          onClick={() => router.push('/admin/agenda')}
+          style={{
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: '16px',
+            padding: '2.5rem 2rem',
+            width: '320px',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+        >
+          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <Calendar size={32} />
+          </div>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS (Horarios)</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Configura las clases disponibles, cupos y profesores de la escuela.</p>
         </div>
 
         {/* Card WhatsApp Bot */}

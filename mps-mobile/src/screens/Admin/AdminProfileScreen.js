@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { auth } from '../../config/firebase';
 
-export default function StudentProfileScreen() {
+export default function AdminProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>StudentProfileScreen</Text>
+      <Text style={styles.text}>Perfil de Administrador</Text>
       <TouchableOpacity onPress={() => auth.signOut()} style={{ marginTop: 20, padding: 15, backgroundColor: '#ef4444', borderRadius: 8 }}>
         <Text style={{ color: '#fff', fontWeight: 'bold' }}>Cerrar Sesión</Text>
       </TouchableOpacity>

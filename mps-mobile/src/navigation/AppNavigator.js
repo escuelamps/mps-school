@@ -4,7 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text, ActivityIndicator } from 'react-native';
 
-// Import Screens (to be created)
+import { auth, db } from '../config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+
+// Import Screens
 import LoginScreen from '../screens/Auth/LoginScreen';
 import StudentCalendarScreen from '../screens/Student/StudentCalendarScreen';
 import StudentGradesScreen from '../screens/Student/StudentGradesScreen';
@@ -14,6 +18,9 @@ import TeacherCalendarScreen from '../screens/Teacher/TeacherCalendarScreen';
 import TeacherAttendanceScreen from '../screens/Teacher/TeacherAttendanceScreen';
 import TeacherGradesScreen from '../screens/Teacher/TeacherGradesScreen';
 import TeacherProfileScreen from '../screens/Teacher/TeacherProfileScreen';
+
+import AdminAgendaScreen from '../screens/Admin/AdminAgendaScreen';
+import AdminProfileScreen from '../screens/Admin/AdminProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,14 +48,49 @@ function TeacherTabs() {
   );
 }
 
+// --- Admin Tabs ---
+function AdminTabs() {
+  return (
+    <Tab.Navigator screenOptions={{ headerTitleAlign: 'center', tabBarActiveTintColor: '#00DE85' }}>
+      <Tab.Screen name="Agenda MPS" component={AdminAgendaScreen} />
+      <Tab.Screen name="Perfil" component={AdminProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+
 // --- Main App Navigator ---
 export default function AppNavigator() {
-  const [isLoading, setIsLoading] = useState(false); // TODO: Hook to Firebase Auth
-  const [userRole, setUserRole] = useState(null); // 'student', 'teacher', or null
+  const [isLoading, setIsLoading] = useState(true);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setUserRole(userDoc.data().role);
+          } else {
+            console.warn("Usuario no encontrado en Firestore");
+            await auth.signOut();
+            setUserRole(null);
+          }
+        } catch (error) {
+          console.error("Error al obtener rol:", error);
+          setUserRole(null);
+        }
+      } else {
+        setUserRole(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F7FA' }}>
         <ActivityIndicator size="large" color="#00DE85" />
       </View>
     );
@@ -58,14 +100,13 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {userRole === null ? (
-          // User is not logged in
           <Stack.Screen name="Login" component={LoginScreen} />
         ) : userRole === 'student' ? (
-          // User is a Student
           <Stack.Screen name="StudentDashboard" component={StudentTabs} />
-        ) : (
-          // User is a Teacher
+        ) : userRole === 'teacher' ? (
           <Stack.Screen name="TeacherDashboard" component={TeacherTabs} />
+        ) : (
+          <Stack.Screen name="AdminDashboard" component={AdminTabs} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

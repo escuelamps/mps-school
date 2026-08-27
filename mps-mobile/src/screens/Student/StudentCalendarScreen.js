@@ -123,7 +123,7 @@ export default function StudentCalendarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000F11', // Fondo oscuro MPS
+    backgroundColor: '#F5F7FA', // Fondo oscuro MPS
     padding: 20,
   },
   title: {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   subtitle: {
-    color: '#94a3b8',
+    color: '#64748B',
     fontSize: 16,
     marginBottom: 20,
   },
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   slotCard: {
     width: '48%',
-    backgroundColor: '#1e293b',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 12,
     borderWidth: 2,
@@ -159,10 +159,10 @@ const styles = StyleSheet.create({
   },
   slotSelected: {
     borderColor: '#00DE85',
-    backgroundColor: 'rgba(0, 222, 133, 0.1)',
+    backgroundColor: '#E2E8F0',
   },
   slotTime: {
-    color: '#fff',
+    color: '#1e293b',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
@@ -182,19 +182,19 @@ const styles = StyleSheet.create({
     borderColor: '#334155',
   },
   paymentTitle: {
-    color: '#fff',
+    color: '#1e293b',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   paymentDesc: {
-    color: '#94a3b8',
+    color: '#64748B',
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 20,
   },
   uploadButton: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#FFFFFF',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',

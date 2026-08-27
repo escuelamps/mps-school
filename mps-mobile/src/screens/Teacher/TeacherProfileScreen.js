@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { auth } from '../../config/firebase';
 
 export default function TeacherProfileScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>TeacherProfileScreen</Text>
+      <TouchableOpacity onPress={() => auth.signOut()} style={{ marginTop: 20, padding: 15, backgroundColor: '#ef4444', borderRadius: 8 }}>
+        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Cerrar Sesión</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -14,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#111',
+    backgroundColor: '#F5F7FA',
   },
   text: {
     color: '#00DE85',
