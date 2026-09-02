@@ -262,6 +262,33 @@ export default function AdminPage() {
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Configura las clases disponibles, cupos y profesores de la escuela.</p>
         </div>
 
+        {/* Card Gestión de Profesores */}
+        <div 
+          onClick={() => router.push('/admin/profesores')}
+          style={{
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: '16px',
+            padding: '2.5rem 2rem',
+            width: '320px',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+        >
+          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#f3e8ff', color: '#7e22ce', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+            <User size={32} />
+          </div>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Creación de cuentas de profesor y gestión del equipo docente.</p>
+        </div>
+
         {/* Card WhatsApp Bot */}
         <div 
           onClick={() => router.push('/admin/chats')}

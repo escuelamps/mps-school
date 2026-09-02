@@ -25,12 +25,29 @@ export default function LoginPage() {
         // Registro
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
-        // Redirigir al inicio o dashboard
-        router.push('/');
+        // After register, generate token and set cookie
+        const token = await userCredential.user.getIdToken();
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+        if(data.role === 'teacher') router.push('/teacher');
+        else router.push('/student');
       } else {
         // Login
-        await signInWithEmailAndPassword(auth, email, password);
-        router.push('/');
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const token = await userCredential.user.getIdToken();
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+        if(data.role === 'teacher') router.push('/teacher');
+        else if (data.role === 'admin') router.push('/admin');
+        else router.push('/student');
       }
     } catch (err) {
       console.error(err);

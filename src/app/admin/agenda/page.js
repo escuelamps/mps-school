@@ -17,7 +17,7 @@ export default function AgendaDashboard() {
   const [time, setTime] = useState('');
   const [teacher, setTeacher] = useState('');
   const [instrument, setInstrument] = useState('');
-  const [capacity, setCapacity] = useState('1');
+  const [capacity, setCapacity] = useState('5');
 
   useEffect(() => {
     const qSlots = query(collection(db, 'agenda_slots'), orderBy('date', 'asc'), orderBy('time', 'asc'));
@@ -42,7 +42,7 @@ export default function AgendaDashboard() {
         createdAt: serverTimestamp()
       });
       setIsAdding(false);
-      setDate(''); setTime(''); setTeacher(''); setInstrument(''); setCapacity('1');
+      setDate(''); setTime(''); setTeacher(''); setInstrument(''); setCapacity('5');
     } catch (error) {
       console.error("Error adding slot: ", error);
       alert("Error al guardar el cupo");
@@ -91,7 +91,15 @@ export default function AgendaDashboard() {
               </div>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Instrumento</label>
-                <input type="text" placeholder="Ej. Guitarra" required value={instrument} onChange={e => setInstrument(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                <select required value={instrument} onChange={e => setInstrument(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
+                  <option value="">Selecciona una familia...</option>
+                  <option value="Piano">Piano</option>
+                  <option value="Percusión">Percusión</option>
+                  <option value="Vientos">Vientos</option>
+                  <option value="Canto">Canto</option>
+                  <option value="Cuerdas Pulsadas">Cuerdas Pulsadas</option>
+                  <option value="Cuerdas Frotadas">Cuerdas Frotadas</option>
+                </select>
               </div>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Cupos Max</label>

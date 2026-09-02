@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
 
@@ -25,29 +23,31 @@ export async function POST(request) {
       return NextResponse.json({ success: false, message: 'Token inválido o expirado' }, { status: 401 });
     }
 
-    const uid = verifyData.users[0].localId;
+    const email = verifyData.users[0].email;
+    let role = 'user';
+    let username = email.split('@')[0];
 
-    // 2. Fetch the user's role from Firestore
-    const userDocRef = doc(db, 'users', uid);
-    const userDocSnap = await getDoc(userDocRef);
-
-    if (!userDocSnap.exists()) {
-      return NextResponse.json({ success: false, message: 'Usuario no encontrado en la base de datos' }, { status: 403 });
+    // Determine role by email prefix
+    if (email === 'william@escuelamps.com' || email === 'lpineda@escuelamps.com') {
+        role = 'admin';
+    } else if (email.startsWith('profe-')) {
+        role = 'teacher';
+        username = username.replace('profe-', '');
+    } else if (email.startsWith('estudiante-')) {
+        role = 'student';
+        username = username.replace('estudiante-', '');
+    } else {
+        // Fallback to student if no prefix is provided for regular users
+        role = 'student';
     }
 
-    const userData = userDocSnap.data();
-
-    // 3. Check if user is an admin
-    if (userData.role !== 'admin') {
-      return NextResponse.json({ success: false, message: 'Acceso denegado: No tienes permisos de administrador' }, { status: 403 });
-    }
-
-    // 4. Set the secure session cookie
-    const response = NextResponse.json({ success: true, username: userData.username || userData.email });
+    // 4. Set the secure session cookie (we use JSON to store both username and role)
+    const sessionData = JSON.stringify({ username, role, email });
+    const response = NextResponse.json({ success: true, username, role });
     
     response.cookies.set({
-      name: 'mps_admin_session',
-      value: userData.username || userData.email, // In a real app, storing a JWT here is better, but this matches proxy.js
+      name: 'mps_admin_session', // Keeping the name so existing admin works, but it's now a generic session
+      value: sessionData, 
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

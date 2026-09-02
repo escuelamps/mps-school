@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ActivityIndicator, Platform, Image } from 'react-native';
 import { auth } from '../../config/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const showAlert = (title, message) => {
     if (Platform.OS === 'web') {
@@ -24,7 +26,6 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      // Auto-append domain if they just typed the username (same as web)
       const formattedEmail = email.includes('@') ? email.trim() : `${email.trim()}@escuelamps.com`;
       await signInWithEmailAndPassword(auth, formattedEmail, password);
     } catch (error) {
@@ -37,6 +38,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../../assets/icon.png')} style={styles.logo} />
       <Text style={styles.title}>Escuela MPS</Text>
       
       <View style={styles.inputContainer}>
@@ -48,14 +50,19 @@ export default function LoginScreen() {
           onChangeText={setEmail}
           autoCapitalize="none"
         />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Contraseña" 
-          secureTextEntry
-          placeholderTextColor="#666"
-          value={password}
-          onChangeText={setPassword}
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput 
+            style={styles.passwordInput} 
+            placeholder="Contraseña" 
+            secureTextEntry={!showPassword}
+            placeholderTextColor="#666"
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+            <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="#666" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
@@ -75,6 +82,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F7FA',
     justifyContent: 'center',
     padding: 20,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    resizeMode: 'contain',
+    marginBottom: 10,
   },
   title: {
     fontSize: 32,
@@ -84,6 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   inputContainer: {
+    width: '100%',
     marginBottom: 20,
   },
   input: {
@@ -95,12 +110,32 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
     marginBottom: 15,
     fontSize: 16,
+    width: '100%',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    marginBottom: 15,
+  },
+  passwordInput: {
+    flex: 1,
+    color: '#333333',
+    padding: 15,
+    fontSize: 16,
+  },
+  eyeIcon: {
+    padding: 15,
   },
   button: {
     backgroundColor: '#00DE85',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+    width: '100%',
   },
   buttonText: {
     color: '#FFFFFF',
