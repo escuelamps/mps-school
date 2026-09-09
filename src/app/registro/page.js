@@ -90,11 +90,22 @@ export default function RegistroPage() {
       setLoading(true);
       try {
         // 1. Firebase Auth: Crear Usuario
-        const { auth } = await import('../../lib/firebase');
+        const { auth, db } = await import('../../lib/firebase');
         const { createUserWithEmailAndPassword, updateProfile } = await import('firebase/auth');
+        const { doc, setDoc } = await import('firebase/firestore');
         
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
         await updateProfile(userCredential.user, { displayName: formData.estudianteNombre });
+
+        // 1.5 Guardar el perfil en Firestore para la App Móvil y la Web (El Agenda MPS)
+        await setDoc(doc(db, 'users', userCredential.user.uid), {
+          role: 'student',
+          email: formData.email,
+          nombre: formData.estudianteNombre,
+          instrumento: formData.instrumento,
+          telefono: formData.telefono,
+          fechaRegistro: new Date().toISOString()
+        });
 
         // 2. Google Forms (Headless): Enviar datos masivos
         const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSci_KW3CWU3lqCWPn68of5bqxZi_YfSEhi-kigcTsqA_9npSg/formResponse';

@@ -28,7 +28,10 @@ if (typeof window !== "undefined") {
   });
 }
 
-const db = initializeFirestore(app, { experimentalForceLongPolling: true });
+let db = null;
+if (typeof window !== "undefined") {
+  db = getFirestore(app);
+}
 const storage = getStorage(app);
 
 export { app, auth, db, storage, analytics };

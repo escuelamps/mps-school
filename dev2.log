@@ -1,0 +1,13 @@
+⚠ Port 3000 is in use by process 26989, using available port 3002 instead.
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://25.45.197.162:3002
+- Environments: .env.local
+✓ Ready in 79s
+Error: ETIMEDOUT: connection timed out, read
+    at ignore-listed frames {
+  errno: -60,
+  code: 'ETIMEDOUT',
+  syscall: 'read'
+}
+[?25h

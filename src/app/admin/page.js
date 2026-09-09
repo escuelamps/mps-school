@@ -264,7 +264,7 @@ export default function AdminPage() {
 
         {/* Card Gestión de Profesores */}
         <div 
-          onClick={() => router.push('/admin/profesores')}
+          onClick={() => router.push('/admin/nosotros')}
           style={{
             background: 'var(--panel-bg)',
             border: '1px solid var(--glass-border)',
@@ -286,7 +286,7 @@ export default function AdminPage() {
             <User size={32} />
           </div>
           <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Creación de cuentas de profesor y gestión del equipo docente.</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio general de todos los profesores y estudiantes de la escuela.</p>
         </div>
 
         {/* Card WhatsApp Bot */}
