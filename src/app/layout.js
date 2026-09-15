@@ -1,6 +1,7 @@
 import './globals.css';
 import FirebaseAnalytics from '@/components/FirebaseAnalytics';
 import ThemeToggle from '@/components/ThemeToggle';
+import CookieBanner from '@/components/CookieBanner';
 
 export const metadata = {
   title: 'MPS | Music and Production School',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
         <FirebaseAnalytics />
         {children}
         <ThemeToggle />
+        <CookieBanner />
       </body>
     </html>
   );
