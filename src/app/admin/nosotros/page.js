@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Trash2, Mail, UserPlus, DollarSign, CreditCard, Lock, Edit2 } from 'lucide-react';
+import { ArrowLeft, User, Trash2, Mail, UserPlus, DollarSign, CreditCard, Lock, Edit2, FileText, BookOpen } from 'lucide-react';
 import '../admin.css';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
@@ -18,6 +18,9 @@ export default function ProfesoresPage() {
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [documentId, setDocumentId] = useState('');
+  const [subject1, setSubject1] = useState('');
+  const [subject2, setSubject2] = useState('');
   const [password, setPassword] = useState('');
   const [hourlyRate, setHourlyRate] = useState('');
   const [bankAccount, setBankAccount] = useState('');
@@ -35,6 +38,9 @@ export default function ProfesoresPage() {
     setEditingTeacherId(null);
     setFirstName('');
     setLastName('');
+    setDocumentId('');
+    setSubject1('');
+    setSubject2('');
     setPassword('');
     setHourlyRate('');
     setBankAccount('');
@@ -49,6 +55,10 @@ export default function ProfesoresPage() {
     setFirstName(nameParts[0] || '');
     setLastName(nameParts.slice(1).join(' ') || '');
     
+    setDocumentId(teacher.documentId || '');
+    setSubject1(teacher.subjects?.[0] || '');
+    setSubject2(teacher.subjects?.[1] || '');
+    
     setPassword(''); // Don't fetch password, it's secure
     setHourlyRate(teacher.hourlyRate || '');
     setBankAccount(teacher.bankAccount || '');
@@ -61,10 +71,14 @@ export default function ProfesoresPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      const subjectsArray = [subject1, subject2].filter(Boolean); // Solo guarda las que no estén vacías
+
       if (editingTeacherId) {
         // Edit Mode
         const updateData = {
           name: `${firstName} ${lastName}`,
+          documentId: documentId,
+          subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount
         };
@@ -87,6 +101,8 @@ export default function ProfesoresPage() {
           name: `${firstName} ${lastName}`,
           email: email,
           role: 'teacher',
+          documentId: documentId,
+          subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount,
           schedule: { start: '08:00', end: '18:00' }
@@ -95,7 +111,7 @@ export default function ProfesoresPage() {
 
       setIsAdding(false);
       setEditingTeacherId(null);
-      setFirstName(''); setLastName(''); setPassword(''); setHourlyRate(''); setBankAccount('');
+      setFirstName(''); setLastName(''); setDocumentId(''); setSubject1(''); setSubject2(''); setPassword(''); setHourlyRate(''); setBankAccount('');
     } catch (error) {
       console.error("Error saving teacher: ", error);
       alert('Hubo un error al guardar los datos del profesor.');
@@ -151,9 +167,33 @@ export default function ProfesoresPage() {
                 <input type="text" required value={lastName} onChange={e => setLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
               </div>
               
+              <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Número de Documento</label>
+                <div style={{ position: 'relative' }}>
+                  <FileText size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input type="text" required value={documentId} onChange={e => setDocumentId(e.target.value)} placeholder="CC / TI / NIT" style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Asignatura Principal *</label>
+                <div style={{ position: 'relative' }}>
+                  <BookOpen size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input type="text" required value={subject1} onChange={e => setSubject1(e.target.value)} placeholder="Ej: Batería, Piano, Canto" style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Asignatura Secundaria (Opcional)</label>
+                <div style={{ position: 'relative' }}>
+                  <BookOpen size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input type="text" value={subject2} onChange={e => setSubject2(e.target.value)} placeholder="Ej: Teoría Musical" style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                </div>
+              </div>
+
               {!editingTeacherId && (
                 <div>
-                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña</label>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña (Mínimo 6)</label>
                   <div style={{ position: 'relative' }}>
                     <Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
                     <input type="text" required minLength="6" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
@@ -175,8 +215,8 @@ export default function ProfesoresPage() {
                   <input type="text" required value={bankAccount} onChange={e => setBankAccount(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid #00DE85' }} />
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gridColumn: '1 / -1' }}>
+                <button type="submit" disabled={loading} style={{ width: '100%', padding: '1rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
                   {loading ? 'Guardando...' : (editingTeacherId ? 'Actualizar Profesor' : 'Crear Profesor')}
                 </button>
               </div>
@@ -198,7 +238,22 @@ export default function ProfesoresPage() {
                   <div>
                     <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{teacher.name}</h3>
                     <p style={{ color: '#00DE85', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}><Mail size={14}/> {teacher.email}</p>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Tarifa: ${teacher.hourlyRate || 0}/hr | Cuenta: {teacher.bankAccount || 'N/A'}</p>
+                    
+                    {teacher.documentId && (
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><FileText size={12}/> CC: {teacher.documentId}</p>
+                    )}
+                    
+                    {teacher.subjects && teacher.subjects.length > 0 && (
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                        {teacher.subjects.map((sub, idx) => (
+                          <span key={idx} style={{ background: 'rgba(0,222,133,0.1)', color: '#00DE85', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>{sub}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.8rem', borderTop: '1px solid var(--glass-border)', paddingTop: '0.5rem' }}>
+                      Tarifa: ${teacher.hourlyRate || 0}/hr | Cuenta: {teacher.bankAccount || 'N/A'}
+                    </p>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
                     <button onClick={() => openEditForm(teacher)} style={{ background: 'transparent', border: 'none', color: '#3b82f6', cursor: 'pointer', padding: '0.5rem' }} title="Editar">
