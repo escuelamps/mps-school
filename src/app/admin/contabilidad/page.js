@@ -26,11 +26,13 @@ export default function AdminContabilidad() {
   const [loading, setLoading] = useState(false);
 
   // Payroll State
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
+  const [selectedMonth, setSelectedMonth] = useState(""); // YYYY-MM
   const [payrollReport, setPayrollReport] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
 
   useEffect(() => {
+    setSelectedMonth(new Date().toISOString().slice(0, 7));
+
     // Listen to Teachers
     const qTeachers = query(collection(db, 'users'), where('role', '==', 'teacher'));
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
