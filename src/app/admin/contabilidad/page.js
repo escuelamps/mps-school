@@ -52,7 +52,7 @@ export default function AdminContabilidad() {
     e.preventDefault();
     setLoading(true);
     try {
-      const email = `alumno-${studentFirstName.toLowerCase().trim()}.${studentLastName.toLowerCase().trim()}@mps.com`;
+      const email = `alumno-${studentFirstName.toLowerCase().trim()}.${studentLastName.toLowerCase().trim()}@escuelamps.com`;
       const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
       const res = await fetch(authUrl, {
         method: 'POST',
@@ -141,7 +141,7 @@ export default function AdminContabilidad() {
           </button>
           <div>
             <h1 className="admin-title">Contabilidad y Alumnos</h1>
-            <p className="admin-subtitle">Nómina docente y alta de estudiantes (CRUD)</p>
+            <p className="admin-subtitle">Nómina docente y alta de estudiantes </p>
           </div>
         </div>
       </div>

@@ -86,7 +86,7 @@ export default function ProfesoresPage() {
         alert('Profesor actualizado correctamente.');
       } else {
         // Create Mode
-        const email = `profe-${firstName.toLowerCase().trim()}.${lastName.toLowerCase().trim()}@mps.com`;
+        const email = `profe-${firstName.toLowerCase().trim()}.${lastName.toLowerCase().trim()}@escuelamps.com`;
         const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
         const res = await fetch(authUrl, {
           method: 'POST',
