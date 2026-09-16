@@ -242,7 +242,7 @@ export default function AgendaProDashboard() {
       <div className="admin-header" style={{ flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button onClick={() => router.push('/admin')} className="back-button"><ArrowLeft size={24} color="#00DE85" /></button>
-          <div><h1 className="admin-title">Agenda Pro (Fase 1)</h1><p className="admin-subtitle">Gestión Nominal y Pagos</p></div>
+          <div><h1 className="admin-title">Agenda MPS (Fase 1)</h1><p className="admin-subtitle">Agendamiento de clases</p></div>
         </div>
         
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
