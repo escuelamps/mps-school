@@ -138,7 +138,7 @@ export default function ProfesoresPage() {
             <p className="admin-subtitle">Directorio y gestión del cuerpo docente</p>
           </div>
         </div>
-        <button className="logout-button" onClick={openAddForm}>
+        <button style={{ background: "#00DE85", color: "#111", border: "none", padding: "0.6rem 1.2rem", borderRadius: "8px", fontWeight: "bold", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }} onClick={openAddForm}>
           <UserPlus size={20} /> {isAdding && !editingTeacherId ? 'Cancelar' : 'Nuevo Profesor'}
         </button>
       </div>
