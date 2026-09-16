@@ -271,7 +271,6 @@ export default function AdminContabilidad() {
                   <input type="text" required value={studentLastName} onChange={e => setStudentLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
                 </div>
                 {!editingStudentId && (<div><label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña de acceso</label><div style={{ position: 'relative' }}><Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} /><input type="text" required minLength="6" value={studentPassword} onChange={e => setStudentPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} /></div></div>)}
-                </div>
                 <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                   <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}>
                     {loading ? 'Guardando...' : (editingStudentId ? 'Actualizar Alumno' : 'Guardar Alumno')}
