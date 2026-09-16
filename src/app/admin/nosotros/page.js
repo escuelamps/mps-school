@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Trash2, Mail, UserPlus, DollarSign, CreditCard, Lock } from 'lucide-react';
+import { ArrowLeft, User, Trash2, Mail, UserPlus, DollarSign, CreditCard, Lock, Edit2 } from 'lucide-react';
 import '../admin.css';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
@@ -14,6 +14,8 @@ export default function ProfesoresPage() {
   
   // Form State
   const [isAdding, setIsAdding] = useState(false);
+  const [editingTeacherId, setEditingTeacherId] = useState(null);
+  
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
@@ -26,46 +28,84 @@ export default function ProfesoresPage() {
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
       setTeachers(snapshot.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.name||'').localeCompare(b.name||'')));
     });
-
     return () => unsubTeachers();
   }, []);
 
-  const handleCreateTeacher = async (e) => {
+  const openAddForm = () => {
+    setEditingTeacherId(null);
+    setFirstName('');
+    setLastName('');
+    setPassword('');
+    setHourlyRate('');
+    setBankAccount('');
+    setIsAdding(!isAdding);
+  };
+
+  const openEditForm = (teacher) => {
+    setEditingTeacherId(teacher.id);
+    
+    // Split name safely
+    const nameParts = (teacher.name || '').split(' ');
+    setFirstName(nameParts[0] || '');
+    setLastName(nameParts.slice(1).join(' ') || '');
+    
+    setPassword(''); // Don't fetch password, it's secure
+    setHourlyRate(teacher.hourlyRate || '');
+    setBankAccount(teacher.bankAccount || '');
+    
+    setIsAdding(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSaveTeacher = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const email = `profe-${firstName.toLowerCase().trim()}.${lastName.toLowerCase().trim()}@mps.com`;
-      const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
-      const res = await fetch(authUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, returnSecureToken: true })
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      
-      const userId = data.localId;
-      await setDoc(doc(db, 'users', userId), {
-        name: `${firstName} ${lastName}`,
-        email: email,
-        role: 'teacher',
-        hourlyRate: Number(hourlyRate),
-        bankAccount: bankAccount,
-        schedule: { start: '08:00', end: '18:00' }
-      });
+      if (editingTeacherId) {
+        // Edit Mode
+        const updateData = {
+          name: `${firstName} ${lastName}`,
+          hourlyRate: Number(hourlyRate),
+          bankAccount: bankAccount
+        };
+        await updateDoc(doc(db, 'users', editingTeacherId), updateData);
+        alert('Profesor actualizado correctamente.');
+      } else {
+        // Create Mode
+        const email = `profe-${firstName.toLowerCase().trim()}.${lastName.toLowerCase().trim()}@mps.com`;
+        const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
+        const res = await fetch(authUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, returnSecureToken: true })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+        
+        const userId = data.localId;
+        await setDoc(doc(db, 'users', userId), {
+          name: `${firstName} ${lastName}`,
+          email: email,
+          role: 'teacher',
+          hourlyRate: Number(hourlyRate),
+          bankAccount: bankAccount,
+          schedule: { start: '08:00', end: '18:00' }
+        });
+      }
 
       setIsAdding(false);
+      setEditingTeacherId(null);
       setFirstName(''); setLastName(''); setPassword(''); setHourlyRate(''); setBankAccount('');
     } catch (error) {
-      console.error("Error creating teacher: ", error);
-      alert('Error al crear el profesor.');
+      console.error("Error saving teacher: ", error);
+      alert('Hubo un error al guardar los datos del profesor.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if(confirm('¿Estás seguro de eliminar el registro de este profesor?')) {
+    if(confirm('¿Estás seguro de eliminar el registro de este profesor? (Nota: Esto no borrará su cuenta Auth por seguridad)')) {
       await deleteDoc(doc(db, 'users', id));
     }
   };
@@ -79,22 +119,29 @@ export default function ProfesoresPage() {
           </button>
           <div>
             <h1 className="admin-title">Profesores</h1>
-            <p className="admin-subtitle">Directorio y gestión del cuerpo docente (CRUD)</p>
+            <p className="admin-subtitle">Directorio y gestión del cuerpo docente</p>
           </div>
         </div>
-        <button className="logout-button" onClick={() => setIsAdding(!isAdding)}>
-          <UserPlus size={20} /> {isAdding ? 'Cancelar' : 'Nuevo Profesor'}
+        <button className="logout-button" onClick={openAddForm}>
+          <UserPlus size={20} /> {isAdding && !editingTeacherId ? 'Cancelar' : 'Nuevo Profesor'}
         </button>
       </div>
 
       <div className="admin-content">
         
-        {/* --- FORMULARIO ALTA PROFESOR --- */}
+        {/* --- FORMULARIO ALTA/EDICIÓN PROFESOR --- */}
         {isAdding && (
           <div className="panel" style={{ marginBottom: '2rem' }}>
-            <h2 style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>Datos Contractuales del Profesor</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h2 style={{ color: 'var(--text-primary)' }}>
+                {editingTeacherId ? 'Editar Datos del Profesor' : 'Datos Contractuales del Profesor'}
+              </h2>
+              {editingTeacherId && (
+                <button onClick={() => setIsAdding(false)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar Edición</button>
+              )}
+            </div>
             
-            <form onSubmit={handleCreateTeacher} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <form onSubmit={handleSaveTeacher} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Nombre</label>
                 <input type="text" required value={firstName} onChange={e => setFirstName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
@@ -103,13 +150,17 @@ export default function ProfesoresPage() {
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Apellido</label>
                 <input type="text" required value={lastName} onChange={e => setLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
               </div>
-              <div>
-                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña</label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
-                  <input type="text" required minLength="6" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+              
+              {!editingTeacherId && (
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña</label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                    <input type="text" required minLength="6" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                  </div>
                 </div>
-              </div>
+              )}
+
               <div>
                 <label style={{ display: 'block', color: '#00DE85', marginBottom: '0.5rem', fontWeight: 'bold' }}>Valor a pagar por Hora ($)</label>
                 <div style={{ position: 'relative' }}>
@@ -126,7 +177,7 @@ export default function ProfesoresPage() {
               </div>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                 <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
-                  {loading ? 'Guardando...' : 'Crear Profesor'}
+                  {loading ? 'Guardando...' : (editingTeacherId ? 'Actualizar Profesor' : 'Crear Profesor')}
                 </button>
               </div>
             </form>
@@ -143,14 +194,17 @@ export default function ProfesoresPage() {
               <p style={{ color: 'var(--text-secondary)' }}>No hay profesores registrados.</p>
             ) : (
               teachers.map(teacher => (
-                <div key={teacher.id} style={{ padding: '1.5rem', background: 'var(--bg-darker)', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={teacher.id} style={{ padding: '1.5rem', background: 'var(--bg-darker)', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
                     <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{teacher.name}</h3>
                     <p style={{ color: '#00DE85', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}><Mail size={14}/> {teacher.email}</p>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Tarifa: ${teacher.hourlyRate || 0}/hr | Cuenta: {teacher.bankAccount || 'N/A'}</p>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => handleDelete(teacher.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.5rem' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexDirection: 'column' }}>
+                    <button onClick={() => openEditForm(teacher)} style={{ background: 'transparent', border: 'none', color: '#3b82f6', cursor: 'pointer', padding: '0.5rem' }} title="Editar">
+                      <Edit2 size={20} />
+                    </button>
+                    <button onClick={() => handleDelete(teacher.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '0.5rem' }} title="Eliminar">
                       <Trash2 size={20} />
                     </button>
                   </div>

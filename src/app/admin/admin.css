@@ -971,3 +971,15 @@ body {
   background: rgba(239, 68, 68, 0.2);
   transform: translateY(-2px);
 }
+
+/* Light Mode Overrides for Admin Dashboard */
+:root[data-theme='light'] {
+  --primary-color: var(--bangladesh-green);
+  --primary-hover: var(--dark-green);
+  --bg-dark: var(--anti-flash-white);
+  --bg-darker: #E2E8F0;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --text-main: var(--rich-black);
+  --text-muted: var(--bangladesh-green);
+}
