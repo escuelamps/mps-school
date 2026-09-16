@@ -1,22 +1,25 @@
 import { NextResponse } from 'next/server';
 
-export function proxy(request) {
+export function middleware(request) {
   const path = request.nextUrl.pathname;
   
-  // Proteger rutas que empiezan con /admin/ (ej. /admin/cenas, /admin/contabilidad)
-  // Pero permitir el paso libre a /admin (el hub/login combinado)
   if (path.startsWith('/admin/') && path !== '/admin/login') {
     const authCookie = request.cookies.get('mps_admin_session');
     
-    // Si no hay cookie o está vacía, redireccionar a /admin (donde está el login ahora)
     if (!authCookie || !authCookie.value) {
       return NextResponse.redirect(new URL('/admin', request.url));
     }
 
-    const username = authCookie.value;
+    let username = authCookie.value;
+    try {
+      const parsed = JSON.parse(authCookie.value);
+      if (parsed.username) {
+        username = parsed.username;
+      }
+    } catch (e) {
+      // Ignorar si no es JSON (ej. sesión vieja legacy)
+    }
 
-    // VALIDACIÓN DE SEGURIDAD REAL:
-    // Si alguien intenta entrar a /admin/contabilidad y NO es lpineda, bloqueado
     if (path.startsWith('/admin/contabilidad') && username !== 'lpineda') {
       return NextResponse.redirect(new URL('/admin', request.url));
     }
@@ -24,6 +27,9 @@ export function proxy(request) {
 
   return NextResponse.next();
 }
+
+// Ensure the exported function is named middleware or proxy if Vercel is looking for it
+export const proxy = middleware;
 
 export const config = {
   matcher: ['/admin/:path*'],
