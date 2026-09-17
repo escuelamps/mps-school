@@ -82,7 +82,6 @@ export default function ProfesoresPage() {
           name: `${firstName} ${lastName}`,
           documentId: documentId,
           birthDate: birthDate,
-          birthDate: birthDate,
           subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount
@@ -107,6 +106,7 @@ export default function ProfesoresPage() {
           email: email,
           role: 'teacher',
           documentId: documentId,
+          birthDate: birthDate,
           subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount,

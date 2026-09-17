@@ -59,7 +59,7 @@ export default function AgendaProDashboard() {
         })).sort((a, b) => a.name.localeCompare(b.name));
       
       const studentData = allUsers
-        .filter(u => u.role === 'student' || u.role === 'alumno' || !u.role) // Fallback if roles aren't strict yet
+        .filter(u => u.role === 'student' || u.role === 'estudiante' || !u.role) // Fallback if roles aren't strict yet
         .map(u => ({ id: u.id, name: u.name || u.email })).sort((a, b) => a.name.localeCompare(b.name));
 
       setTeachers(teacherData);
@@ -313,11 +313,11 @@ export default function AgendaProDashboard() {
                 {/* Fase 1: Enrolled Students */}
                 <div style={{ marginBottom: '1.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>Alumnos Inscritos ({(selectedSlot.students||[]).length}/{selectedSlot.capacity})</h3>
+                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>Estudiantes Inscritos ({(selectedSlot.students||[]).length}/{selectedSlot.capacity})</h3>
                   </div>
                   
                   {(selectedSlot.students||[]).length === 0 ? (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic' }}>No hay alumnos registrados.</p>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontStyle: 'italic' }}>No hay estudiantes registrados.</p>
                   ) : (
                     (selectedSlot.students||[]).map((st, idx) => (
                       <div key={idx} className="student-list-item">
@@ -343,7 +343,7 @@ export default function AgendaProDashboard() {
                   {(selectedSlot.students||[]).length < selectedSlot.capacity && (
                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
                       <select value={studentToEnroll} onChange={e=>setStudentToEnroll(e.target.value)} style={{ flex: 1, padding: '0.6rem', borderRadius: '6px', background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
-                        <option value="">Seleccionar alumno existente...</option>
+                        <option value="">Seleccionar estudiante existente...</option>
                         {studentsList.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                       </select>
                       <button onClick={enrollStudent} style={{ padding: '0.6rem 1rem', borderRadius: '6px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><UserPlus size={18}/> Agregar</button>

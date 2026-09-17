@@ -25,6 +25,7 @@ export default function AdminContabilidad() {
   const [studentLastName, setStudentLastName] = useState('');
   const [studentPassword, setStudentPassword] = useState('');
   const [studentBirthDate, setStudentBirthDate] = useState('');
+  const [studentInstrument, setStudentInstrument] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Payroll State
@@ -58,7 +59,9 @@ export default function AdminContabilidad() {
     setStudentLastName(nameParts.slice(1).join(' ') || '');
     setStudentPassword('');
       setStudentBirthDate('');
+      setStudentInstrument('');
     setStudentBirthDate(student.birthDate || '');
+    setStudentInstrument(student.instrument || '');
     setIsAddingStudent(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -73,10 +76,10 @@ export default function AdminContabilidad() {
         await updateDoc(doc(db, 'users', editingStudentId), {
           name: `${studentFirstName} ${studentLastName}`
         });
-        alert('Alumno actualizado correctamente.');
+        alert('Estudiante actualizado correctamente.');
       } else {
         // Modo Creación
-        const email = `alumno-${studentFirstName.toLowerCase().trim()}.${studentLastName.toLowerCase().trim()}@escuelamps.com`;
+        const email = `estudiante-${studentFirstName.toLowerCase().trim()}.${studentLastName.toLowerCase().trim()}@escuelamps.com`;
         const authUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
         const res = await fetch(authUrl, {
           method: 'POST',
@@ -103,7 +106,7 @@ export default function AdminContabilidad() {
       setStudentFirstName(''); setStudentLastName(''); setStudentPassword('');
     } catch (error) {
       console.error("Error creating student: ", error);
-      alert('Error al crear el alumno.');
+      alert('Error al crear el estudiante.');
     } finally {
       setLoading(false);
     }
@@ -169,7 +172,7 @@ export default function AdminContabilidad() {
             <ArrowLeft size={24} color="#00DE85" />
           </button>
           <div>
-            <h1 className="admin-title">Contabilidad y Alumnos</h1>
+            <h1 className="admin-title">Contabilidad y Estudiantes</h1>
             <p className="admin-subtitle">Nómina docente y alta de estudiantes </p>
           </div>
         </div>
@@ -246,20 +249,20 @@ export default function AdminContabilidad() {
         <div className="panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
             <h2 style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Users size={24} color="#00DE85" /> Directorio Financiero de Alumnos ({students.length})
+              <Users size={24} color="#00DE85" /> Directorio Financiero de Estudiantes ({students.length})
             </h2>
             <button 
               onClick={() => setIsAddingStudent(!isAddingStudent)}
               style={{ background: '#00DE85', color: '#111', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-              <UserPlus size={18} /> {isAddingStudent && !editingStudentId ? 'Cancelar' : 'Nuevo Alumno'}
+              <UserPlus size={18} /> {isAddingStudent && !editingStudentId ? 'Cancelar' : 'Nuevo Estudiante'}
             </button>
           </div>
 
           {isAddingStudent && (
             <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--glass-border)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <h3 style={{ color: 'var(--text-primary)' }}>{editingStudentId ? 'Editar Alumno' : 'Crear Ficha de Alumno'}</h3>
+                <h3 style={{ color: 'var(--text-primary)' }}>{editingStudentId ? 'Editar Estudiante' : 'Crear Ficha de Estudiante'}</h3>
                 {editingStudentId && (
                   <button onClick={() => { setIsAddingStudent(false); setEditingStudentId(null); }} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar Edición</button>
                 )}
@@ -274,6 +277,12 @@ export default function AdminContabilidad() {
                   <input type="text" required value={studentLastName} onChange={e => setStudentLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
                 </div>
                 
+                
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Instrumento</label>
+                  <input type="text" value={studentInstrument} onChange={e => setStudentInstrument(e.target.value)} placeholder="Ej. Piano, Guitarra..." style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                </div>
+
                 <div>
                   <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Fecha de Nacimiento</label>
                   <div style={{ position: 'relative' }}>
@@ -285,7 +294,7 @@ export default function AdminContabilidad() {
                 {!editingStudentId && (<div><label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña de acceso</label><div style={{ position: 'relative' }}><Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} /><input type="text" required minLength="6" value={studentPassword} onChange={e => setStudentPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} /></div></div>)}
                 <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                   <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}>
-                    {loading ? 'Guardando...' : (editingStudentId ? 'Actualizar Alumno' : 'Guardar Alumno')}
+                    {loading ? 'Guardando...' : (editingStudentId ? 'Actualizar Estudiante' : 'Guardar Estudiante')}
                   </button>
                 </div>
               </form>
@@ -298,6 +307,7 @@ export default function AdminContabilidad() {
                 <div>
                   <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{student.name}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Mail size={14}/> {student.email?.replace(/@.*$/, "")}</p>
+                  <p style={{ color: 'var(--accent)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem', fontWeight: 'bold' }}>🎸 {student.instrument || 'Sin instrumento'}</p>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Calendar size={14}/> {student.birthDate || 'Sin fecha de nacimiento'}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -310,7 +320,7 @@ export default function AdminContabilidad() {
                 </div>
               </div>
             ))}
-            {students.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No hay alumnos registrados.</p>}
+            {students.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No hay estudiantes registrados.</p>}
           </div>
         </div>
 
