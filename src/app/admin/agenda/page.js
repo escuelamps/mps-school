@@ -14,6 +14,22 @@ const PIXELS_PER_HOUR = 60;
 const HOURS_ARRAY = Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => `${(i + START_HOUR).toString().padStart(2, '0')}:00`);
 const DAYS_OF_WEEK = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
+
+const getInstrumentIcon = (instrumentName) => {
+  if (!instrumentName) return '🎵';
+  const name = instrumentName.toLowerCase();
+  if (name.includes('piano') || name.includes('teclado')) return '🎹';
+  if (name.includes('guitarra') || name.includes('bajo') || name.includes('cuerda') || name.includes('ukelele')) return '🎸';
+  if (name.includes('violín') || name.includes('violin') || name.includes('chelo')) return '🎻';
+  if (name.includes('batería') || name.includes('bateria') || name.includes('percusi')) return '🥁';
+  if (name.includes('vocal') || name.includes('canto') || name.includes('voz') || name.includes('técnica')) return '🎤';
+  if (name.includes('actuación') || name.includes('actuacion') || name.includes('teatro')) return '🎭';
+  if (name.includes('saxo') || name.includes('viento')) return '🎷';
+  if (name.includes('producción') || name.includes('produccion') || name.includes('audio')) return '🎧';
+  if (name.includes('marketing')) return '📈';
+  return '🎵';
+};
+
 export default function AgendaProDashboard() {
   const router = useRouter();
   
@@ -307,7 +323,7 @@ export default function AgendaProDashboard() {
                 <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
                   <span>📅 {selectedSlot.date} | {selectedSlot.time} ({selectedSlot.duration}m)</span>
                   <span>👨‍🏫 {selectedSlot.teacher}</span>
-                  <span>🎸 {selectedSlot.instrument}</span>
+                  <span>{getInstrumentIcon(selectedSlot.instrument)} {selectedSlot.instrument}</span>
                 </div>
 
                 {/* Fase 1: Enrolled Students */}

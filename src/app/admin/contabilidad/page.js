@@ -9,6 +9,22 @@ import '../admin.css';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
 
+
+const getInstrumentIcon = (instrumentName) => {
+  if (!instrumentName) return '🎵';
+  const name = instrumentName.toLowerCase();
+  if (name.includes('piano') || name.includes('teclado')) return '🎹';
+  if (name.includes('guitarra') || name.includes('bajo') || name.includes('cuerda') || name.includes('ukelele')) return '🎸';
+  if (name.includes('violín') || name.includes('violin') || name.includes('chelo')) return '🎻';
+  if (name.includes('batería') || name.includes('bateria') || name.includes('percusi')) return '🥁';
+  if (name.includes('vocal') || name.includes('canto') || name.includes('voz') || name.includes('técnica')) return '🎤';
+  if (name.includes('actuación') || name.includes('actuacion') || name.includes('teatro')) return '🎭';
+  if (name.includes('saxo') || name.includes('viento')) return '🎷';
+  if (name.includes('producción') || name.includes('produccion') || name.includes('audio')) return '🎧';
+  if (name.includes('marketing')) return '📈';
+  return '🎵';
+};
+
 export default function AdminContabilidad() {
   const router = useRouter();
   
@@ -307,7 +323,7 @@ export default function AdminContabilidad() {
                 <div>
                   <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{student.name}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Mail size={14}/> {student.email?.replace(/@.*$/, "")}</p>
-                  <p style={{ color: 'var(--accent)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem', fontWeight: 'bold' }}>🎸 {student.instrument || 'Sin instrumento'}</p>
+                  <p style={{ color: 'var(--accent)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem', fontWeight: 'bold' }}>{getInstrumentIcon(student.instrument)} {student.instrument || 'Sin instrumento'}</p>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Calendar size={14}/> {student.birthDate || 'Sin fecha de nacimiento'}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
