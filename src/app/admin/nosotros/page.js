@@ -19,6 +19,7 @@ export default function ProfesoresPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [documentId, setDocumentId] = useState('');
+  const [birthDate, setBirthDate] = useState('');
   const [subject1, setSubject1] = useState('');
   const [subject2, setSubject2] = useState('');
   const [password, setPassword] = useState('');
@@ -39,6 +40,7 @@ export default function ProfesoresPage() {
     setFirstName('');
     setLastName('');
     setDocumentId('');
+      setBirthDate('');
     setSubject1('');
     setSubject2('');
     setPassword('');
@@ -56,6 +58,7 @@ export default function ProfesoresPage() {
     setLastName(nameParts.slice(1).join(' ') || '');
     
     setDocumentId(teacher.documentId || '');
+    setBirthDate(teacher.birthDate || '');
     setSubject1(teacher.subjects?.[0] || '');
     setSubject2(teacher.subjects?.[1] || '');
     
@@ -78,6 +81,8 @@ export default function ProfesoresPage() {
         const updateData = {
           name: `${firstName} ${lastName}`,
           documentId: documentId,
+          birthDate: birthDate,
+          birthDate: birthDate,
           subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount
@@ -167,7 +172,15 @@ export default function ProfesoresPage() {
                 <input type="text" required value={lastName} onChange={e => setLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
               </div>
               
+              
               <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Fecha de Nacimiento</label>
+                <div style={{ position: 'relative' }}>
+                  <Calendar size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                  <input type="date" value={birthDate} onChange={e => setBirthDate(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                </div>
+              </div>
+<div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Número de Documento</label>
                 <div style={{ position: 'relative' }}>
                   <FileText size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />

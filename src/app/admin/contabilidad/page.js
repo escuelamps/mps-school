@@ -24,6 +24,7 @@ export default function AdminContabilidad() {
   const [studentFirstName, setStudentFirstName] = useState('');
   const [studentLastName, setStudentLastName] = useState('');
   const [studentPassword, setStudentPassword] = useState('');
+  const [studentBirthDate, setStudentBirthDate] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Payroll State
@@ -56,6 +57,8 @@ export default function AdminContabilidad() {
     setStudentFirstName(nameParts[0] || '');
     setStudentLastName(nameParts.slice(1).join(' ') || '');
     setStudentPassword('');
+      setStudentBirthDate('');
+    setStudentBirthDate(student.birthDate || '');
     setIsAddingStudent(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -270,6 +273,15 @@ export default function AdminContabilidad() {
                   <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Apellido</label>
                   <input type="text" required value={studentLastName} onChange={e => setStudentLastName(e.target.value)} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
                 </div>
+                
+                <div>
+                  <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Fecha de Nacimiento</label>
+                  <div style={{ position: 'relative' }}>
+                    <Calendar size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+                    <input type="date" value={studentBirthDate} onChange={e => setStudentBirthDate(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} />
+                  </div>
+                </div>
+
                 {!editingStudentId && (<div><label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Contraseña de acceso</label><div style={{ position: 'relative' }}><Lock size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} /><input type="text" required minLength="6" value={studentPassword} onChange={e => setStudentPassword(e.target.value)} style={{ width: '100%', padding: '0.8rem 0.8rem 0.8rem 2.2rem', borderRadius: '8px', background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }} /></div></div>)}
                 <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                   <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}>
@@ -286,6 +298,7 @@ export default function AdminContabilidad() {
                 <div>
                   <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{student.name}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Mail size={14}/> {student.email?.replace(/@.*$/, "")}</p>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Calendar size={14}/> {student.birthDate || 'Sin fecha de nacimiento'}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <button onClick={() => openEditStudentForm(student)} style={{ background: 'transparent', border: 'none', color: '#3b82f6', cursor: 'pointer', padding: '0.5rem' }}>
