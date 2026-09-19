@@ -91,7 +91,7 @@ export default function EventoPage() {
           payload.mimeType = formData.comprobante.type;
         }
 
-        await fetch("https://script.google.com/macros/s/AKfycbwTBsWzVQL4jmsNB9Y6kQsEW1cQQ47aVNE0H6rAYAdogF9FrAJK1VCDUbShnBm0K480/exec", {
+        await fetch("https://script.google.com/macros/s/AKfycbwhyI-DQn19KW1wHpdPUfV_wFSFzNLtZTJXF7Xo8HuWkiPrEThaSoBxjeNmrtZiWOjJtQ/exec", {
           method: "POST",
           body: JSON.stringify(payload),
           mode: "no-cors"
