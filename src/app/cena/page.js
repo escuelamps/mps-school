@@ -4,15 +4,19 @@ import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza, G
 import Link from 'next/link';
 
 const OPCIONES_MENU = [
-  { id: 'vino', label: 'Vino Caliente 2X1', price: 25000, icon: <Wine size={20} />, image: '/images/mps-vino.jpeg' },
-  { id: 'hamburguesa_sola', label: 'Hamburguesa sola', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-sin-papa.jpeg' },
-  { id: 'hamburguesa_papas', label: 'Hamburguesa con papas', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
-  { id: 'nachos', label: 'Nachos', price: 15000, icon: <Utensils size={20} />, image: '/images/mps-nachos.jpeg' },
-  { id: 'papas_paquete', label: 'Snacks en paquetes', price: 3000, icon: <Utensils size={20} /> },
-  { id: 'gaseosa', label: 'Gaseosa Postobon', price: 5000, icon: <GlassWater size={20} /> },
-  { id: 'cerveza', label: 'Cerveza (Aguila, Club Colombia, Poker)', price: 6000, icon: <Beer size={20} /> },
-  { id: 'pony_malta', label: 'Pony Malta', price: 2500, icon: <GlassWater size={20} /> },
-  { id: 'agua', label: 'Agua', price: 3000, icon: <GlassWater size={20} /> },
+  { id: 'todo_rico', label: 'Todo rico', price: 3500, icon: <Utensils size={20} /> },
+  { id: 'papas_margaritas', label: 'Papas Margaritas', price: 3500, icon: <Utensils size={20} /> },
+  { id: 'paquetes_surtidos', label: 'Paquetes surtidos', price: 3000, icon: <Utensils size={20} /> },
+  { id: 'gaseosa_postobon', label: 'Gaseosa Postobon', price: 3500, icon: <GlassWater size={20} /> },
+  { id: 'coca_cola', label: 'Coca cola', price: 3000, icon: <GlassWater size={20} /> },
+  { id: 'cuatro', label: 'Cuatro', price: 3000, icon: <GlassWater size={20} /> },
+  { id: 'poni_malta', label: 'Poni malta', price: 3000, icon: <GlassWater size={20} /> },
+  { id: 'agua_cristal', label: 'Agua Cristal', price: 2000, icon: <GlassWater size={20} /> },
+  { id: 'cerveza_club', label: 'Cerveza Club Colombia', price: 5000, icon: <Beer size={20} /> },
+  { id: 'cerveza_aguila', label: 'Cerveza Aguila', price: 5000, icon: <Beer size={20} /> },
+  { id: 'hamburguesa_sola', label: 'Hamburguesa Sola', price: 12000, icon: <Pizza size={20} />, image: '/images/mps-sin-papa.jpeg' },
+  { id: 'hamburguesa_combo_gaseosa', label: 'Hamburguesa Combo (+ Gaseosa)', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
+  { id: 'hamburguesa_combo_cerveza', label: 'Hamburguesa Combo (+ Cerveza)', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
 ];
 
 export default function CenaPage() {
@@ -21,6 +25,7 @@ export default function CenaPage() {
   
   const [formData, setFormData] = useState({
     nombre: '',
+    telefono: '',
     mesa: '',
     opcionesSeleccionadas: [],
     comprobante: null,
@@ -61,6 +66,7 @@ export default function CenaPage() {
   const validate = () => {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'Requerido.';
+    if (!formData.telefono.trim()) newErrors.telefono = 'Requerido.';
     
     if (!formData.mesa.trim()) {
       newErrors.mesa = 'Requerido.';
@@ -110,6 +116,7 @@ export default function CenaPage() {
 
         await addDoc(collection(db, 'cenas'), {
           nombre: formData.nombre,
+          telefono: formData.telefono,
           mesa: formData.mesa,
           opcionCena: seleccionTexto,
           comprobanteUrl: comprobanteUrl,
@@ -122,9 +129,10 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           sheetName: 'Cena',
-          headers: ["Fecha", "Nombre", "Mesa", "Opción", "Total", "Pago en Efectivo", "Recibo"],
+          headers: ["Fecha", "Nombre", "Teléfono", "Mesa", "Opción", "Total", "Pago en Efectivo", "Recibo"],
           rowData: [
             formData.nombre,
+            formData.telefono,
             formData.mesa || "Sin mesa",
             seleccionTexto,
             total,
@@ -286,6 +294,12 @@ export default function CenaPage() {
                 <label style={labelStyle}>Nombre Completo *</label>
                 <input name="nombre" value={formData.nombre} onChange={handleChange} style={inputStyle('nombre')} placeholder="Tu nombre" />
                 {errors.nombre && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.nombre}</span>}
+              </div>
+
+              <div>
+                <label style={labelStyle}>Teléfono (WhatsApp) *</label>
+                <input name="telefono" type="number" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
+                {errors.telefono && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.telefono}</span>}
               </div>
             </div>
 
