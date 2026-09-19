@@ -129,10 +129,10 @@ export default function CenaPage() {
         // 2. LÓGICA DE GOOGLE SHEETS (Para el Excel de la escuela)
         const payload = {
           sheetName: 'Cena',
-          // Volvemos exactamente a las 7 columnas originales que funcionaban
-          headers: ["Fecha", "Nombre", "Mesa", "Opción", "Total", "Pago en Efectivo", "Recibo"],
+          headers: ["Fecha", "Nombre", "Teléfono", "Mesa", "Opción", "Total", "Pago en efectivo", "Recibo"],
           rowData: [
-            `${formData.nombre} - Tel: ${formData.telefono}`, // Fusionamos el teléfono aquí para no agregar columnas nuevas
+            formData.nombre,
+            formData.telefono,
             formData.mesa || "Sin mesa",
             seleccionTexto,
             total,
