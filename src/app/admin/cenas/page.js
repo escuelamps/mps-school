@@ -129,6 +129,7 @@ export default function CenasAdmin() {
                 <tr key={reserva.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
                   <td style={{ padding: '1rem 1.5rem' }}>
                     <p style={{ margin: 0, fontWeight: '500', color: 'var(--text-primary)' }}>{reserva.nombre}</p>
+                    {reserva.telefono && <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>📞 {reserva.telefono}</p>}
                   </td>
                   <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
                     <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{reserva.mesa ? `#${reserva.mesa}` : '-'}</span>
