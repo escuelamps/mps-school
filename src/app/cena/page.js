@@ -156,7 +156,7 @@ export default function CenaPage() {
         setSuccess(true);
       } catch (err) {
         console.error("Error al guardar:", err);
-        alert("Hubo un problema procesando tu reserva. Intenta de nuevo.");
+        alert("Hubo un problema: " + err.message);
       } finally {
         setLoading(false);
       }
