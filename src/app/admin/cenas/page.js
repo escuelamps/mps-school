@@ -107,83 +107,63 @@ export default function CenasAdmin() {
             </div>
           </div>
           
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
-            <thead style={{ background: 'var(--section-bg)' }}>
-              <tr>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Invitado</th>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Mesa</th>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Pedido</th>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Estado del Pago</th>
-                <th style={{ padding: '1rem 1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontWeight: '600', fontSize: '0.9rem', borderBottom: '1px solid var(--glass-border)' }}>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
               {loading ? (
-                <tr>
-                  <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                    Cargando pedidos...
-                  </td>
-                </tr>
+                <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  Cargando pedidos...
+                </div>
               ) : filtradas.map(reserva => (
-                <tr key={reserva.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    <p style={{ margin: 0, fontWeight: '500', color: 'var(--text-primary)' }}>{reserva.nombre}</p>
-                    {reserva.telefono && <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>📞 {reserva.telefono}</p>}
-                  </td>
-                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                    <span style={{ fontWeight: 'bold', color: 'var(--text-primary)' }}>{reserva.mesa ? `#${reserva.mesa}` : '-'}</span>
-                  </td>
-                  <td style={{ padding: '1rem 1.5rem' }}>
-                    <span style={{ 
-                      padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem', fontWeight: '500',
-                      background: 'var(--section-bg)',
-                      color: 'var(--text-primary)'
-                    }}>
+                <div key={reserva.id} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1.5rem', borderBottom: '1px solid var(--glass-border)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div>
+                      <p style={{ margin: 0, fontWeight: '600', color: 'var(--text-primary)', fontSize: '1.1rem' }}>{reserva.nombre}</p>
+                      {reserva.telefono && <p style={{ margin: '0.3rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>📞 {reserva.telefono}</p>}
+                    </div>
+                    <div style={{ background: 'var(--section-bg)', padding: '0.4rem 0.8rem', borderRadius: '8px', fontWeight: 'bold', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
+                      Mesa {reserva.mesa ? `#${reserva.mesa}` : '-'}
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <span style={{ padding: '4px 10px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: '500', background: 'var(--section-bg)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
                       {reserva.opcionCena}
                     </span>
-                  </td>
-                  <td style={{ padding: '1rem 1.5rem' }}>
                     <span style={{ 
                       display: 'inline-flex', alignItems: 'center', gap: '5px',
                       color: (reserva.estado === 'Aprobado' || reserva.estado === 'Pagado') ? 'var(--accent)' : '#ca8a04',
-                      fontWeight: '500', fontSize: '0.9rem'
+                      fontWeight: '600', fontSize: '0.9rem'
                     }}>
                       {(reserva.estado === 'Aprobado' || reserva.estado === 'Pagado') ? <CheckCircle2 size={16} /> : <Clock size={16} />}
                       {reserva.estado || 'Pendiente'}
                     </span>
-                  </td>
-                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                     {reserva.comprobanteUrl ? (
-                      <a href={reserva.comprobanteUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', padding: '0.5rem 1rem', background: 'var(--section-bg)', border: '1px solid var(--glass-border)', borderRadius: '6px', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}>
+                      <a href={reserva.comprobanteUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', padding: '0.6rem 1.2rem', background: 'var(--section-bg)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Ver Recibo
                       </a>
                     ) : (
-                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Sin recibo</span>
+                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontStyle: 'italic' }}>Sin recibo adjunto</span>
                     )}
-                  </td>
-                  <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: '500', background: 'var(--section-bg)', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--glass-border)' }}>
+                    
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: '600', background: 'rgba(0, 222, 133, 0.1)', padding: '0.6rem 1.2rem', borderRadius: '8px', border: '1px solid rgba(0, 222, 133, 0.3)' }}>
                       <input 
                         type="checkbox" 
                         checked={false} 
                         onChange={() => setPedidoACerrar(reserva.id)} 
-                        style={{ width: '16px', height: '16px', accentColor: 'var(--accent)' }}
+                        style={{ width: '18px', height: '18px', accentColor: 'var(--accent)', cursor: 'pointer' }}
                       />
-                      Entregado / Cancelado
+                      Entregado / Cerrar
                     </label>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
               {!loading && filtradas.length === 0 && (
-                <tr>
-                  <td colSpan="5" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                    No hay pedidos registrados aún.
-                  </td>
-                </tr>
+                <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  No hay pedidos registrados aún.
+                </div>
               )}
-            </tbody>
-          </table>
           </div>
         </div>
       </div>
