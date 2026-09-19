@@ -186,9 +186,9 @@ export default function CenaPage() {
           <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem' }}>
             Hemos recibido tu pedido. En breve lo llevaremos a tu mesa.
           </p>
-          <Link href="/" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
-            Volver al inicio
-          </Link>
+          <a href="/cena" className="btn-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+            Hacer otro pedido
+          </a>
         </div>
       </main>
     );
