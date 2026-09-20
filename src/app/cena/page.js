@@ -247,9 +247,9 @@ export default function CenaPage() {
                           <img src={opcion.image} alt={opcion.label} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                         )}
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <h3 style={{ margin: '0 0 0.2rem 0', color: 'var(--text-primary)', fontSize: '1rem', display: 'flex', alignItems: 'flex-start', gap: '0.4rem', lineHeight: '1.2' }}>
+                          <h3 style={{ margin: '0 0 0.2rem 0', color: 'var(--text-primary)', fontSize: '0.95rem', display: 'flex', alignItems: 'flex-start', gap: '0.4rem', lineHeight: '1.2' }}>
                             <span style={{ flexShrink: 0, marginTop: '2px' }}>{opcion.icon}</span> 
-                            <span style={{ wordBreak: 'break-word' }}>{opcion.label}</span>
+                            <span>{opcion.label}</span>
                           </h3>
                           <p style={{ margin: 0, color: 'var(--accent)', fontWeight: 'bold', fontSize: '1rem' }}>
                             ${opcion.price.toLocaleString('es-CO')}
