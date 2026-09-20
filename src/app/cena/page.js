@@ -27,7 +27,7 @@ export default function CenaPage() {
     nombre: '',
     telefono: '',
     mesa: '',
-    opcionesSeleccionadas: [],
+    opcionesCantidades: {},
     comprobante: null,
     pagoEfectivo: false,
   });
@@ -45,21 +45,23 @@ export default function CenaPage() {
     }
   };
 
-  const handleCheckboxChange = (id) => {
+  const handleQuantityChange = (id, delta) => {
     setFormData(prev => {
-      const isSelected = prev.opcionesSeleccionadas.includes(id);
-      let nuevasOpciones = [];
-      if (isSelected) {
-        nuevasOpciones = prev.opcionesSeleccionadas.filter(item => item !== id);
+      const currentQty = prev.opcionesCantidades[id] || 0;
+      const newQty = Math.max(0, currentQty + delta);
+      const newCantidades = { ...prev.opcionesCantidades };
+      
+      if (newQty === 0) {
+        delete newCantidades[id];
       } else {
-        nuevasOpciones = [...prev.opcionesSeleccionadas, id];
+        newCantidades[id] = newQty;
       }
       
-      if (errors.opcionesSeleccionadas && nuevasOpciones.length > 0) {
-        setErrors(e => ({...e, opcionesSeleccionadas: ''}));
+      if (errors.opcionesCantidades && Object.keys(newCantidades).length > 0) {
+        setErrors(e => ({...e, opcionesCantidades: ''}));
       }
       
-      return { ...prev, opcionesSeleccionadas: nuevasOpciones };
+      return { ...prev, opcionesCantidades: newCantidades };
     });
   };
 
@@ -74,8 +76,8 @@ export default function CenaPage() {
       newErrors.mesa = 'Debe ser un número.';
     }
 
-    if (formData.opcionesSeleccionadas.length === 0) {
-      newErrors.opcionesSeleccionadas = 'Selecciona al menos una opción.';
+    if (Object.keys(formData.opcionesCantidades).length === 0) {
+      newErrors.opcionesCantidades = 'Selecciona al menos una opción.';
     }
     
     // NOTA: El comprobante ya no es obligatorio, por lo tanto quitamos la validación
@@ -99,8 +101,9 @@ export default function CenaPage() {
       try {
         let comprobanteUrl = '';
         
-        const seleccionTexto = formData.opcionesSeleccionadas.map(id => {
-          return OPCIONES_MENU.find(opt => opt.id === id).label;
+        const seleccionTexto = Object.entries(formData.opcionesCantidades).map(([id, qty]) => {
+          const label = OPCIONES_MENU.find(opt => opt.id === id).label;
+          return `${qty}x ${label}`;
         }).join(', ');
 
         // 1. LÓGICA DE FIREBASE (Para el tiempo real del Panel)
@@ -170,9 +173,9 @@ export default function CenaPage() {
   };
 
   // Calcular el total
-  const total = formData.opcionesSeleccionadas.reduce((sum, id) => {
+  const total = Object.entries(formData.opcionesCantidades).reduce((sum, [id, qty]) => {
     const option = OPCIONES_MENU.find(o => o.id === id);
-    return sum + (option ? option.price : 0);
+    return sum + (option ? option.price * qty : 0);
   }, 0);
 
   if (success) {
@@ -227,33 +230,19 @@ export default function CenaPage() {
             
             {/* Opciones en cajas */}
             <div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-                {OPCIONES_MENU.map((opcion) => {
-                  const isSelected = formData.opcionesSeleccionadas.includes(opcion.id);
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+                {OPCIONES_MENU.map(opcion => {
+                  const qty = formData.opcionesCantidades[opcion.id] || 0;
+                  const isSelected = qty > 0;
                   return (
-                    <label key={opcion.id} style={{ 
-                      display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '1rem', 
+                    <div key={opcion.id} style={{ 
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.8rem', padding: '1rem', 
                       background: isSelected ? 'rgba(0, 222, 133, 0.1)' : 'var(--panel-bg)', 
                       borderRadius: '12px', 
                       border: `2px solid ${isSelected ? 'var(--accent)' : 'var(--glass-border)'}`, 
-                      cursor: 'pointer', transition: 'all 0.2s' 
+                      transition: 'all 0.2s' 
                     }}>
-                      <input 
-                        type="checkbox" 
-                        style={{ display: 'none' }}
-                        checked={isSelected}
-                        onChange={() => handleCheckboxChange(opcion.id)}
-                      />
-                      <div style={{ 
-                        width: '24px', height: '24px', borderRadius: '6px', 
-                        border: `2px solid ${isSelected ? 'var(--accent)' : '#94a3b8'}`,
-                        background: isSelected ? 'var(--accent)' : 'transparent',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0
-                      }}>
-                        {isSelected && <CheckCircle2 size={16} color="#000F11" />}
-                      </div>
-                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', flex: 1 }}>
                         {opcion.image && (
                           <img src={opcion.image} alt={opcion.label} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }} />
                         )}
@@ -267,13 +256,27 @@ export default function CenaPage() {
                           </p>
                         </div>
                       </div>
-                    </label>
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--bg-primary)', padding: '5px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                        <button 
+                          type="button" 
+                          onClick={() => handleQuantityChange(opcion.id, -1)}
+                          style={{ width: '32px', height: '32px', borderRadius: '6px', border: 'none', background: 'var(--section-bg)', color: 'var(--text-primary)', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >-</button>
+                        <span style={{ minWidth: '20px', textAlign: 'center', fontWeight: 'bold', fontSize: '1.1rem', color: 'var(--text-primary)' }}>{qty}</span>
+                        <button 
+                          type="button" 
+                          onClick={() => handleQuantityChange(opcion.id, 1)}
+                          style={{ width: '32px', height: '32px', borderRadius: '6px', border: 'none', background: 'var(--accent)', color: '#000F11', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                        >+</button>
+                      </div>
+                    </div>
                   )
                 })}
               </div>
-              {errors.opcionesSeleccionadas && <span style={{ color: '#ff6961', fontSize: '0.9rem', marginTop: '1rem', display: 'block' }}>{errors.opcionesSeleccionadas}</span>}
+              {errors.opcionesCantidades && <span style={{ color: '#ff6961', fontSize: '0.9rem', marginTop: '1rem', display: 'block' }}>{errors.opcionesCantidades}</span>}
               
-              {formData.opcionesSeleccionadas.length > 0 && (
+              {Object.keys(formData.opcionesCantidades).length > 0 && (
                 <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px dashed var(--glass-border)', textAlign: 'right' }}>
                   <h3 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1.2rem' }}>Total a pagar: <span style={{ color: 'var(--accent)' }}>${total.toLocaleString('es-CO')}</span></h3>
                 </div>
