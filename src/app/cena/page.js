@@ -288,7 +288,7 @@ export default function CenaPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
               <div>
                 <label style={labelStyle}>Escribe el número de tu mesa *</label>
-                <input name="mesa" type="number" value={formData.mesa} onChange={handleChange} style={inputStyle('mesa')} placeholder="Ej: 5" min="1" />
+                <input name="mesa" type="text" inputMode="numeric" pattern="[0-9]*" value={formData.mesa} onChange={handleChange} style={inputStyle('mesa')} placeholder="Ej: 5" />
                 <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>para recibir tu pedido</p>
                 {errors.mesa && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.mesa}</span>}
               </div>
@@ -301,7 +301,7 @@ export default function CenaPage() {
 
               <div>
                 <label style={labelStyle}>Teléfono (WhatsApp) *</label>
-                <input name="telefono" type="number" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
+                <input name="telefono" type="text" inputMode="numeric" pattern="[0-9]*" value={formData.telefono} onChange={handleChange} style={inputStyle('telefono')} placeholder="300 000 0000" />
                 {errors.telefono && <span style={{ color: '#ff6961', fontSize: '0.8rem', marginTop: '0.3rem', display: 'block' }}>{errors.telefono}</span>}
               </div>
             </div>
