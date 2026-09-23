@@ -22,6 +22,7 @@ const OPCIONES_MENU = [
 export default function CenaPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   
   const [formData, setFormData] = useState({
     nombre: '',
@@ -93,11 +94,16 @@ export default function CenaPage() {
     reader.onerror = error => reject(error);
   });
 
-  const handleSubmit = async (e) => {
+  const handlePreSubmit = (e) => {
     e.preventDefault();
-    
     if (validate()) {
-      setLoading(true);
+      setShowConfirmModal(true);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setShowConfirmModal(false);
       try {
         let comprobanteUrl = '';
         
@@ -163,7 +169,6 @@ export default function CenaPage() {
       } finally {
         setLoading(false);
       }
-    }
   };
 
   const handleChange = (e) => {
@@ -226,7 +231,7 @@ export default function CenaPage() {
         </div>
 
         <div className="glass-card" style={{ padding: '2.5rem', width: '100%', maxWidth: '800px' }}>
-          <form onSubmit={handleSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <form onSubmit={handlePreSubmit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             
             {/* Opciones en cajas */}
             <div>
@@ -349,6 +354,54 @@ export default function CenaPage() {
         </div>
         
       </div>
+
+      {/* MODAL DE CONFIRMACIÓN */}
+      {showConfirmModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}>
+          <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', padding: '2rem', borderRadius: '20px', maxWidth: '500px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '1.5rem', textAlign: 'center' }}>Confirma tu Pedido</h3>
+            
+            <div style={{ background: 'var(--panel-bg)', padding: '1rem', borderRadius: '12px', marginBottom: '1.5rem' }}>
+              <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)' }}><strong>Nombre:</strong> {formData.nombre}</p>
+              <p style={{ margin: '0 0 0.5rem 0', color: 'var(--text-secondary)' }}><strong>Mesa:</strong> {formData.mesa}</p>
+              <p style={{ margin: 0, color: 'var(--text-secondary)' }}><strong>Pago:</strong> {formData.pagoEfectivo ? 'Efectivo' : 'Nequi / Bre-B'}</p>
+            </div>
+
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h4 style={{ color: 'var(--text-primary)', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>Resumen</h4>
+              {Object.entries(formData.opcionesCantidades).map(([id, qty]) => {
+                const opcion = OPCIONES_MENU.find(opt => opt.id === id);
+                return (
+                  <div key={id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', color: 'var(--text-primary)' }}>
+                    <span>{qty}x {opcion.label}</span>
+                    <span style={{ fontWeight: 'bold' }}>${(opcion.price * qty).toLocaleString('es-CO')}</span>
+                  </div>
+                );
+              })}
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)', color: 'var(--accent)', fontSize: '1.2rem', fontWeight: '900' }}>
+                <span>TOTAL:</span>
+                <span>${total.toLocaleString('es-CO')}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+              <button 
+                onClick={() => setShowConfirmModal(false)}
+                style={{ flex: 1, padding: '1rem', borderRadius: '12px', border: '1px solid var(--glass-border)', background: 'var(--panel-bg)', color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer' }}
+              >
+                Volver a editar
+              </button>
+              <button 
+                onClick={handleSubmit}
+                disabled={loading}
+                style={{ flex: 1, padding: '1rem', borderRadius: '12px', border: 'none', background: 'var(--accent)', color: '#000F11', fontSize: '1rem', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
+              >
+                {loading ? 'Enviando...' : 'Sí, Confirmar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
