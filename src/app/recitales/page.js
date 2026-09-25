@@ -215,25 +215,25 @@ export default function RecitalesPage() {
 
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Hamburguesa Sola <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Deliciosa hamburguesa artesanal de res con queso, vegetales frescos y salsas de la casa.')} /></span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Hamburguesa Sola <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Hamburguesa Sola', text: 'Deliciosa hamburguesa artesanal de res con queso, vegetales frescos y salsas de la casa.', image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Gaseosa <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Nuestra hamburguesa artesanal acompañada de papas a la francesa y una gaseosa bien fría.')} /></span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Gaseosa <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Combo + Gaseosa', text: 'Nuestra hamburguesa artesanal acompañada de papas a la francesa y una gaseosa bien fría.', image: 'https://images.unsplash.com/photo-1594212854758-c0b9cd133c91?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Nuestra hamburguesa artesanal acompañada de papas a la francesa y un té refrescante.')} /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Combo + Té', text: 'Nuestra hamburguesa artesanal acompañada de papas a la francesa y un té refrescante.', image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Delicioso té en botella, ideal para acompañar tu velada.')} /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Té en Botella', text: 'Delicioso té frío, ideal para refrescar tu velada.', image: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Variedad de gaseosas tradicionales y jugos naturales.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Gaseosa / Jugo', text: 'Variedad de gaseosas tradicionales y jugos en botella o de caja.', image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Snacks surtidos (papas, platanitos, chicharrones, etc.) para picar durante el evento.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Paquetes', text: 'Snacks surtidos (papas, platanitos, chicharrones, etc.) para picar durante el evento.', image: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍬 Dulcería <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Chocolatinas, bom bom bum, chiclets, mentas, sparkies.')} /></span> <strong style={{ color: 'var(--accent)' }}>Desde $1.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍬 Dulcería <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood({ title: 'Dulcería', text: 'Chocolatinas, bom bom bum, chiclets, mentas, sparkies.', image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&w=600&q=80' })} /></span> <strong style={{ color: 'var(--accent)' }}>Desde $1.000</strong>
               </li>
             </ul>
 
@@ -286,13 +286,18 @@ export default function RecitalesPage() {
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
           <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '20px', width: '100%', maxWidth: '400px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)' }}>
-              <h2 style={{ fontSize: '1.2rem', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Utensils color="var(--accent)" /> Detalles del Producto</h2>
-              <button onClick={() => setSelectedFood(null)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+              <h2 style={{ fontSize: '1.2rem', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Utensils color="var(--accent)" /> {selectedFood.title}
+              </h2>
+              <button onClick={() => setSelectedFood(null)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', zIndex: 10 }}>
                 <X size={24} />
               </button>
             </div>
+            <div style={{ width: '100%', height: '200px', backgroundColor: '#111' }}>
+              <img src={selectedFood.image} alt={selectedFood.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
             <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.5' }}>
-              {selectedFood}
+              {selectedFood.text}
             </div>
             <div style={{ padding: '1rem', borderTop: '1px solid var(--glass-border)', textAlign: 'center' }}>
               <button onClick={() => setSelectedFood(null)} style={{ background: 'var(--accent)', color: '#000', border: 'none', padding: '0.8rem 2rem', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
