@@ -16,7 +16,7 @@ export default function RecitalesPage() {
   const [showMap, setShowMap] = useState(false);
   const [selectedFood, setSelectedFood] = useState(null);
   
-  const AVAILABLE_DATES = ['2026-10-04', '2026-10-18', '2026-11-01'];
+  const AVAILABLE_DATES = ['2026-10-04', '2026-10-18', '2026-11-08'];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
