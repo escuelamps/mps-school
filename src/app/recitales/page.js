@@ -227,11 +227,15 @@ export default function RecitalesPage() {
 
             <div style={{ background: 'var(--panel-bg)', padding: '1.5rem', borderRadius: '12px', textAlign: 'center' }}>
               <h4 style={{ color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                <QrCode size={18} /> Pago fácil vía Nequi
+                <QrCode size={18} /> Paga fácil vía Nequi o Bre-B
               </h4>
-              <div style={{ background: '#fff', padding: '10px', borderRadius: '12px', display: 'inline-block' }}>
+              <div style={{ background: '#fff', padding: '10px', borderRadius: '12px', display: 'inline-block', marginBottom: '1rem' }}>
                 <img src="/images/qr.png" alt="QR Nequi" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
               </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: 0 }}>
+                O usa la llave Bre-B:<br/>
+                <strong style={{ color: 'var(--accent)', fontSize: '1.2rem', letterSpacing: '1px' }}>@miprimersol</strong>
+              </p>
             </div>
           </div>
         </div>
