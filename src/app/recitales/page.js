@@ -11,6 +11,7 @@ export default function RecitalesPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   
   const AVAILABLE_DATES = ['2026-10-04', '2026-10-18', '2026-11-01'];
 
@@ -54,7 +55,7 @@ export default function RecitalesPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!nombre || !telefono) {
-      alert("Por favor llena todos los datos.");
+      setErrorMsg('Por favor llena todos los datos.');
       return;
     }
     
@@ -67,7 +68,7 @@ export default function RecitalesPage() {
       const q = query(collection(db, 'recitales'), where('fecha', '==', fecha));
       const snapshot = await getCountFromServer(q);
       if (snapshot.data().count >= 7) {
-        alert("¡Oh no! Justo se acaban de agotar los cupos para esta fecha.");
+        setErrorMsg('¡Oh no! Justo se acaban de agotar los cupos para esta fecha.');
         setIsFull(true);
         setSubmitting(false);
         return;
@@ -83,7 +84,7 @@ export default function RecitalesPage() {
       setSuccess(true);
     } catch (err) {
       console.error(err);
-      alert("Hubo un error al registrarte.");
+      setErrorMsg('Hubo un error al registrarte. Por favor intenta de nuevo.');
     }
     setSubmitting(false);
   };
@@ -132,7 +133,7 @@ export default function RecitalesPage() {
               <Calendar size={20} color="var(--accent)" />
               <select 
                 value={fecha} 
-                onChange={(e) => setFecha(e.target.value)}
+                onChange={(e) => { setFecha(e.target.value); setErrorMsg(''); }}
                 style={{ ...inputStyle, padding: '0.5rem', width: 'auto', display: 'inline-block' }}
               >
                 {AVAILABLE_DATES.map(d => (
@@ -167,15 +168,21 @@ export default function RecitalesPage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Nombre Completo</label>
-                <input required value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle} placeholder="Tu nombre" />
+                <input required value={nombre} onChange={e => { setNombre(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="Tu nombre" />
               </div>
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Teléfono (WhatsApp)</label>
-                <input required type="text" inputMode="numeric" value={telefono} onChange={e => setTelefono(e.target.value)} style={inputStyle} placeholder="300 000 0000" />
+                <input required type="text" inputMode="numeric" value={telefono} onChange={e => { setTelefono(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="300 000 0000" />
               </div>
               
-              <button 
-                type="submit" 
+              
+              {errorMsg && (
+                <div style={{ background: 'rgba(255, 105, 97, 0.1)', color: '#ff6961', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255, 105, 97, 0.3)', fontSize: '0.9rem', textAlign: 'center' }}>
+                  {errorMsg}
+                </div>
+              )}
+              <button  
+                 type="submit" 
                 disabled={submitting}
                 className="btn-primary" 
                 style={{ marginTop: '1rem', padding: '1rem', fontSize: '1.1rem', cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1 }}
