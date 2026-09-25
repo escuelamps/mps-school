@@ -11,8 +11,26 @@ export async function GET(request) {
 
   try {
     let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
-    if (privateKey.startsWith('"') && privateKey.endsWith('"')) privateKey = privateKey.slice(1, -1);
+    
+    // 1. Quitar comillas si las tiene
+    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+      privateKey = privateKey.slice(1, -1);
+    }
+    
+    // 2. Reemplazar 
+ literales si existen
     privateKey = privateKey.replace(/\\n/g, '\n');
+    
+    // 3. Si Vercel aplanó todo quitando los saltos de línea (causa del DECODER error)
+    if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+      const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
+      if (match) {
+        // Extraer el cuerpo y quitarle absolutamente todos los espacios que Vercel le haya puesto
+        const core = match[1].replace(/\s+/g, '');
+        // Reconstruir el formato PEM exacto que pide Google
+        privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
+      }
+    }
 
     const auth = new google.auth.GoogleAuth({
       credentials: {
