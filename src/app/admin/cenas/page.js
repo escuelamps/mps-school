@@ -139,7 +139,11 @@ export default function CenasAdmin() {
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    {reserva.comprobanteUrl ? (
+                    {reserva.comprobanteUrl === 'excel' ? (
+                      <span style={{ padding: '0.6rem 1.2rem', background: 'rgba(202, 138, 4, 0.1)', border: '1px solid rgba(202, 138, 4, 0.3)', borderRadius: '8px', color: '#ca8a04', fontSize: '0.9rem', fontWeight: '600' }}>
+                        📄 Recibo en Excel
+                      </span>
+                    ) : reserva.comprobanteUrl ? (
                       <a href={reserva.comprobanteUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', padding: '0.6rem 1.2rem', background: 'var(--section-bg)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '600' }}>
                         Ver Recibo
                       </a>

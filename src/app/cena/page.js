@@ -113,14 +113,11 @@ export default function CenaPage() {
         }).join(', ');
 
         // 1. LÓGICA DE FIREBASE (Para el tiempo real del Panel)
-        const { db, storage } = await import('@/lib/firebase');
+        const { db } = await import('@/lib/firebase');
         const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-        const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
 
         if (formData.comprobante) {
-          const fileRef = ref(storage, `comprobantes_cenas/${Date.now()}_${formData.comprobante.name}`);
-          const uploadResult = await uploadBytes(fileRef, formData.comprobante);
-          comprobanteUrl = await getDownloadURL(uploadResult.ref);
+          comprobanteUrl = 'excel';
         }
 
         await addDoc(collection(db, 'cenas'), {
