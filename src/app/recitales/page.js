@@ -6,6 +6,7 @@ export default function RecitalesPage() {
   const [fecha, setFecha] = useState('2026-10-04');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
+  const [acompanante, setAcompanante] = useState('');
   
   const [isFull, setIsFull] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -77,6 +78,7 @@ export default function RecitalesPage() {
       await addDoc(collection(db, 'recitales'), {
         nombre,
         telefono,
+        acompanante,
         fecha,
         createdAt: serverTimestamp()
       });
@@ -174,6 +176,11 @@ export default function RecitalesPage() {
                 <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Teléfono (WhatsApp)</label>
                 <input required type="text" inputMode="numeric" value={telefono} onChange={e => { setTelefono(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="300 000 0000" />
               </div>
+              <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Acompañante (Opcional)</label>
+                <input value={acompanante} onChange={e => { setAcompanante(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="Nombre de quien te acompaña" />
+              </div>
+
               
               
               {errorMsg && (
