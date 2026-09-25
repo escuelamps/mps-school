@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Calendar, MapPin, Clock, CheckCircle2, Utensils, QrCode } from 'lucide-react';
+import { Calendar, MapPin, Clock, CheckCircle2, Utensils, QrCode, Info, X } from 'lucide-react';
 
 export default function RecitalesPage() {
   const [fecha, setFecha] = useState('2026-10-04');
@@ -13,6 +13,7 @@ export default function RecitalesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showMap, setShowMap] = useState(false);
   
   const AVAILABLE_DATES = ['2026-10-04', '2026-10-18', '2026-11-01'];
 
@@ -146,8 +147,8 @@ export default function RecitalesPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-secondary)' }}>
               <Clock size={20} color="var(--accent)" /> 11:00 AM
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-secondary)' }}>
-              <MapPin size={20} color="var(--accent)" /> Sede Principal MPS
+            <div onClick={() => setShowMap(true)} style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-primary)', cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold' }}>
+              <MapPin size={20} color="var(--accent)" /> Sede Principal MPS (Ver Mapa)
             </div>
           </div>
 
@@ -213,22 +214,22 @@ export default function RecitalesPage() {
 
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🍔 Hamburguesa Sola</span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Hamburguesa Sola <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🍔 Combo + Gaseosa</span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Gaseosa <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🍔 Combo + Cerveza</span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🍺 Cerveza (Club/Águila)</span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🥤 Gaseosa / Jugo</span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span>🍟 Paquetes</span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
               </li>
             </ul>
 
