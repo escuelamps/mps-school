@@ -14,6 +14,7 @@ export default function RecitalesPage() {
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [showMap, setShowMap] = useState(false);
+  const [selectedFood, setSelectedFood] = useState(null);
   
   const AVAILABLE_DATES = ['2026-10-04', '2026-10-18', '2026-11-01'];
 
@@ -214,22 +215,22 @@ export default function RecitalesPage() {
 
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Hamburguesa Sola <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Hamburguesa Sola <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Deliciosa hamburguesa artesanal de res con queso, vegetales frescos y salsas de la casa.')} /></span> <strong style={{ color: 'var(--accent)' }}>$12.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Gaseosa <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Gaseosa <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Nuestra hamburguesa artesanal acompañada de papas a la francesa y una gaseosa bien fría.')} /></span> <strong style={{ color: 'var(--accent)' }}>$15.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Nuestra hamburguesa artesanal acompañada de papas a la francesa y un té refrescante.')} /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Té frío o caliente, ideal para acompañar tu velada.')} /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Variedad de gaseosas tradicionales y jugos naturales.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--text-secondary)" /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Snacks surtidos (papas, platanitos, chicharrones, etc.) para picar durante el evento.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
               </li>
             </ul>
 
@@ -249,6 +250,56 @@ export default function RecitalesPage() {
         </div>
 
       </div>
+
+      {/* Map Modal */}
+      {showMap && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '20px', width: '100%', maxWidth: '500px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)' }}>
+              <h2 style={{ fontSize: '1.2rem', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}><MapPin color="var(--accent)" /> Ubicación Sede MPS</h2>
+              <button onClick={() => setShowMap(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                <X size={24} />
+              </button>
+            </div>
+            <div style={{ width: '100%', height: '350px' }}>
+              <iframe 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                style={{ border: 0 }}
+                src="https://maps.google.com/maps?q=Escuela%20Musical%20MPS&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                allowFullScreen
+              ></iframe>
+            </div>
+            <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              Cq. 73 #39 B - 40, Laureles - Estadio, Medellín.
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Food Info Modal */}
+      {selectedFood && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+          <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '20px', width: '100%', maxWidth: '400px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.02)' }}>
+              <h2 style={{ fontSize: '1.2rem', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Utensils color="var(--accent)" /> Detalles del Producto</h2>
+              <button onClick={() => setSelectedFood(null)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                <X size={24} />
+              </button>
+            </div>
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.5' }}>
+              {selectedFood}
+            </div>
+            <div style={{ padding: '1rem', borderTop: '1px solid var(--glass-border)', textAlign: 'center' }}>
+              <button onClick={() => setSelectedFood(null)} style={{ background: 'var(--accent)', color: '#000', border: 'none', padding: '0.8rem 2rem', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }
