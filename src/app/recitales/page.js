@@ -142,7 +142,7 @@ export default function RecitalesPage() {
               </select>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-secondary)' }}>
-              <Clock size={20} color="var(--accent)" /> 7:00 PM
+              <Clock size={20} color="var(--accent)" /> 11:00 AM
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-secondary)' }}>
               <MapPin size={20} color="var(--accent)" /> Sede Principal MPS
