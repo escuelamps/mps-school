@@ -39,7 +39,7 @@ export default function EstudiantesActivosPage() {
         </button>
         <div className="header-info">
           <h1>Estudiantes Activos</h1>
-          <p>Conexión en vivo con Google Sheets (William)</p>
+          <p>Directorio y estado actual de los estudiantes.</p>
         </div>
         <button 
           onClick={fetchSheetsData} 

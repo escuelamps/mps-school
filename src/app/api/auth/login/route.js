@@ -28,7 +28,7 @@ export async function POST(request) {
     let username = email.split('@')[0];
 
     // Determine role by email prefix
-    if (email === 'william@escuelamps.com' || email === 'lpineda@escuelamps.com') {
+    if (email === 'william@escuelamps.com' || email === 'lpineda@escuelamps.com' || email === 'juanse@escuelamps.com') {
         role = 'admin';
     } else if (email.startsWith('profe-')) {
         role = 'teacher';

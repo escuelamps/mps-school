@@ -396,7 +396,7 @@ export default function AdminPage() {
               <FileSpreadsheet size={32} />
             </div>
             <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Visualización en vivo de la base de matrículas (Google Sheets).</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Consolidado y registro oficial de matrículas de la escuela.</p>
           </div>
         )}
 
@@ -424,7 +424,7 @@ export default function AdminPage() {
               <Users size={32} />
             </div>
             <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Visualización de estudiantes activos y morosos (Google Sheets).</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio oficial y estado actual de los estudiantes.</p>
           </div>
         )}
 

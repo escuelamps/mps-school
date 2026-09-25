@@ -20,7 +20,9 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "eslint": "^9",
-    "eslint-config-next": "16.2.10"
+    "eslint": "^10.11.0",
+    "eslint-config-next": "16.2.10",
+    "glob": "^13.0.6",
+    "node-domexception": "^2.0.2"
   }
 }

@@ -201,13 +201,13 @@ export default function AdminContabilidad() {
             onClick={() => router.push('/admin/matriculas')}
             style={{ background: '#dcfce7', color: '#166534', border: '1px solid #166534', padding: '1rem 2rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            📑 Ver Base de Matrículas (Excel Juanse)
+            📑 Base de Matrículas
           </button>
           <button 
             onClick={() => router.push('/admin/estudiantes-activos')}
             style={{ background: '#e0e7ff', color: '#3730a3', border: '1px solid #3730a3', padding: '1rem 2rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            👥 Ver Estudiantes Activos (Excel William)
+            👥 Estudiantes Activos
           </button>
         </div>
 

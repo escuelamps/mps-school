@@ -39,7 +39,7 @@ export default function MatriculasPage() {
         </button>
         <div className="header-info">
           <h1>Base de Matrículas</h1>
-          <p>Conexión en vivo con Google Sheets (Juanse)</p>
+          <p>Consolidado y registro oficial de matrículas.</p>
         </div>
         <button 
           onClick={fetchSheetsData} 
