@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from 'react-native';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, increment, getDoc, arrayUnion } from 'firebase/firestore';
+import { db, auth } from '../../config/firebase';
 
 export default function StudentCalendarScreen() {
   const [slots, setSlots] = useState([]);
@@ -36,9 +36,19 @@ export default function StudentCalendarScreen() {
 
     setIsBooking(true);
     try {
+      const currentUser = auth.currentUser;
+      if (!currentUser) throw new Error("No hay usuario autenticado");
+
+      let studentName = currentUser.email;
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (userDoc.exists() && userDoc.data().name) {
+        studentName = userDoc.data().name;
+      }
+
       const slotRef = doc(db, 'agenda_slots', selectedSlot.id);
       await updateDoc(slotRef, {
-        booked: increment(1)
+        booked: increment(1),
+        students: arrayUnion({ uid: currentUser.uid, name: studentName, email: currentUser.email })
       });
       
       Alert.alert(
