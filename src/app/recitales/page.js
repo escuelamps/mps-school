@@ -270,12 +270,12 @@ export default function RecitalesPage() {
                 height="100%" 
                 frameBorder="0" 
                 style={{ border: 0 }}
-                src="https://maps.google.com/maps?q=Escuela%20Musical%20MPS&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                src="https://maps.google.com/maps?q=4.6461109,-74.0685269&z=16&output=embed" 
                 allowFullScreen
               ></iframe>
             </div>
             <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-              Cq. 73 #39 B - 40, Laureles - Estadio, Medellín.
+              Carrera 17 # 58a - 37, Chapinero, Bogotá.
             </div>
           </div>
         </div>
