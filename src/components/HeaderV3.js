@@ -7,9 +7,9 @@ import { Menu, X, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-reac
 const EVENTS_DB = [
   { date: '2026-08-01', title: 'Open mic MPS', type: 'past', link: '/eventos-anteriores', time: 'N/A' },
   { date: '2026-08-11', title: 'Noches MPS: Una noche para sanar...', type: 'past', link: '/eventos-anteriores', time: 'N/A' },
-  { date: '2026-10-04', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-04', time: '7:00 PM' },
-  { date: '2026-10-18', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-18', time: '7:00 PM' },
-  { date: '2026-11-01', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-11-01', time: '7:00 PM' },
+  { date: '2026-10-04', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-04', time: '11:00 AM' },
+  { date: '2026-10-18', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-18', time: '11:00 AM' },
+  { date: '2026-11-08', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-11-08', time: '11:00 AM' },
 ];
 
 const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
