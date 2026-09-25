@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff, FileSpreadsheet, Users } from 'lucide-react';
 import './admin.css';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -369,6 +369,62 @@ export default function AdminPage() {
             </div>
             <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control financiero, revisión de ingresos y gestión contable de MPS.</p>
+          </div>
+        )}
+
+        {/* Card Matriculas (Sólo juanse) */}
+        {username === 'juanse' && (
+          <div 
+            onClick={() => router.push('/admin/matriculas')}
+            style={{
+              background: 'var(--panel-bg)',
+              border: '1px solid var(--glass-border)',
+              borderRadius: '16px',
+              padding: '2.5rem 2rem',
+              width: '320px',
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+          >
+            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+              <FileSpreadsheet size={32} />
+            </div>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Visualización en vivo de la base de matrículas (Google Sheets).</p>
+          </div>
+        )}
+
+        {/* Card Estudiantes Activos (Sólo william) */}
+        {username === 'william' && (
+          <div 
+            onClick={() => router.push('/admin/estudiantes-activos')}
+            style={{
+              background: 'var(--panel-bg)',
+              border: '1px solid var(--glass-border)',
+              borderRadius: '16px',
+              padding: '2.5rem 2rem',
+              width: '320px',
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+          >
+            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0e7ff', color: '#3730a3', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+              <Users size={32} />
+            </div>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Visualización de estudiantes activos y morosos (Google Sheets).</p>
           </div>
         )}
 
