@@ -100,7 +100,7 @@ export default function EstudiantesActivosPage() {
         {loading ? (
           <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
             <Loader2 size={40} className="animate-spin" style={{ margin: '0 auto 1rem' }} />
-            <p>Descargando celdas desde Google Sheets...</p>
+            <p>Actualizando...</p>
           </div>
         ) : error ? (
           <div style={{ padding: '3rem', textAlign: 'center', color: '#ef4444' }}>
