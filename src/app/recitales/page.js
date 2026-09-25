@@ -224,13 +224,16 @@ export default function RecitalesPage() {
                 <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍔 Combo + Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Nuestra hamburguesa artesanal acompañada de papas a la francesa y un té refrescante.')} /></span> <strong style={{ color: 'var(--accent)' }}>$18.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
-                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Té frío o caliente, ideal para acompañar tu velada.')} /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍵 Té <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Delicioso té en botella, ideal para acompañar tu velada.')} /></span> <strong style={{ color: 'var(--accent)' }}>$5.000</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
                 <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🥤 Gaseosa / Jugo <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Variedad de gaseosas tradicionales y jugos naturales.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.500</strong>
               </li>
               <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
                 <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍟 Paquetes <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Snacks surtidos (papas, platanitos, chicharrones, etc.) para picar durante el evento.')} /></span> <strong style={{ color: 'var(--accent)' }}>$3.000</strong>
+              </li>
+              <li style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-primary)' }}>
+                <span style={{display: 'flex', alignItems: 'center', gap: '0.4rem'}}>🍬 Dulcería <Info size={14} color="var(--accent)" style={{cursor: 'pointer'}} onClick={() => setSelectedFood('Chocolatinas, bom bom bum, chiclets, mentas, sparkies.')} /></span> <strong style={{ color: 'var(--accent)' }}>Desde $1.000</strong>
               </li>
             </ul>
 
