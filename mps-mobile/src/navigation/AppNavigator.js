@@ -11,6 +11,7 @@ import { doc, getDoc } from 'firebase/firestore';
 // Import Screens
 import LoginScreen from '../screens/Auth/LoginScreen';
 import StudentCalendarScreen from '../screens/Student/StudentCalendarScreen';
+import StudentEventsScreen from '../screens/Student/StudentEventsScreen';
 import StudentGradesScreen from '../screens/Student/StudentGradesScreen';
 import StudentProfileScreen from '../screens/Student/StudentProfileScreen';
 
@@ -28,8 +29,9 @@ const Tab = createBottomTabNavigator();
 // --- Student Tabs ---
 function StudentTabs() {
   return (
-    <Tab.Navigator screenOptions={{ headerTitleAlign: 'center', tabBarActiveTintColor: '#00DE85' }}>
-      <Tab.Screen name="Calendario" component={StudentCalendarScreen} />
+    <Tab.Navigator screenOptions={{ headerTitleAlign: 'center', tabBarActiveTintColor: '#00DE85', tabBarStyle: { backgroundColor: '#000F11', borderTopColor: '#1e293b' }, headerStyle: { backgroundColor: '#000F11' }, headerTintColor: '#FFF' }}>
+      <Tab.Screen name="Clases" component={StudentCalendarScreen} options={{ title: 'Agenda MPS' }} />
+      <Tab.Screen name="Eventos" component={StudentEventsScreen} />
       <Tab.Screen name="Notas" component={StudentGradesScreen} />
       <Tab.Screen name="Perfil" component={StudentProfileScreen} />
     </Tab.Navigator>
