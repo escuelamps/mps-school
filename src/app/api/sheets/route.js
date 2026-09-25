@@ -36,7 +36,7 @@ export async function GET(request) {
         client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
         private_key: privateKey,
       },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
 
     const sheets = google.sheets({ version: 'v4', auth });
@@ -62,5 +62,68 @@ export async function GET(request) {
   } catch (error) {
     console.error('Sheets Error:', error.message);
     return NextResponse.json({ error: 'Error al consultar Google Sheets: ' + error.message }, { status: 500 });
+  }
+}
+
+
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { type, rowNumber, values } = body;
+
+    if (!type || (type !== 'matriculas' && type !== 'activos')) {
+      return NextResponse.json({ error: 'Parámetro type inválido.' }, { status: 400 });
+    }
+    if (!rowNumber || !values) {
+      return NextResponse.json({ error: 'Faltan parámetros rowNumber o values.' }, { status: 400 });
+    }
+
+    let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
+    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+      privateKey = privateKey.slice(1, -1);
+    }
+    privateKey = privateKey.replace(/\\n/g, '\n');
+    if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+      const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
+      if (match) {
+        const core = match[1].replace(/\s+/g, '');
+        privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
+      }
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+        private_key: privateKey,
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+
+    const sheets = google.sheets({ version: 'v4', auth });
+    
+    let spreadsheetId = '';
+    let rangeToUpdate = '';
+
+    if (type === 'matriculas') {
+      spreadsheetId = process.env.SHEET_MATRICULAS_ID;
+      rangeToUpdate = `'BASE MATRICULA 2026+ 1 (ACTIVOS)'!A${rowNumber}:Z${rowNumber}`; 
+    } else {
+      spreadsheetId = process.env.SHEET_ACTIVOS_ID;
+      rangeToUpdate = `A${rowNumber}:Z${rowNumber}`; 
+    }
+
+    const response = await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: rangeToUpdate,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: {
+        values: [values]
+      }
+    });
+
+    return NextResponse.json({ success: true, updatedRange: response.data.updatedRange });
+  } catch (error) {
+    console.error('Sheets Update Error:', error.message);
+    return NextResponse.json({ error: 'Error al actualizar Google Sheets: ' + error.message }, { status: 500 });
   }
 }
