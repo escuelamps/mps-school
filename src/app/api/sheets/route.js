@@ -17,8 +17,7 @@ export async function GET(request) {
       privateKey = privateKey.slice(1, -1);
     }
     
-    // 2. Reemplazar 
- literales si existen
+    // 2. Reemplazar "\\n" literales por saltos de línea reales
     privateKey = privateKey.replace(/\\n/g, '\n');
     
     // 3. Si Vercel aplanó todo quitando los saltos de línea (causa del DECODER error)
