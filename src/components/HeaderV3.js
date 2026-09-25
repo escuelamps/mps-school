@@ -5,9 +5,11 @@ import { ContactModal, LoginModal } from '@/components/Modals';
 import { Menu, X, Calendar, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const EVENTS_DB = [
-  { date: '2026-08-22', title: 'Concierto de Gala MPS', type: 'upcoming', link: '/evento', time: '7:00 PM' },
-  { date: '2026-07-15', title: 'Muestra de Alumnos', type: 'past', link: '/eventos-anteriores', time: '5:00 PM' },
-  { date: '2026-09-30', title: 'Recital de Otoño', type: 'upcoming', link: '/evento', time: '6:30 PM' },
+  { date: '2026-08-01', title: 'Open mic MPS', type: 'past', link: '/eventos-anteriores', time: 'N/A' },
+  { date: '2026-08-11', title: 'Noches MPS: Una noche para sanar...', type: 'past', link: '/eventos-anteriores', time: 'N/A' },
+  { date: '2026-10-04', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-04', time: '7:00 PM' },
+  { date: '2026-10-18', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-10-18', time: '7:00 PM' },
+  { date: '2026-11-01', title: 'Recitales', type: 'upcoming', link: '/recitales?date=2026-11-01', time: '7:00 PM' },
 ];
 
 const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
