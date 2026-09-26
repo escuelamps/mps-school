@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Lock, LogIn } from 'lucide-react';
@@ -14,6 +14,15 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('timeout') === 'true') {
+        setError('Tu sesión ha expirado por inactividad. Por favor, ingresa de nuevo por seguridad.');
+      }
+    }
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
