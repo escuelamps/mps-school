@@ -74,12 +74,27 @@ export default function AgendaProDashboard() {
           id: u.id, name: u.name || u.email, schedule: u.schedule || { start: '08:00', end: '18:00', breakStart: '', breakEnd: '' }
         })).sort((a, b) => a.name.localeCompare(b.name));
       
-      const studentData = allUsers
-        .filter(u => u.role === 'student' || u.role === 'estudiante' || !u.role) // Fallback if roles aren't strict yet
-        .map(u => ({ id: u.id, name: u.name || u.email })).sort((a, b) => a.name.localeCompare(b.name));
-
       setTeachers(teacherData);
-      setStudentsList(studentData);
+      
+      // FETCH STUDENTS FROM EXCEL INSTEAD OF FIREBASE
+      try {
+        const res = await fetch('/api/sheets?type=activos');
+        const json = await res.json();
+        if (json.data && json.data.length > 1) {
+          const headers = json.data[0].map(h => h ? h.toLowerCase() : '');
+          let nameIndex = headers.findIndex(h => h.includes('estudiante') || h.includes('nombre') || h.includes('alumno'));
+          if (nameIndex === -1) nameIndex = 0; // fallback to first column
+          
+          const excelStudents = json.data.slice(1).map((row, i) => ({
+            id: `excel_${i}`,
+            name: row[nameIndex] || 'Desconocido'
+          })).filter(s => s.name && s.name !== 'Desconocido');
+          
+          setStudentsList(excelStudents.sort((a, b) => a.name.localeCompare(b.name)));
+        }
+      } catch (e) {
+        console.error("Error trayendo alumnos del excel", e);
+      }
       if(teacherData.length > 0) setWeekTeacherId(teacherData[0].id);
     };
     fetchUsers();
