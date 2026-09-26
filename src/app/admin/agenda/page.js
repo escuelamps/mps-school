@@ -79,7 +79,11 @@ export default function AgendaProDashboard() {
       // 1. Fetch Firebase Students
       const fbStudents = allUsers
         .filter(u => u.role === 'student' || u.role === 'estudiante' || !u.role)
-        .map(u => ({ id: u.id, name: u.name || u.email }));
+        .map(u => ({ 
+          id: u.id, 
+          name: u.name || u.email, 
+          phone: u.telefono || u.phone || u.cedula || u.documento || '' 
+        }));
       
       // 2. Fetch Excel Students
       let excelStudents = [];
@@ -90,25 +94,40 @@ export default function AgendaProDashboard() {
           const headers = json.data[0].map(h => h ? h.toLowerCase() : '');
           let nameIndex = headers.findIndex(h => h.includes('estudiante') || h.includes('nombre') || h.includes('alumno'));
           if (nameIndex === -1) nameIndex = 0; 
+
+          let phoneIndex = headers.findIndex(h => h.includes('celular') || h.includes('teléfono') || h.includes('telefono') || h.includes('cédula') || h.includes('cedula') || h.includes('documento'));
           
           excelStudents = json.data.slice(1).map((row, i) => ({
             id: `excel_${i}`,
-            name: row[nameIndex] || 'Desconocido'
+            name: row[nameIndex] || 'Desconocido',
+            phone: phoneIndex !== -1 ? (row[phoneIndex] || '') : ''
           })).filter(s => s.name && s.name !== 'Desconocido');
         }
       } catch (e) {
         console.error("Error trayendo alumnos del excel", e);
       }
 
-      // 3. Merge and Deduplicate by Name
+      // 3. Merge and Deduplicate by Phone/Cedula (Fallback to Name)
       const combined = [...fbStudents, ...excelStudents];
       const uniqueStudents = [];
-      const seenNames = new Set();
+      const seenKeys = new Set();
+
       for (const st of combined) {
         if (!st.name) continue;
-        const normalized = st.name.toLowerCase().trim();
-        if (!seenNames.has(normalized)) {
-          seenNames.add(normalized);
+        
+        // Generamos una clave única: usamos solo los números del teléfono/cédula si existe
+        let key = '';
+        if (st.phone) {
+          key = st.phone.replace(/\D/g, '');
+        }
+        
+        // Si no tiene teléfono/cédula válido, usamos el nombre en minúsculas como respaldo
+        if (!key || key.length < 5) {
+          key = st.name.toLowerCase().trim();
+        }
+
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
           uniqueStudents.push(st);
         }
       }
@@ -394,7 +413,7 @@ export default function AgendaProDashboard() {
                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
                       <select value={studentToEnroll} onChange={e=>setStudentToEnroll(e.target.value)} style={{ flex: 1, padding: '0.6rem', borderRadius: '6px', background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)' }}>
                         <option value="">Seleccionar estudiante existente...</option>
-                        {studentsList.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                        {studentsList.map(s => <option key={s.id} value={s.id}>{s.name} {s.phone ? `(${s.phone})` : ''}</option>)}
                       </select>
                       <button onClick={enrollStudent} style={{ padding: '0.6rem 1rem', borderRadius: '6px', background: '#00DE85', color: '#111', fontWeight: 'bold', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><UserPlus size={18}/> Agregar</button>
                     </div>
