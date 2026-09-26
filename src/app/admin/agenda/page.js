@@ -75,26 +75,45 @@ export default function AgendaProDashboard() {
         })).sort((a, b) => a.name.localeCompare(b.name));
       
       setTeachers(teacherData);
+
+      // 1. Fetch Firebase Students
+      const fbStudents = allUsers
+        .filter(u => u.role === 'student' || u.role === 'estudiante' || !u.role)
+        .map(u => ({ id: u.id, name: u.name || u.email }));
       
-      // FETCH STUDENTS FROM EXCEL INSTEAD OF FIREBASE
+      // 2. Fetch Excel Students
+      let excelStudents = [];
       try {
         const res = await fetch('/api/sheets?type=activos');
         const json = await res.json();
         if (json.data && json.data.length > 1) {
           const headers = json.data[0].map(h => h ? h.toLowerCase() : '');
           let nameIndex = headers.findIndex(h => h.includes('estudiante') || h.includes('nombre') || h.includes('alumno'));
-          if (nameIndex === -1) nameIndex = 0; // fallback to first column
+          if (nameIndex === -1) nameIndex = 0; 
           
-          const excelStudents = json.data.slice(1).map((row, i) => ({
+          excelStudents = json.data.slice(1).map((row, i) => ({
             id: `excel_${i}`,
             name: row[nameIndex] || 'Desconocido'
           })).filter(s => s.name && s.name !== 'Desconocido');
-          
-          setStudentsList(excelStudents.sort((a, b) => a.name.localeCompare(b.name)));
         }
       } catch (e) {
         console.error("Error trayendo alumnos del excel", e);
       }
+
+      // 3. Merge and Deduplicate by Name
+      const combined = [...fbStudents, ...excelStudents];
+      const uniqueStudents = [];
+      const seenNames = new Set();
+      for (const st of combined) {
+        if (!st.name) continue;
+        const normalized = st.name.toLowerCase().trim();
+        if (!seenNames.has(normalized)) {
+          seenNames.add(normalized);
+          uniqueStudents.push(st);
+        }
+      }
+
+      setStudentsList(uniqueStudents.sort((a, b) => a.name.localeCompare(b.name)));
       if(teacherData.length > 0) setWeekTeacherId(teacherData[0].id);
     };
     fetchUsers();
