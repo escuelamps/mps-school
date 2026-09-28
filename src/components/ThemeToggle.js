@@ -36,7 +36,7 @@ export default function ThemeToggle() {
       style={{
         position: 'fixed',
         bottom: '2rem',
-        left: '2rem',
+        right: '2rem',
         width: '50px',
         height: '50px',
         borderRadius: '50%',
