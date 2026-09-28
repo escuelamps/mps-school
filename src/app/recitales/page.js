@@ -85,25 +85,27 @@ export default function RecitalesPage() {
         createdAt: serverTimestamp()
       });
 
-      // Guardar también en Google Sheets (Hoja "Recitales")
+      // Guardar en Google Sheets mediante el Apps Script de Noches MPS
       try {
-        await fetch('/api/sheets', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'recitales',
-            values: [
-              new Date().toLocaleString('es-CO'), // Marca temporal
-              nombre,
-              telefono,
-              acompanante || '0',
-              fecha,
-              'Confirmado'
-            ]
-          })
+        const payload = {
+          sheetName: 'Recitales',
+          headers: ["Marca temporal", "Nombre", "Teléfono", "Acompañantes", "Fecha", "Estado"],
+          rowData: [
+            nombre,
+            telefono,
+            acompanante || '0',
+            fecha,
+            'Confirmado'
+          ]
+        };
+
+        await fetch("https://script.google.com/macros/s/AKfycbzqOhXUSTkyBEjaa481vTtA6HbaFOVqAVQiko3bGOePdtU6dL7MaK1-Op6WnW9Shes1Tg/exec", {
+          method: "POST",
+          body: JSON.stringify(payload),
+          mode: "no-cors"
         });
       } catch (err) {
-        console.error("Error guardando en sheets:", err);
+        console.error("Error enviando al macro de google:", err);
       }
 
       setSuccess(true);
