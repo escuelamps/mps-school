@@ -85,6 +85,27 @@ export default function RecitalesPage() {
         createdAt: serverTimestamp()
       });
 
+      // Guardar también en Google Sheets (Hoja "Recitales")
+      try {
+        await fetch('/api/sheets', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'recitales',
+            values: [
+              new Date().toLocaleString('es-CO'), // Marca temporal
+              nombre,
+              telefono,
+              acompanante || '0',
+              fecha,
+              'Confirmado'
+            ]
+          })
+        });
+      } catch (err) {
+        console.error("Error guardando en sheets:", err);
+      }
+
       setSuccess(true);
     } catch (err) {
       console.error(err);

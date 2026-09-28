@@ -5,7 +5,7 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type');
 
-  if (!type || (type !== 'matriculas' && type !== 'activos')) {
+  if (!type || (type !== 'matriculas' && type !== 'activos' && type !== 'recitales')) {
     return NextResponse.json({ error: 'Parámetro type inválido. Usa ?type=matriculas o ?type=activos' }, { status: 400 });
   }
 
@@ -74,7 +74,7 @@ export async function POST(request) {
     if (!type || (type !== 'matriculas' && type !== 'activos')) {
       return NextResponse.json({ error: 'Parámetro type inválido.' }, { status: 400 });
     }
-    if (!rowNumber || !values) {
+    if ((type !== 'recitales' && !rowNumber) || !values) {
       return NextResponse.json({ error: 'Faltan parámetros rowNumber o values.' }, { status: 400 });
     }
 
@@ -104,10 +104,29 @@ export async function POST(request) {
     let spreadsheetId = '';
     let rangeToUpdate = '';
 
+    let spreadsheetId = '';
+    
+    if (type === 'recitales') {
+      spreadsheetId = process.env.SHEET_NOCHES_MPS_ID;
+      if(!spreadsheetId) throw new Error("Falta el ID del Excel de Noches MPS");
+      
+      const response = await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: 'Recitales!A:F', // Hoja 3
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+        requestBody: {
+          values: [values]
+        }
+      });
+      return NextResponse.json({ success: true, updatedRange: response.data.updates?.updatedRange });
+    }
+
+    let rangeToUpdate = '';
     if (type === 'matriculas') {
       spreadsheetId = process.env.SHEET_MATRICULAS_ID;
       rangeToUpdate = `'BASE MATRICULA 2026+ 1 (ACTIVOS)'!A${rowNumber}:Z${rowNumber}`; 
-    } else {
+    } else if (type === 'activos') {
       spreadsheetId = process.env.SHEET_ACTIVOS_ID;
       rangeToUpdate = `A${rowNumber}:Z${rowNumber}`; 
     }
