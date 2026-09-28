@@ -179,8 +179,8 @@ export default function RecitalesPage() {
                 <input required type="text" inputMode="numeric" value={telefono} onChange={e => { setTelefono(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="300 000 0000" />
               </div>
               <div>
-                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Acompañante (Opcional)</label>
-                <input value={acompanante} onChange={e => { setAcompanante(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="Nombre de quien te acompaña" />
+                <label style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Cantidad de acompañantes (Opcional)</label>
+                <input type="number" min="0" value={acompanante} onChange={e => { setAcompanante(e.target.value); setErrorMsg(''); }} style={inputStyle} placeholder="Ej: 1, 2..." />
               </div>
 
               
@@ -206,7 +206,7 @@ export default function RecitalesPage() {
         <div style={{ position: 'sticky', top: '100px', height: 'fit-content' }}>
           <div className="glass-card" style={{ padding: '2rem', border: '1px solid var(--accent)' }}>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: 'var(--text-primary)', fontSize: '1.3rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '1rem' }}>
-              <Utensils color="var(--accent)" /> Comida en el Recital
+              <Utensils color="var(--accent)" /> Cafetería y Productos
             </h3>
             
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.9rem', lineHeight: '1.5' }}>
