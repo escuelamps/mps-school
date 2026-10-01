@@ -121,7 +121,6 @@ export async function POST(request) {
       return NextResponse.json({ success: true, updatedRange: response.data.updates?.updatedRange });
     }
 
-    let rangeToUpdate = '';
     if (type === 'matriculas') {
       spreadsheetId = process.env.SHEET_MATRICULAS_ID;
       rangeToUpdate = `'BASE MATRICULA 2026+ 1 (ACTIVOS)'!A${rowNumber}:Z${rowNumber}`; 
