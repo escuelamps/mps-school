@@ -104,7 +104,6 @@ export async function POST(request) {
     let spreadsheetId = '';
     let rangeToUpdate = '';
 
-    let spreadsheetId = '';
     
     if (type === 'recitales') {
       spreadsheetId = process.env.SHEET_NOCHES_MPS_ID;
