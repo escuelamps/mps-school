@@ -22,10 +22,10 @@ export default function ProduccionPage() {
             Programa Especializado
           </div>
           <h1 style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: '1rem', color: 'white' }}>
-            Producción Musical & DJ
+            Producción Musical
           </h1>
           <h3 style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', fontWeight: 400, marginBottom: '2rem' }}>
-            Síntesis, Mezcla, Masterización y DJing
+            Síntesis, Mezcla y Masterización
           </h3>
           <button onClick={() => setIsContactOpen(true)} className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Inscribirme Ahora
@@ -47,7 +47,7 @@ export default function ProduccionPage() {
               "Salas equipadas con monitores de estudio",
               "Licencias de Ableton Live incluidas",
               "Prácticas reales en mezcla",
-              "Equipos Pioneer para DJing"
+              "Masterización para plataformas digitales"
             ].map((feature, i) => (
               <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)' }}></div>

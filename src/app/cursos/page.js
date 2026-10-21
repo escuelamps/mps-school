@@ -46,33 +46,34 @@ const SPOTLIGHT_AREAS = [
   {
     id: 'produccion',
     tag: 'Tecnología & Creación Sonora',
-    name: 'Producción Musical & DJing Profesional',
-    summary: 'Domina los estándares de la industria del audio. Crea beats, graba instrumentos acústicos, realiza síntesis de audio, mezcla, masterización y performance DJ en cabina real.',
+    name: 'Producción Musical',
+    summary: 'Domina los estándares de la industria del audio. Crea beats, graba instrumentos acústicos, realiza síntesis de audio, mezcla y masterización con software profesional.',
     image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1200&q=80',
     highlights: [
       'Ableton Live, Logic Pro y FL Studio en estudios equipados',
       'Síntesis analógica, diseño de sonido y samples',
       'Mezcla profesional con monitores de estudio e interfaces',
-      'Técnicas de mezcla para DJ, ecualización y efectos en vivo'
+      'Masterización y estándares de streaming digital'
     ],
     mode: 'Estudio Profesional MPS',
-    linkMessage: 'Hola MPS! Me interesa el programa de Producción Musical y DJ.'
+    linkMessage: 'Hola MPS! Me interesa el programa de Producción Musical.'
   },
   {
     id: 'actuacion',
-    tag: 'Artes Escénicas & Proyección',
-    name: 'Actuación y Modelaje',
-    summary: 'Desarrolla seguridad escénica, dominio del cuerpo y voz tanto en teatro como frente a la cámara. Construye tu marca personal, pasarela, etiqueta y expresión integral.',
+    tag: 'Artes Escénicas & Expresión',
+    name: 'Actuación y Artes Escénicas',
+    summary: 'Desarrolla seguridad escénica, dominio del cuerpo y voz tanto en teatro como frente a la cámara con directores y formadores de amplia trayectoria.',
     image: 'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=1200&q=80',
     highlights: [
       'Expresión corporal, dicción y entrenamiento vocal escénico',
       'Actuación teatral y técnicas frente a la cámara audiovisual',
-      'Pasarela, postura, etiqueta y presencia de alto impacto',
-      'Construcción y proyección de tu marca personal y artística'
+      'Construcción de personajes y escenas teatrales',
+      'Preparación para castings y audiciones actorales'
     ],
     mode: 'Sala de Expresión y Escenario',
-    linkMessage: 'Hola MPS! Quiero conocer más del programa de Actuación y Modelaje.'
-  },
+    linkMessage: 'Hola MPS! Quiero conocer más del programa de Actuación y Artes Escénicas.'
+  }
+  /* Fotografía oculto temporalmente
   {
     id: 'fotografia',
     tag: 'Imagen Visual & Revelado',
@@ -88,6 +89,7 @@ const SPOTLIGHT_AREAS = [
     mode: 'Estudio de Fotografía MPS',
     linkMessage: 'Hola MPS! Deseo información sobre los cursos de Fotografía y Medios Digitales.'
   }
+  */
 ];
 
 // Catálogo completo de cursos individuales (100% alineados a la landing page)
@@ -242,6 +244,7 @@ const COURSES_CATALOG = [
     level: 'Intermedio a Avanzado',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80'
   },
+  /* DJing oculto temporalmente
   {
     id: 'djing',
     category: 'produccion',
@@ -257,6 +260,7 @@ const COURSES_CATALOG = [
     level: 'Todos los niveles',
     image: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=600&q=80'
   },
+  */
   {
     id: 'actuacion-teatral',
     category: 'actuacion',
@@ -271,7 +275,8 @@ const COURSES_CATALOG = [
     ],
     level: 'Todos los niveles',
     image: 'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80'
-  },
+  }
+  /* Modelaje y Fotografía ocultos temporalmente
   {
     id: 'modelaje-marca',
     category: 'actuacion',
@@ -317,6 +322,7 @@ const COURSES_CATALOG = [
     level: 'Todos los niveles',
     image: 'https://images.unsplash.com/photo-1542744094-3a31f272c490?w=600&q=80'
   }
+  */
 ];
 
 // Preguntas Frecuentes (FAQ)
@@ -327,7 +333,7 @@ const FAQ_ITEMS = [
   },
   {
     q: '¿Desde qué edad se puede ingresar a la Escuela MPS?',
-    a: 'Aceptamos estudiantes desde los 2 años en nuestro programa de Estimulación Temprana e Iniciación Musical. Para instrumentos específicos, producción, actuación y fotografía atendemos a niños desde los 5 años, jóvenes y adultos de cualquier edad sin límite.'
+    a: 'Aceptamos estudiantes desde los 2 años en nuestro programa de Estimulación Temprana e Iniciación Musical. Para instrumentos específicos, producción musical y actuación atendemos a niños desde los 5 años, jóvenes y adultos de cualquier edad sin límite.'
   },
   {
     q: '¿Cómo funcionan los horarios de las clases?',
@@ -339,7 +345,7 @@ const FAQ_ITEMS = [
   },
   {
     q: '¿Los estudiantes tienen oportunidad de presentarse en vivo?',
-    a: '¡Sí, es parte esencial de nuestro ADN! En MPS organizamos semestralmente los Recitales MPS en auditorios y escenarios profesionales con sonido e iluminación en vivo, además de muestras de actuación y exposiciones fotográficas para que vivas la experiencia real de un artista.'
+    a: '¡Sí, es parte esencial de nuestro ADN! En MPS organizamos semestralmente los Recitales MPS en auditorios y escenarios profesionales con sonido e iluminación en vivo, además de muestras teatrales para que vivas la experiencia real de un artista.'
   }
 ];
 
@@ -377,7 +383,7 @@ export default function CursosPage() {
           </h1>
 
           <p className="cj-hero-subtitle">
-            Aprende música, producción, actuación y fotografía con una metodología práctica desde el primer día, estudios profesionales insonorizados y docentes en activo.
+            Aprende música, producción musical y actuación con una metodología práctica desde el primer día, estudios profesionales insonorizados y docentes en activo.
           </p>
 
           <div className="cj-hero-actions">
@@ -401,7 +407,7 @@ export default function CursosPage() {
               <div className="cj-stat-label">Años de Trayectoria</div>
             </div>
             <div className="cj-stat-item">
-              <div className="cj-stat-number">4 Áreas</div>
+              <div className="cj-stat-number">3 Áreas</div>
               <div className="cj-stat-label">Formación Integral</div>
             </div>
             <div className="cj-stat-item">
@@ -435,9 +441,8 @@ export default function CursosPage() {
               className={`cj-spotlight-tab ${activeSpotlight === area.id ? 'active' : ''}`}
             >
               {area.id === 'musica' && '🎵 Área de Música'}
-              {area.id === 'produccion' && '🎛️ Producción & DJ'}
-              {area.id === 'actuacion' && '🎭 Actuación y Modelaje'}
-              {area.id === 'fotografia' && '📸 Fotografía Digital'}
+              {area.id === 'produccion' && '🎛️ Producción Musical'}
+              {area.id === 'actuacion' && '🎭 Actuación y Teatro'}
             </button>
           ))}
         </div>
@@ -518,20 +523,22 @@ export default function CursosPage() {
             className={`cj-filter-btn ${selectedCategory === 'produccion' ? 'active' : ''}`}
             onClick={() => setSelectedCategory('produccion')}
           >
-            Producción & DJ ({COURSES_CATALOG.filter(c => c.category === 'produccion').length})
+            Producción Musical ({COURSES_CATALOG.filter(c => c.category === 'produccion').length})
           </button>
           <button 
             className={`cj-filter-btn ${selectedCategory === 'actuacion' ? 'active' : ''}`}
             onClick={() => setSelectedCategory('actuacion')}
           >
-            Actuación & Modelaje ({COURSES_CATALOG.filter(c => c.category === 'actuacion').length})
+            Actuación ({COURSES_CATALOG.filter(c => c.category === 'actuacion').length})
           </button>
+          {/* Fotografía oculto temporalmente
           <button 
             className={`cj-filter-btn ${selectedCategory === 'fotografia' ? 'active' : ''}`}
             onClick={() => setSelectedCategory('fotografia')}
           >
             Fotografía ({COURSES_CATALOG.filter(c => c.category === 'fotografia').length})
           </button>
+          */}
         </div>
 
         {/* GRID DE TARJETAS */}

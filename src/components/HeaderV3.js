@@ -207,8 +207,6 @@ export default function HeaderV3() {
               <span>•</span>
               <span>EVENTOS</span>
               <span>•</span>
-              <span>FOTOGRAFÍA</span>
-              <span>•</span>
               <span>SALA DE ENSAYOS</span>
               <span>•</span>
             </div>

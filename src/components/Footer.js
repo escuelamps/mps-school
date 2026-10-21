@@ -9,7 +9,7 @@ export default function Footer() {
         <div>
           <h3 style={{ color: 'var(--accent)', fontSize: '1.5rem', marginBottom: '1rem' }}>MPS</h3>
           <p style={{ opacity: 0.7, fontSize: '0.9rem' }}>
-            Music and Production School. Formando talentos en música, producción musical, actuación y fotografía.
+            Music and Production School. Formando talentos en música, producción musical y actuación.
           </p>
         </div>
         <div>

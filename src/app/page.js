@@ -84,7 +84,7 @@ export default function V3Page() {
             Potencia tu <br/><span className="text-gradient">talento</span> con profesionales.
           </h1>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '3rem', lineHeight: 1.6, maxWidth: '90%' }}>
-            Music And Production School te guiará por un viaje de descubrimiento artístico. Ofrecemos programas estructurados en música, actuación, modelaje y fotografía para todas las edades.
+            Music And Production School te guiará por un viaje de descubrimiento artístico. Ofrecemos programas estructurados en música, producción y actuación para todas las edades.
           </p>
           <div style={{ display: 'flex', gap: '1rem' }}>
             <button onClick={() => setIsContactOpen(true)} className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -151,14 +151,13 @@ export default function V3Page() {
             </div>
           </AccordionItem>
 
-          <AccordionItem title="Producción Musical & DJ">
+          <AccordionItem title="Producción Musical">
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem', alignItems: 'center' }}>
               <div>
                 <p style={{ marginBottom: '1rem' }}>Aprende a crear, mezclar y masterizar música desde cero. Utilizando software estándar de la industria como Ableton Live, Logic Pro y FL Studio.</p>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
                   <li>🎛️ Síntesis de sonido</li>
                   <li>🎚️ Mezcla y Masterización</li>
-                  <li>💿 Técnicas de DJing profesional</li>
                 </ul>
                 <Link href="/programas/produccion" className="btn-primary" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>Ver más</Link>
               </div>
@@ -168,16 +167,17 @@ export default function V3Page() {
             </div>
           </AccordionItem>
 
-          <AccordionItem title="Actuación y Modelaje">
-             <p style={{ marginBottom: '1rem' }}>Desarrolla tu expresión corporal, seguridad en escena y técnicas vocales para la actuación teatral o audiovisual.</p>
-             <p style={{ marginBottom: '1.5rem' }}>Nuestro programa de modelaje se enfoca no solo en pasarela, sino en etiqueta, protocolo, fotografía y construcción de marca personal.</p>
+          <AccordionItem title="Actuación y Artes Escénicas">
+             <p style={{ marginBottom: '1.5rem' }}>Desarrolla tu expresión corporal, seguridad en escena y técnicas vocales para la actuación teatral o audiovisual con directores y docentes con trayectoria.</p>
              <Link href="/programas/actuacion" className="btn-primary" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>Ver más</Link>
           </AccordionItem>
 
+          {/* Fotografía oculto temporalmente
           <AccordionItem title="Fotografía y Medios Digitales">
              <p style={{ marginBottom: '1.5rem' }}>Aprende el manejo manual de cámaras réflex (DSLR y Mirrorless), iluminación de estudio, composición y revelado digital en Lightroom y Photoshop. Cursos para principiantes y módulos avanzados de fotografía de producto y retrato.</p>
              <Link href="/programas/fotografia" className="btn-primary" style={{ padding: '0.5rem 1.5rem', fontSize: '0.9rem', display: 'inline-block', textDecoration: 'none' }}>Ver más</Link>
           </AccordionItem>
+          */}
         </div>
       </section>
 

@@ -22,10 +22,10 @@ export default function ActuacionPage() {
             Programa Especializado
           </div>
           <h1 style={{ fontSize: 'clamp(2.5rem, 4vw, 4rem)', fontWeight: 800, lineHeight: 1.1, marginBottom: '1rem', color: 'white' }}>
-            Actuación y Modelaje
+            Actuación y Artes Escénicas
           </h1>
           <h3 style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', fontWeight: 400, marginBottom: '2rem' }}>
-            Expresión corporal, Teatro, TV y Pasarela
+            Expresión corporal, Teatro y Cámara
           </h3>
           <button onClick={() => setIsContactOpen(true)} className="btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Inscribirme Ahora
@@ -37,7 +37,7 @@ export default function ActuacionPage() {
         <div>
           <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Sobre el <span className="text-gradient">Programa</span></h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8 }}>
-            Desarrolla tu expresión corporal, seguridad en escena y técnicas vocales para la actuación teatral o audiovisual. Nuestro programa de modelaje se enfoca no solo en pasarela, sino en etiqueta, protocolo, fotografía y construcción de marca personal.
+            Desarrolla tu expresión corporal, seguridad en escena y técnicas vocales para la actuación teatral o audiovisual con directores y docentes con trayectoria.
           </p>
         </div>
         <div>
@@ -47,7 +47,7 @@ export default function ActuacionPage() {
               "Auditorio propio para teatro",
               "Prácticas frente a cámara",
               "Convenios con agencias de casting",
-              "Book fotográfico incluido en modelaje"
+              "Muestras teatrales en vivo semestrales"
             ].map((feature, i) => (
               <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)' }}></div>
