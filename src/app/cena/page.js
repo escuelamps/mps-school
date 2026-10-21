@@ -4,19 +4,55 @@ import { ArrowLeft, CheckCircle2, Upload, Utensils, Coffee, Wine, Beer, Pizza, G
 import Link from 'next/link';
 
 const OPCIONES_MENU = [
-  { id: 'todo_rico', label: 'Todo rico', price: 3500, icon: <Utensils size={20} /> },
-  { id: 'papas_margaritas', label: 'Papas Margaritas', price: 3500, icon: <Utensils size={20} /> },
-  { id: 'paquetes_surtidos', label: 'Paquetes surtidos', price: 3000, icon: <Utensils size={20} /> },
-  { id: 'gaseosa_postobon', label: 'Gaseosa Postobon', price: 3500, icon: <GlassWater size={20} /> },
-  { id: 'coca_cola', label: 'Coca cola', price: 3000, icon: <GlassWater size={20} /> },
-  { id: 'cuatro', label: 'Cuatro', price: 3000, icon: <GlassWater size={20} /> },
-  { id: 'pony_malta', label: 'Pony Malta', price: 3000, icon: <GlassWater size={20} /> },
-  { id: 'agua_cristal', label: 'Agua Cristal', price: 2000, icon: <GlassWater size={20} /> },
-  { id: 'cerveza_club', label: 'Cerveza Club Colombia', price: 5000, icon: <Beer size={20} /> },
-  { id: 'cerveza_aguila', label: 'Cerveza Aguila', price: 5000, icon: <Beer size={20} /> },
-  { id: 'hamburguesa_sola', label: 'Hamburguesa Sola', price: 12000, icon: <Pizza size={20} />, image: '/images/mps-sin-papa.jpeg' },
-  { id: 'hamburguesa_combo_gaseosa', label: 'Hamburguesa Combo (+ Gaseosa)', price: 15000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
-  { id: 'hamburguesa_combo_cerveza', label: 'Hamburguesa Combo (+ Cerveza)', price: 18000, icon: <Pizza size={20} />, image: '/images/mps-hamburguesa.jpeg' },
+  { 
+    id: 'hamburguesa_sola', 
+    label: 'Hamburguesa Sola', 
+    price: 12000, 
+    icon: <Pizza size={20} />, 
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'combo_gaseosa', 
+    label: 'Combo + Gaseosa', 
+    price: 15000, 
+    icon: <Pizza size={20} />, 
+    image: 'https://images.unsplash.com/photo-1594212854758-c0b9cd133c91?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'combo_te', 
+    label: 'Combo + Té', 
+    price: 18000, 
+    icon: <Pizza size={20} />, 
+    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'te', 
+    label: 'Té', 
+    price: 5000, 
+    icon: <Coffee size={20} />, 
+    image: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'gaseosa_jugo', 
+    label: 'Gaseosa / Jugo', 
+    price: 3500, 
+    icon: <GlassWater size={20} />, 
+    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'paquetes', 
+    label: 'Paquetes', 
+    price: 3000, 
+    icon: <Utensils size={20} />, 
+    image: 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?auto=format&fit=crop&w=600&q=80' 
+  },
+  { 
+    id: 'dulceria', 
+    label: 'Dulcería', 
+    price: 1000, 
+    icon: <Utensils size={20} />, 
+    image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&w=600&q=80' 
+  },
 ];
 
 export default function CenaPage() {

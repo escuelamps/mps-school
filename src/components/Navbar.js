@@ -20,6 +20,7 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <div style={{ display: 'none', gap: '2rem', alignItems: 'center' }} className="desktop-menu">
+            <Link href="/cursos" style={{ fontWeight: 500, transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = 'var(--accent)'} onMouseOut={(e) => e.target.style.color = 'inherit'}>Cursos</Link>
             <Link href="/nosotros" style={{ fontWeight: 500, transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = 'var(--accent)'} onMouseOut={(e) => e.target.style.color = 'inherit'}>Nosotros</Link>
             <Link href="/programas" style={{ fontWeight: 500, transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = 'var(--accent)'} onMouseOut={(e) => e.target.style.color = 'inherit'}>Programas</Link>
             <button onClick={() => setIsContactOpen(true)} style={{ fontWeight: 500, transition: 'color 0.3s', color: 'var(--text-primary)', fontSize: '1rem' }} onMouseOver={(e) => e.target.style.color = 'var(--accent)'} onMouseOut={(e) => e.target.style.color = 'inherit'}>Contacto</button>
@@ -35,6 +36,7 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {isOpen && (
           <div className="glass" style={{ position: 'absolute', top: '100%', left: 0, width: '100%', padding: '1rem 2rem', display: 'flex', flexDirection: 'column', gap: '1rem', borderTop: '1px solid rgba(0,222,133,0.1)' }}>
+            <Link href="/cursos" onClick={() => setIsOpen(false)}>Cursos</Link>
             <Link href="/nosotros" onClick={() => setIsOpen(false)}>Nosotros</Link>
             <Link href="/programas" onClick={() => setIsOpen(false)}>Programas</Link>
             <button onClick={() => { setIsContactOpen(true); setIsOpen(false); }} style={{ textAlign: 'left', color: 'inherit', fontSize: '1rem' }}>Contacto</button>

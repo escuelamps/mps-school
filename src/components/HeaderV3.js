@@ -225,6 +225,7 @@ export default function HeaderV3() {
           <img src="/images/logo2.png" alt="MPS Escuela Logo" style={{ height: '75px', objectFit: 'contain' }} className="nav-logo" />
         </Link>
         <div className="desktop-nav" style={{ gap: '2rem', alignItems: 'center' }}>
+          <Link href="/cursos" className="nav-link">Cursos</Link>
           <Link href="/#programas" className="nav-link">Programas</Link>
           <Link href="/quienes-somos" className="nav-link">Quiénes Somos</Link>
           <Link href="/#ubicacion" className="nav-link">Ubicación</Link>
@@ -239,6 +240,7 @@ export default function HeaderV3() {
         
         {/* Menú Móvil Desplegable */}
         <div className="mobile-menu" style={{ display: isMobileMenuOpen ? 'flex' : 'none' }}>
+          <Link href="/cursos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Cursos</Link>
           <Link href="/#programas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Programas</Link>
           <Link href="/quienes-somos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Quiénes Somos</Link>
           <Link href="/#ubicacion" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Ubicación</Link>
