@@ -28,12 +28,21 @@ export default function ProfesoresPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'juanse') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     const qTeachers = query(collection(db, 'users'), where('role', '==', 'teacher'));
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
       setTeachers(snapshot.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.name||'').localeCompare(b.name||'')));
     });
     return () => unsubTeachers();
-  }, []);
+  }, [router]);
 
   const openAddForm = () => {
     setEditingTeacherId(null);

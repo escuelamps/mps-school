@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff, FileSpreadsheet, Users } from 'lucide-react';
+import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff, FileSpreadsheet, Users, ClipboardCheck, BookOpen, ExternalLink, X } from 'lucide-react';
 import './admin.css';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -20,6 +20,7 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showTeacherTools, setShowTeacherTools] = useState(false);
 
   useEffect(() => {
     // Comprobar si ya está logueado al cargar
@@ -207,143 +208,233 @@ export default function AdminPage() {
         ¿A qué módulo deseas entrar hoy?
       </p>
 
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {/* Card Agenda MPS */}
-        <div 
-          onClick={() => router.push('/admin/reservas')}
-          style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            width: '320px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-        >
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <Calendar size={32} />
-          </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Reservas y Pagos</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Aprobación de comprobantes Nequi leídos por Inteligencia Artificial.</p>
-        </div>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '1100px' }}>
+        
+        {/* ================= VISTA DE JUANSE (SOLO PROFESORES) ================= */}
+        {username === 'juanse' && (
+          <>
+            {/* Card Profesores */}
+            <div 
+              onClick={() => router.push('/admin/nosotros')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#f3e8ff', color: '#7e22ce', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <User size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio general de todos los profesores y gestión docente.</p>
+            </div>
 
-        {/* Card Gestión de Agenda (Nueva) */}
-        <div 
-          onClick={() => router.push('/admin/agenda')}
-          style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            width: '320px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-        >
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <Calendar size={32} />
-          </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS (Horarios)</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Configura las clases disponibles, cupos y profesores de la escuela.</p>
-        </div>
+            {/* Card Planillas y Aulas Docentes */}
+            <div 
+              onClick={() => setShowTeacherTools(true)}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <ClipboardCheck size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Planillas y Aulas</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Registro de planillas docentes, firmas y Google Classroom de procesos.</p>
+            </div>
+          </>
+        )}
 
-        {/* Card Gestión de Profesores */}
-        <div 
-          onClick={() => router.push('/admin/nosotros')}
-          style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            width: '320px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-        >
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#f3e8ff', color: '#7e22ce', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <User size={32} />
-          </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio general de todos los profesores y estudiantes de la escuela.</p>
-        </div>
+        {/* ================= VISTA DE WILLIAM (SOLO ESTUDIANTES) ================= */}
+        {username === 'william' && (
+          <>
+            {/* Card Estudiantes Activos */}
+            <div 
+              onClick={() => router.push('/admin/estudiantes-activos')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                transition: 'transform 0.2s',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0e7ff', color: '#3730a3', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <Users size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio oficial y estado actual de los estudiantes.</p>
+            </div>
 
-        {/* Card WhatsApp Bot */}
-        <div 
-          onClick={() => router.push('/admin/chats')}
-          style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            width: '320px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-        >
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <MessageSquare size={32} />
-          </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>WhatsApp Bot</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Supervisión de chats en vivo, control del bot de ventas y atención humana.</p>
-        </div>
+            {/* Card Matrículas */}
+            <div 
+              onClick={() => router.push('/admin/matriculas')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                transition: 'transform 0.2s',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <FileSpreadsheet size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Consolidado y registro oficial de matrículas de la escuela.</p>
+            </div>
 
-        {/* Card Cenas MPS (Visible para todos) */}
-        <div 
-          onClick={() => router.push('/admin/cenas')}
-          style={{
-            background: 'var(--panel-bg)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: '16px',
-            padding: '2.5rem 2rem',
-            width: '320px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-        >
-          <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#fee2e2', color: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
-          </div>
-          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Cenas MPS</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
-        </div>
+            {/* Card Agenda MPS (Horarios Clases) */}
+            <div 
+              onClick={() => router.push('/admin/agenda')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <Calendar size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS (Horarios)</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Configura las clases disponibles y cupos de la escuela.</p>
+            </div>
 
-        {/* Card Contabilidad (Sólo lpineda) */}
+            {/* Card Reservas y Pagos */}
+            <div 
+              onClick={() => router.push('/admin/reservas')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <Calendar size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Reservas y Pagos</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Aprobación y verificación de comprobantes Nequi y pagos.</p>
+            </div>
+
+            {/* Card Cenas MPS */}
+            <div 
+              onClick={() => router.push('/admin/cenas')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#fee2e2', color: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Cenas MPS</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
+            </div>
+
+            {/* Card Atención WhatsApp */}
+            <div 
+              onClick={() => router.push('/admin/chats')}
+              style={{
+                background: 'var(--panel-bg)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '2.5rem 2rem',
+                width: '320px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
+            >
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <MessageSquare size={32} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Atención WhatsApp</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Supervisión de chats en vivo y atención a estudiantes.</p>
+            </div>
+          </>
+        )}
+
+        {/* ================= VISTA DE LAURA PINEDA (OPCIÓN B: CONTABILIDAD CENTRAL) ================= */}
         {username === 'lpineda' && (
           <div 
             onClick={() => router.push('/admin/contabilidad')}
@@ -352,7 +443,7 @@ export default function AdminPage() {
               border: '1px solid var(--glass-border)',
               borderRadius: '16px',
               padding: '2.5rem 2rem',
-              width: '320px',
+              width: '360px',
               cursor: 'pointer',
               boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
               transition: 'all 0.2s ease',
@@ -368,67 +459,154 @@ export default function AdminPage() {
               <Wallet size={32} />
             </div>
             <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control financiero, revisión de ingresos y gestión contable de MPS.</p>
-          </div>
-        )}
-
-        {/* Card Matriculas (Sólo juanse) */}
-        {username === 'juanse' && (
-          <div 
-            onClick={() => router.push('/admin/matriculas')}
-            style={{
-              background: 'var(--panel-bg)',
-              border: '1px solid var(--glass-border)',
-              borderRadius: '16px',
-              padding: '2.5rem 2rem',
-              width: '320px',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-          >
-            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-              <FileSpreadsheet size={32} />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Consolidado y registro oficial de matrículas de la escuela.</p>
-          </div>
-        )}
-
-        {/* Card Estudiantes Activos (Sólo william) */}
-        {username === 'william' && (
-          <div 
-            onClick={() => router.push('/admin/estudiantes-activos')}
-            style={{
-              background: 'var(--panel-bg)',
-              border: '1px solid var(--glass-border)',
-              borderRadius: '16px',
-              padding: '2.5rem 2rem',
-              width: '320px',
-              cursor: 'pointer',
-              transition: 'transform 0.2s',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-          >
-            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0e7ff', color: '#3730a3', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-              <Users size={32} />
-            </div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio oficial y estado actual de los estudiantes.</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Control financiero, liquidación de profesores, gestión de estudiantes y cuentas de cobro.</p>
           </div>
         )}
 
       </div>
+
+      {/* Modal de Herramientas de Profesores para Juanse */}
+      {showTeacherTools && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          padding: '1.5rem'
+        }}>
+          <div style={{
+            background: 'var(--panel-bg)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: '20px',
+            padding: '2.5rem',
+            maxWidth: '550px',
+            width: '100%',
+            position: 'relative',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+          }}>
+            <button
+              onClick={() => setShowTeacherTools(false)}
+              style={{
+                position: 'absolute',
+                top: '1.5rem',
+                right: '1.5rem',
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer'
+              }}
+            >
+              <X size={24} />
+            </button>
+
+            <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Planillas y Herramientas Docentes</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2rem' }}>
+              Accesos directos para control y seguimiento de clases:
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdm_EwrN8ux8nZatOyg0SQg1uONk7ztvCiTxCQL11DbUqH3XQ/formResponse"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1.2rem',
+                  borderRadius: '12px',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--glass-border)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontWeight: 600
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <ClipboardCheck size={20} color="#00DE85" /> Formulario de Registro de Planilla
+                </span>
+                <ExternalLink size={16} color="var(--text-secondary)" />
+              </a>
+
+              <a
+                href="https://docs.google.com/forms/d/1Ay7nQMB2JcIINSY_ozCRd4XMSIt-1ydOA3n10jj3Qgs/edit#responses"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1.2rem',
+                  borderRadius: '12px',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--glass-border)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontWeight: 600
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <FileSpreadsheet size={20} color="#38bdf8" /> Ver Respuestas y Firmas de Planillas
+                </span>
+                <ExternalLink size={16} color="var(--text-secondary)" />
+              </a>
+
+              <a
+                href="https://classroom.google.com/h/tv"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1.2rem',
+                  borderRadius: '12px',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--glass-border)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontWeight: 600
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <BookOpen size={20} color="#a855f7" /> Google Classroom (Procesos)
+                </span>
+                <ExternalLink size={16} color="var(--text-secondary)" />
+              </a>
+
+              <a
+                href="https://docs.google.com/spreadsheets/d/1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo/edit?gid=0#gid=0"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '1.2rem',
+                  borderRadius: '12px',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--glass-border)',
+                  color: 'var(--text-primary)',
+                  textDecoration: 'none',
+                  fontWeight: 600
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <Users size={20} color="#f59e0b" /> Base de Datos Profesores
+                </span>
+                <ExternalLink size={16} color="var(--text-secondary)" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

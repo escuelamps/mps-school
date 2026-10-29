@@ -18,8 +18,17 @@ export default function ChatsDashboard() {
   const prevChatsRef = useRef([]);
   const messagesEndRef = useRef(null);
 
-  // Lógica de inactividad (1 hora)
+  // Lógica de inactividad (1 hora) y validación de usuario
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'william') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     let inactivityTimer;
     
     const logout = async () => {
@@ -208,7 +217,7 @@ export default function ChatsDashboard() {
                 
                 <div style={{ marginTop: '0.5rem' }}>
                   <span className={`bot-badge ${chat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'paused' : 'active'}`}>
-                    {chat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'Bot Pausado (Humano)' : 'Bot Activo'}
+                    {chat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'Atención Asesor' : 'Automático'}
                   </span>
                 </div>
               </div>
@@ -235,16 +244,16 @@ export default function ChatsDashboard() {
                 </div>
               </div>
 
-              {/* Botón para Pausar/Activar Bot */}
+              {/* Botón para Pausar/Activar Asesor */}
               <button 
                 onClick={() => toggleBot(selectedChat.id, selectedChat.botState)}
                 className={`toggle-btn ${selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'paused' : 'active'}`}
-                title={selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? "El bot está pausado. Clic para reactivar." : "El bot está activo. Clic para pausarlo y hablar tú."}
+                title={selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? "Atención personal activa. Clic para reactivar respuestas automáticas." : "Respuestas automáticas activas. Clic para atender tú."}
               >
                 {selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? (
-                  <><PowerOff size={16} /> Bot Pausado</>
+                  <><PowerOff size={16} /> Atención Asesor</>
                 ) : (
-                  <><Power size={16} /> Bot Activo</>
+                  <><Power size={16} /> Automático</>
                 )}
               </button>
             </div>
@@ -267,8 +276,8 @@ export default function ChatsDashboard() {
                         
                         {!msg.sender.includes('user') && (
                           <div className={`msg-sender ${isAdmin ? 'admin' : 'bot'}`}>
-                            {isAdmin ? <User size={12} /> : <Bot size={12} />}
-                            {isAdmin ? 'Marketing' : 'Bot (Automático)'}
+                            {isAdmin ? <User size={12} /> : <MessageCircle size={12} />}
+                            {isAdmin ? 'Asesor' : 'Respuesta Automática'}
                           </div>
                         )}
                         
@@ -291,7 +300,7 @@ export default function ChatsDashboard() {
                 <textarea
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder={selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? "Escribe un mensaje..." : "Debes pausar el bot (arriba a la derecha) para poder escribir."}
+                  placeholder={selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? "Escribe un mensaje..." : "Debes activar 'Atención Asesor' (arriba a la derecha) para poder escribir."}
                   className="chat-textarea"
                   disabled={selectedChat.botState !== 'PAUSADO_ASESOR_HUMANO'}
                   style={{ opacity: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 1 : 0.6, cursor: selectedChat.botState === 'PAUSADO_ASESOR_HUMANO' ? 'text' : 'not-allowed' }}
@@ -316,7 +325,7 @@ export default function ChatsDashboard() {
         ) : (
           <div className="empty-state">
             <div className="empty-icon">
-              <Bot size={48} />
+              <MessageCircle size={48} />
             </div>
             <h2 className="empty-title">MPS WhatsApp CRM</h2>
             <p className="empty-subtitle">Selecciona un chat en la barra lateral para ver los mensajes.</p>

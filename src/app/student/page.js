@@ -169,7 +169,7 @@ export default function StudentPage() {
               ) : isUploading ? (
                 <div style={{ color: 'var(--accent)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
                   <div className="loader" style={{ borderTopColor: 'var(--accent)', width: '30px', height: '30px', borderRadius: '50%', border: '3px solid rgba(0,222,133,0.3)' }}></div>
-                  <span>La Inteligencia Artificial está leyendo el comprobante...</span>
+                  <span>Validando el comprobante de pago...</span>
                 </div>
               ) : (
                 <div style={{ color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>

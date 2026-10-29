@@ -73,8 +73,17 @@ export default function MatriculasPage() {
   };
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username === 'juanse') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     fetchSheetsData();
-  }, []);
+  }, [router]);
 
   return (
     <div className="admin-dashboard">

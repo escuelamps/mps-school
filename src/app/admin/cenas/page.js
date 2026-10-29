@@ -1,15 +1,26 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Utensils, Search, CheckCircle2, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CenasAdmin() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pedidoACerrar, setPedidoACerrar] = useState(null);
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'william') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     let unsubscribe;
 
     const setupRealtime = async () => {

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, getDocs, onSnapshot, doc, setDoc, deleteDoc, where } from 'firebase/firestore';
-import { ArrowLeft, Trash2, Mail, Lock, DollarSign, Calculator, Calendar, Users, UserPlus, Edit2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Mail, Lock, DollarSign, Calculator, Calendar, Users, UserPlus, Edit2, FileSpreadsheet, ExternalLink } from 'lucide-react';
 import '../admin.css';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
@@ -50,6 +50,15 @@ export default function AdminContabilidad() {
   const [isCalculating, setIsCalculating] = useState(false);
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'lpineda') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     setSelectedMonth(new Date().toISOString().slice(0, 7));
 
     // Listen to Teachers
@@ -196,19 +205,27 @@ export default function AdminContabilidad() {
 
       <div className="admin-content">
         
-        <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
           <button 
             onClick={() => router.push('/admin/matriculas')}
-            style={{ background: '#dcfce7', color: '#166534', border: '1px solid #166534', padding: '1rem 2rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            style={{ background: '#dcfce7', color: '#166534', border: '1px solid #166534', padding: '0.9rem 1.5rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
             📑 Base de Matrículas
           </button>
           <button 
             onClick={() => router.push('/admin/estudiantes-activos')}
-            style={{ background: '#e0e7ff', color: '#3730a3', border: '1px solid #3730a3', padding: '1rem 2rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            style={{ background: '#e0e7ff', color: '#3730a3', border: '1px solid #3730a3', padding: '0.9rem 1.5rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
             👥 Estudiantes Activos
           </button>
+          <a 
+            href="https://docs.google.com/forms/d/1Ay7nQMB2JcIINSY_ozCRd4XMSIt-1ydOA3n10jj3Qgs/edit#responses"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ background: '#fef08a', color: '#854d0e', border: '1px solid #854d0e', padding: '0.9rem 1.5rem', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
+          >
+            <FileSpreadsheet size={18} /> Ver Firmas y Respuestas de Planillas
+          </a>
         </div>
 
         {/* --- CALCULADORA DE NÓMINA (FASE 3) --- */}

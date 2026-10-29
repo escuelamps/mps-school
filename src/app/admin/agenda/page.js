@@ -62,6 +62,15 @@ export default function AgendaProDashboard() {
   const [draggingSlot, setDraggingSlot] = useState(null);
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'william') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     // Fetch Teachers & Students
     const fetchUsers = async () => {
       const q = query(collection(db, 'users'));

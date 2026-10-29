@@ -14,6 +14,15 @@ export default function ReservasDashboard() {
   const [selectedReceipt, setSelectedReceipt] = useState(null);
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username || data.username !== 'william') {
+          router.replace('/admin');
+        }
+      })
+      .catch(() => router.replace('/admin'));
+
     const qPagos = query(collection(db, 'pagos_pendientes'), orderBy('createdAt', 'desc'));
     const unsubPagos = onSnapshot(qPagos, (snapshot) => {
       setPagos(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
