@@ -45,10 +45,10 @@ export async function GET(request) {
     let range = '';
 
     if (type === 'matriculas') {
-      spreadsheetId = process.env.SHEET_MATRICULAS_ID || '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
+      spreadsheetId = '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
       range = "'Respuestas de formulario 1'!A1:Z1000"; 
     } else {
-      spreadsheetId = process.env.SHEET_ACTIVOS_ID || '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
+      spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
       range = "'Base de datos estudiantes 2026 - 2'!A1:K200"; 
     }
 
@@ -122,10 +122,10 @@ export async function POST(request) {
     }
 
     if (type === 'matriculas') {
-      spreadsheetId = process.env.SHEET_MATRICULAS_ID || '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
+      spreadsheetId = '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
       rangeToUpdate = `'Respuestas de formulario 1'!A${rowNumber}:Z${rowNumber}`; 
     } else if (type === 'activos') {
-      spreadsheetId = process.env.SHEET_ACTIVOS_ID || '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
+      spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
       rangeToUpdate = `'Base de datos estudiantes 2026 - 2'!A${rowNumber}:K${rowNumber}`; 
     }
 
