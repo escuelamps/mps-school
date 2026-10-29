@@ -45,11 +45,11 @@ export async function GET(request) {
     let range = '';
 
     if (type === 'matriculas') {
-      spreadsheetId = process.env.SHEET_MATRICULAS_ID;
-      range = "'BASE MATRICULA 2026+ 1 (ACTIVOS)'!A1:Z1000"; 
+      spreadsheetId = process.env.SHEET_MATRICULAS_ID || '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
+      range = "'Respuestas de formulario 1'!A1:Z1000"; 
     } else {
-      spreadsheetId = process.env.SHEET_ACTIVOS_ID;
-      range = "A1:Z1000"; 
+      spreadsheetId = process.env.SHEET_ACTIVOS_ID || '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
+      range = "'Base de datos estudiantes 2026 - 2'!A1:K200"; 
     }
 
     const response = await sheets.spreadsheets.values.get({
@@ -122,11 +122,11 @@ export async function POST(request) {
     }
 
     if (type === 'matriculas') {
-      spreadsheetId = process.env.SHEET_MATRICULAS_ID;
-      rangeToUpdate = `'BASE MATRICULA 2026+ 1 (ACTIVOS)'!A${rowNumber}:Z${rowNumber}`; 
+      spreadsheetId = process.env.SHEET_MATRICULAS_ID || '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
+      rangeToUpdate = `'Respuestas de formulario 1'!A${rowNumber}:Z${rowNumber}`; 
     } else if (type === 'activos') {
-      spreadsheetId = process.env.SHEET_ACTIVOS_ID;
-      rangeToUpdate = `A${rowNumber}:Z${rowNumber}`; 
+      spreadsheetId = process.env.SHEET_ACTIVOS_ID || '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
+      rangeToUpdate = `'Base de datos estudiantes 2026 - 2'!A${rowNumber}:K${rowNumber}`; 
     }
 
     const response = await sheets.spreadsheets.values.update({
