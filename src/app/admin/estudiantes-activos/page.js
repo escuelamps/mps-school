@@ -19,6 +19,8 @@ export default function EstudiantesActivosPage() {
   const [editValues, setEditValues] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   const [editError, setEditError] = useState(null);
+  const [columnFilters, setColumnFilters] = useState({});
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const handleEditClick = (rowIndex) => {
     setEditingRow(rowIndex);
@@ -85,6 +87,23 @@ export default function EstudiantesActivosPage() {
     fetchSheetsData();
   }, [router]);
 
+  const filteredRows = (data.length > 1 ? data.slice(1) : []).map((row, index) => ({
+    row,
+    actualIndex: index + 1
+  })).filter(({ row }) => {
+    for (const [colIdxStr, filterVal] of Object.entries(columnFilters)) {
+      if (!filterVal || !filterVal.trim()) continue;
+      const colIdx = parseInt(colIdxStr, 10);
+      const cellVal = (row[colIdx] || '').toString().toLowerCase();
+      if (!cellVal.includes(filterVal.toLowerCase().trim())) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  const displayedRows = filteredRows.slice(0, visibleCount);
+
   return (
     <div className="admin-dashboard">
       <div className="admin-header">
@@ -125,34 +144,100 @@ export default function EstudiantesActivosPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', color: 'var(--text-primary)' }}>
               <thead>
                 <tr style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid var(--glass-border)' }}>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--accent)', whiteSpace: 'nowrap' }}>Acciones</th>
+                  <th style={{ padding: '0.8rem 1rem', textAlign: 'left', fontWeight: 'bold', fontSize: '0.8rem', color: 'var(--accent)', whiteSpace: 'nowrap' }}>Editar</th>
                   {data[0].map((header, idx) => (
-                    <th key={idx} style={{ padding: '1rem', textAlign: 'left', fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                    <th key={idx} style={{ padding: '0.8rem 1rem', textAlign: 'left', fontWeight: 'bold', fontSize: '0.8rem', color: 'var(--accent)', whiteSpace: 'nowrap' }}>
                       {header}
+                    </th>
+                  ))}
+                </tr>
+                {/* Fila de Filtros por Columna */}
+                <tr style={{ background: 'rgba(0,0,0,0.2)', borderBottom: '1px solid var(--glass-border)' }}>
+                  <th style={{ padding: '0.4rem 1rem' }}></th>
+                  {data[0].map((header, idx) => (
+                    <th key={idx} style={{ padding: '0.4rem 0.6rem' }}>
+                      <input 
+                        type="text" 
+                        placeholder={`Filtrar...`}
+                        value={columnFilters[idx] || ''}
+                        onChange={(e) => {
+                          setColumnFilters(prev => ({ ...prev, [idx]: e.target.value }));
+                          setVisibleCount(10);
+                        }}
+                        style={{
+                          width: '100%',
+                          minWidth: '90px',
+                          padding: '0.35rem 0.5rem',
+                          borderRadius: '6px',
+                          border: '1px solid var(--glass-border)',
+                          background: 'rgba(255,255,255,0.06)',
+                          color: 'var(--text-primary)',
+                          fontSize: '0.75rem',
+                          outline: 'none'
+                        }}
+                      />
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {data.slice(1).map((row, rowIndex) => {
-                  const actualIndex = rowIndex + 1; // Para coincidir con data[]
-                  return (
-                    <tr key={rowIndex} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.3s' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
-                      <td style={{ padding: '1rem' }}>
-                        <button onClick={() => handleEditClick(actualIndex)} style={{ background: 'var(--accent)', color: 'black', border: 'none', padding: '0.5rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                          <Edit2 size={16} />
+                {displayedRows.length === 0 ? (
+                  <tr>
+                    <td colSpan={data[0].length + 1} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                      No se encontraron estudiantes con los filtros aplicados.
+                    </td>
+                  </tr>
+                ) : (
+                  displayedRows.map(({ row, actualIndex }) => (
+                    <tr key={actualIndex} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'} onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}>
+                      <td style={{ padding: '0.7rem 1rem' }}>
+                        <button onClick={() => handleEditClick(actualIndex)} title="Editar registro" style={{ background: 'var(--accent)', color: 'black', border: 'none', padding: '0.35rem 0.6rem', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.8rem', fontWeight: 600 }}>
+                          <Edit2 size={13} /> Editar
                         </button>
                       </td>
                       {data[0].map((_, colIndex) => (
-                        <td key={colIndex} style={{ padding: '1rem', fontSize: '0.95rem', whiteSpace: 'nowrap' }}>
+                        <td key={colIndex} style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
                           {row[colIndex] || '-'}
                         </td>
                       ))}
                     </tr>
-                  )
-                })}
+                  ))
+                )}
               </tbody>
             </table>
+
+            {/* Paginación: Botón Cargar Más */}
+            {filteredRows.length > visibleCount && (
+              <div style={{ padding: '1.2rem', textAlign: 'center', borderTop: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.01)' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                  Mostrando {displayedRows.length} de {filteredRows.length} estudiantes
+                </span>
+                <button
+                  onClick={() => setVisibleCount(prev => prev + 10)}
+                  style={{
+                    background: 'transparent',
+                    color: 'var(--accent)',
+                    border: '1px solid var(--accent)',
+                    padding: '0.6rem 1.8rem',
+                    borderRadius: '8px',
+                    fontWeight: 'bold',
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'var(--accent)';
+                    e.currentTarget.style.color = '#000';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'var(--accent)';
+                  }}
+                >
+                  Cargar más (+10)
+                </button>
+              </div>
+            )}
 
           </div>
         )}
