@@ -39,7 +39,11 @@ export default function ProfesoresPage() {
 
     const qTeachers = query(collection(db, 'users'), where('role', '==', 'teacher'));
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
-      setTeachers(snapshot.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.name||'').localeCompare(b.name||'')));
+      const teacherList = snapshot.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(t => !['lpineda@escuelamps.com', 'juanse@escuelamps.com', 'william@escuelamps.com'].includes(t.email))
+        .sort((a,b) => (a.name || a.email || '').localeCompare(b.name || b.email || ''));
+      setTeachers(teacherList);
     });
     return () => unsubTeachers();
   }, [router]);
@@ -49,7 +53,7 @@ export default function ProfesoresPage() {
     setFirstName('');
     setLastName('');
     setDocumentId('');
-      setBirthDate('');
+    setBirthDate('');
     setSubject1('');
     setSubject2('');
     setPassword('');
@@ -61,18 +65,19 @@ export default function ProfesoresPage() {
   const openEditForm = (teacher) => {
     setEditingTeacherId(teacher.id);
     
-    // Split name safely
-    const nameParts = (teacher.name || '').split(' ');
+    // Split name safely with fallbacks
+    const fullName = (teacher.name || teacher.username || (teacher.email ? teacher.email.replace('profe-', '').split('@')[0].replace('.', ' ') : '')).trim();
+    const nameParts = fullName.split(' ');
     setFirstName(nameParts[0] || '');
     setLastName(nameParts.slice(1).join(' ') || '');
     
     setDocumentId(teacher.documentId || '');
     setBirthDate(teacher.birthDate || '');
-    setSubject1(teacher.subjects?.[0] || '');
-    setSubject2(teacher.subjects?.[1] || '');
+    setSubject1(teacher.subject1 || teacher.subjects?.[0] || '');
+    setSubject2(teacher.subject2 || teacher.subjects?.[1] || '');
     
     setPassword(''); // Don't fetch password, it's secure
-    setHourlyRate(teacher.hourlyRate || '');
+    setHourlyRate(teacher.hourlyRate !== undefined && teacher.hourlyRate !== null ? String(teacher.hourlyRate) : '');
     setBankAccount(teacher.bankAccount || '');
     
     setIsAdding(true);
@@ -88,9 +93,11 @@ export default function ProfesoresPage() {
       if (editingTeacherId) {
         // Edit Mode
         const updateData = {
-          name: `${firstName} ${lastName}`,
+          name: `${firstName} ${lastName}`.trim(),
           documentId: documentId,
           birthDate: birthDate,
+          subject1: subject1,
+          subject2: subject2,
           subjects: subjectsArray,
           hourlyRate: Number(hourlyRate),
           bankAccount: bankAccount
@@ -258,16 +265,16 @@ export default function ProfesoresPage() {
               teachers.map(teacher => (
                 <div key={teacher.id} style={{ padding: '1.5rem', background: 'var(--bg-darker)', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
-                    <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{teacher.name}</h3>
+                    <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{teacher.name || teacher.username || teacher.email}</h3>
                     <p style={{ color: '#00DE85', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}><Mail size={14}/> {teacher.email?.replace(/@.*$/, "")}</p>
                     
                     {teacher.documentId && (
                       <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><FileText size={12}/> CC: {teacher.documentId}</p>
                     )}
                     
-                    {teacher.subjects && teacher.subjects.length > 0 && (
+                    {((teacher.subjects && teacher.subjects.length > 0) ? teacher.subjects : [teacher.subject1, teacher.subject2].filter(Boolean)).length > 0 && (
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                        {teacher.subjects.map((sub, idx) => (
+                        {((teacher.subjects && teacher.subjects.length > 0) ? teacher.subjects : [teacher.subject1, teacher.subject2].filter(Boolean)).map((sub, idx) => (
                           <span key={idx} style={{ background: 'rgba(0,222,133,0.1)', color: '#00DE85', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>{sub}</span>
                         ))}
                       </div>
