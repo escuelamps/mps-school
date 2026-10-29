@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, User, Trash2, Mail, UserPlus, DollarSign, CreditCard, Lock, Edit2, FileText, BookOpen, Calendar } from 'lucide-react';
+import { ArrowLeft, User, Trash2, UserPlus, DollarSign, CreditCard, Lock, Edit2, FileText, BookOpen, Calendar } from 'lucide-react';
 import '../admin.css';
 
 const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
@@ -25,7 +25,15 @@ export default function ProfesoresPage() {
   const [password, setPassword] = useState('');
   const [hourlyRate, setHourlyRate] = useState('');
   const [bankAccount, setBankAccount] = useState('');
+  
   const [loading, setLoading] = useState(false);
+
+  const getTeacherName = (t) => {
+    if (t.name && t.name.trim()) return t.name.trim();
+    if (t.email === 'lpineda@escuelamps.com' || t.username === 'lpineda') return 'Laura Pineda';
+    if (t.username) return t.username;
+    return 'Profesor';
+  };
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -41,8 +49,7 @@ export default function ProfesoresPage() {
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
       const teacherList = snapshot.docs
         .map(d => ({ id: d.id, ...d.data() }))
-        .filter(t => !['lpineda@escuelamps.com', 'juanse@escuelamps.com', 'william@escuelamps.com'].includes(t.email))
-        .sort((a,b) => (a.name || a.email || '').localeCompare(b.name || b.email || ''));
+        .sort((a,b) => getTeacherName(a).localeCompare(getTeacherName(b)));
       setTeachers(teacherList);
     });
     return () => unsubTeachers();
@@ -66,7 +73,7 @@ export default function ProfesoresPage() {
     setEditingTeacherId(teacher.id);
     
     // Split name safely with fallbacks
-    const fullName = (teacher.name || teacher.username || (teacher.email ? teacher.email.replace('profe-', '').split('@')[0].replace('.', ' ') : '')).trim();
+    const fullName = getTeacherName(teacher);
     const nameParts = fullName.split(' ');
     setFirstName(nameParts[0] || '');
     setLastName(nameParts.slice(1).join(' ') || '');
@@ -265,8 +272,7 @@ export default function ProfesoresPage() {
               teachers.map(teacher => (
                 <div key={teacher.id} style={{ padding: '1.5rem', background: 'var(--bg-darker)', borderRadius: '12px', border: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
-                    <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.2rem' }}>{teacher.name || teacher.username || teacher.email}</h3>
-                    <p style={{ color: '#00DE85', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.9rem' }}><Mail size={14}/> {teacher.email?.replace(/@.*$/, "")}</p>
+                    <h3 style={{ color: 'var(--text-primary)', fontSize: '1.2rem', marginBottom: '0.4rem' }}>{getTeacherName(teacher)}</h3>
                     
                     {teacher.documentId && (
                       <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><FileText size={12}/> CC: {teacher.documentId}</p>
