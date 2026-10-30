@@ -227,8 +227,8 @@ export default function AdminPage() {
 
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '1100px' }}>
         
-        {/* ================= VISTA DE JUANSE (SOLO PROFESORES) ================= */}
-        {username === 'juanse' && (
+        {/* ================= VISTA DE JUANSE / LAURA PINEDA (PROFESORES Y CLASES) ================= */}
+        {(username === 'juanse' || username === 'lpineda') && (
           <>
             {/* Card Profesores */}
             <div 
@@ -257,7 +257,7 @@ export default function AdminPage() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Directorio general de todos los profesores y gestión docente.</p>
             </div>
 
-            {/* Card Planillas y Aulas Docentes */}
+            {/* Card Planillas y Clases MPS */}
             <div 
               onClick={() => setShowTeacherTools(true)}
               style={{
@@ -286,8 +286,8 @@ export default function AdminPage() {
           </>
         )}
 
-        {/* ================= VISTA DE WILLIAM (SOLO ESTUDIANTES) ================= */}
-        {username === 'william' && (
+        {/* ================= VISTA DE WILLIAM / LAURA PINEDA (ESTUDIANTES Y GESTIÓN) ================= */}
+        {(username === 'william' || username === 'lpineda') && (
           <>
             {/* Card Estudiantes Activos */}
             <div 

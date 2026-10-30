@@ -57,22 +57,59 @@ export default function RegistroPlanillaPage() {
 
   // Load teachers and students
   useEffect(() => {
-    // 1. Check user auth
+    let loggedTeacherName = '';
+
+    // Helper to resolve teacher name from session
+    const getTeacherNameFromSession = (u) => {
+      if (!u || !u.username) return '';
+      const uLower = u.username.toLowerCase();
+      const eLower = (u.email || '').toLowerCase();
+      if (uLower === 'lpineda' || eLower === 'lpineda@escuelamps.com') return 'Laura Pineda';
+      if (uLower === 'william' || eLower === 'william@escuelamps.com') return 'William Buitrago';
+      if (uLower === 'juanse' || eLower === 'juanse@escuelamps.com') return 'Juan Sebastián';
+      return u.name || u.username;
+    };
+
+    // 1. Check user auth & pre-select
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(userData => {
-        if (!userData || !userData.username) {
-          // Allow if admin or teacher
+        if (userData && userData.username) {
+          loggedTeacherName = getTeacherNameFromSession(userData);
+          if (loggedTeacherName) {
+            setProfesor(loggedTeacherName);
+          }
         }
       })
       .catch(() => {});
 
-    // 2. Load teachers from Firestore
+    // 2. Load teachers from Firestore + Base Docente
     const fetchTeachers = async () => {
       try {
+        const teachersMap = new Map();
+        
+        // Profesores base del cuerpo docente de MPS
+        const DEFAULT_TEACHERS = [
+          'Laura Pineda',
+          'William Buitrago',
+          'Jorge Garcia',
+          'Sebastian Vergara',
+          'Andres Bernal',
+          'Carlos Macia',
+          'Jenny Rojas',
+          'Laura Mendoza',
+          'Luisa Medellin',
+          'Sahar Abwmar',
+          'Shalom Prieto'
+        ];
+        DEFAULT_TEACHERS.forEach(tName => {
+          teachersMap.set(tName.toLowerCase(), { id: tName, name: tName });
+        });
+
+        // Complementar con usuarios de Firestore
         const q = query(collection(db, 'users'), where('role', 'in', ['teacher', 'admin']));
         const snap = await getDocs(q);
-        const list = snap.docs.map(doc => {
+        snap.docs.forEach(doc => {
           const d = doc.data();
           let name = d.name;
           if (!name || !name.trim()) {
@@ -80,11 +117,23 @@ export default function RegistroPlanillaPage() {
             else if (d.email === 'william@escuelamps.com' || d.username === 'william') name = 'William Buitrago';
             else name = d.username || 'Profesor';
           }
-          return { id: doc.id, name: name.trim() };
-        }).sort((a, b) => a.name.localeCompare(b.name));
+          if (name && name.trim()) {
+            teachersMap.set(name.trim().toLowerCase(), { id: doc.id, name: name.trim() });
+          }
+        });
 
+        const list = Array.from(teachersMap.values()).sort((a, b) => a.name.localeCompare(b.name));
         setProfesoresList(list);
-        if (list.length > 0 && !profesor) {
+
+        // Preselección automática si está logueado
+        if (loggedTeacherName) {
+          const match = list.find(t => t.name.toLowerCase() === loggedTeacherName.toLowerCase());
+          if (match) {
+            setProfesor(match.name);
+          } else {
+            setProfesor(loggedTeacherName);
+          }
+        } else if (list.length > 0 && !profesor) {
           setProfesor(list[0].name);
         }
       } catch (e) {
