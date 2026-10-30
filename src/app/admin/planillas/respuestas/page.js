@@ -3,14 +3,16 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
-import { ArrowLeft, BarChart2, PieChart, Users, BookOpen, Calendar, Eye, Trash2, X, Plus, Clock, FileText, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BarChart2, PieChart, Users, BookOpen, Calendar, Eye, Trash2, X, Plus, Clock, FileText, CheckCircle2, ExternalLink, RefreshCw, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import '../../admin.css';
 
 export default function RespuestasPlanillasPage() {
   const router = useRouter();
-  const [planillas, setPlanillas] = useState([]);
+  const [firestorePlanillas, setFirestorePlanillas] = useState([]);
+  const [sheetPlanillas, setSheetPlanillas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
 
   // Modal de firma y detalle
   const [selectedPlanilla, setSelectedPlanilla] = useState(null);
@@ -26,6 +28,22 @@ export default function RespuestasPlanillasPage() {
   });
   const [visibleCount, setVisibleCount] = useState(10);
 
+  const fetchSheetData = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/sheets?type=planillas');
+      const json = await res.json();
+      if (json.data && Array.isArray(json.data)) {
+        setSheetPlanillas(json.data);
+      }
+    } catch (err) {
+      console.error('Error cargando planillas de Sheets:', err);
+    } finally {
+      setSyncing(false);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetch('/api/auth/me')
       .then(res => res.json())
@@ -36,33 +54,52 @@ export default function RespuestasPlanillasPage() {
       })
       .catch(() => router.replace('/admin'));
 
+    // 1. Cargar histórico masivo de Google Sheets
+    fetchSheetData();
+
+    // 2. Escuchar en tiempo real registros hechos desde la app en Firestore
     const q = query(collection(db, 'planillas'), orderBy('createdAt', 'desc'));
     const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-      setPlanillas(list);
-      setLoading(false);
+      const list = snapshot.docs.map(d => ({ id: d.id, ...d.data(), source: 'firestore' }));
+      setFirestorePlanillas(list);
     }, (error) => {
-      console.error('Error escuchando planillas:', error);
-      setLoading(false);
+      console.error('Error escuchando planillas Firestore:', error);
     });
 
     return () => unsub();
   }, [router]);
 
-  const handleDelete = async (id) => {
-    if (confirm('¿Estás seguro de eliminar este registro de planilla? Esta acción no se puede deshacer.')) {
-      try {
-        await deleteDoc(doc(db, 'planillas', id));
-      } catch (err) {
-        console.error('Error eliminando planilla:', err);
-        alert('No se pudo eliminar el registro.');
+  // Lista unificada: los registros web nuevos primero, seguidos por todo el histórico de Google Sheets
+  const planillas = [...firestorePlanillas, ...sheetPlanillas];
+
+  const handleDelete = async (item) => {
+    if (confirm(`¿Estás seguro de eliminar el registro de ${item.estudiante} con ${item.profesor}?`)) {
+      if (item.source === 'firestore') {
+        try {
+          await deleteDoc(doc(db, 'planillas', item.id));
+        } catch (err) {
+          console.error('Error eliminando planilla:', err);
+          alert('No se pudo eliminar el registro en Firestore.');
+        }
+      } else {
+        // En registros de Google Sheets, se ocultan de la vista actual
+        setSheetPlanillas(prev => prev.filter(p => p.id !== item.id));
       }
     }
   };
 
+  const getSignatureThumbnail = (url) => {
+    if (!url) return null;
+    if (url.startsWith('data:image')) return url;
+    const match = url.match(/id=([^&]+)/);
+    if (match) {
+      return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
+    }
+    return url;
+  };
+
   // Métricas estadísticas
   const totalClases = planillas.length;
-  
   const uniqueProfesores = Array.from(new Set(planillas.map(p => p.profesor).filter(Boolean)));
   const uniqueEstudiantes = Array.from(new Set(planillas.map(p => p.estudiante).filter(Boolean)));
 
@@ -128,22 +165,45 @@ export default function RespuestasPlanillasPage() {
           </div>
         </div>
 
-        <Link
-          href="/admin/planillas/registro"
-          style={{
-            background: "#00DE85",
-            color: "#111",
-            textDecoration: "none",
-            padding: "0.6rem 1.2rem",
-            borderRadius: "8px",
-            fontWeight: "bold",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem"
-          }}
-        >
-          <Plus size={20} /> Registrar Planilla
-        </Link>
+        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+          <button
+            onClick={fetchSheetData}
+            disabled={syncing}
+            style={{
+              background: 'transparent',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--glass-border)',
+              padding: '0.6rem 1rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              fontWeight: 600,
+              fontSize: '0.85rem'
+            }}
+          >
+            {syncing ? <Loader2 size={16} className="animate-spin" /> : <RefreshCw size={16} />}
+            Sincronizar
+          </button>
+
+          <Link
+            href="/admin/planillas/registro"
+            style={{
+              background: "#00DE85",
+              color: "#111",
+              textDecoration: "none",
+              padding: "0.6rem 1.2rem",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}
+          >
+            <Plus size={20} /> Registrar Planilla
+          </Link>
+        </div>
       </div>
 
       <div className="admin-content">
@@ -195,13 +255,13 @@ export default function RespuestasPlanillasPage() {
 
             {rankingProfesores.length === 0 ? (
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textAlign: 'center', padding: '2rem' }}>
-                Aún no hay planillas registradas.
+                {loading ? 'Cargando datos...' : 'Aún no hay planillas registradas.'}
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {rankingProfesores.map(({ prof, count }) => {
                   const pct = Math.round((count / (totalClases || 1)) * 100);
-                  const barWidth = Math.max(12, Math.round((count / maxProfesorCount) * 100));
+                  const barWidth = Math.max(8, Math.round((count / maxProfesorCount) * 100));
                   return (
                     <div key={prof}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.3rem' }}>
@@ -239,13 +299,13 @@ export default function RespuestasPlanillasPage() {
 
             {rankingInstrumentos.length === 0 ? (
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textAlign: 'center', padding: '2rem' }}>
-                Aún no hay planillas registradas.
+                {loading ? 'Cargando datos...' : 'Aún no hay planillas registradas.'}
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {rankingInstrumentos.map(({ inst, count }, idx) => {
                   const pct = Math.round((count / (totalClases || 1)) * 100);
-                  const barWidth = Math.max(12, Math.round((count / maxInstrumentoCount) * 100));
+                  const barWidth = Math.max(8, Math.round((count / maxInstrumentoCount) * 100));
                   const color = COLORS[idx % COLORS.length];
                   return (
                     <div key={inst}>
@@ -448,94 +508,101 @@ export default function RespuestasPlanillasPage() {
                     </td>
                   </tr>
                 ) : (
-                  displayedPlanillas.map((item) => (
-                    <tr
-                      key={item.id}
-                      style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }}
-                      onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
-                      onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-                    >
-                      {/* Firma */}
-                      <td style={{ padding: '0.6rem 1rem', textAlign: 'center' }}>
-                        {item.firma ? (
-                          <div
-                            onClick={() => setSelectedPlanilla(item)}
-                            title="Ver firma y detalle completo"
+                  displayedPlanillas.map((item) => {
+                    const thumb = getSignatureThumbnail(item.firma);
+                    return (
+                      <tr
+                        key={item.id}
+                        style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }}
+                        onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                      >
+                        {/* Firma */}
+                        <td style={{ padding: '0.6rem 1rem', textAlign: 'center' }}>
+                          {item.firma ? (
+                            <div
+                              onClick={() => setSelectedPlanilla(item)}
+                              title="Ver firma y detalle completo"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '48px',
+                                height: '28px',
+                                borderRadius: '4px',
+                                background: '#0d1518',
+                                border: '1px solid var(--accent)',
+                                cursor: 'pointer',
+                                overflow: 'hidden'
+                              }}
+                            >
+                              {item.firma.startsWith('data:image') ? (
+                                <img
+                                  src={item.firma}
+                                  alt="Firma"
+                                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                                />
+                              ) : (
+                                <span style={{ fontSize: '0.7rem', color: '#00DE85', fontWeight: 'bold' }}>Firma</span>
+                              )}
+                            </div>
+                          ) : (
+                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>-</span>
+                          )}
+                        </td>
+
+                        {/* Fecha */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
+                          {item.fecha || '-'}
+                        </td>
+
+                        {/* Hora */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
+                          {item.hora || '-'}
+                        </td>
+
+                        {/* Profesor */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                          {item.profesor || '-'}
+                        </td>
+
+                        {/* Estudiante */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', fontWeight: 600, color: '#00DE85', whiteSpace: 'nowrap' }}>
+                          {item.estudiante || '-'}
+                        </td>
+
+                        {/* Instrumento */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                          <span style={{ background: 'rgba(0,222,133,0.1)', color: '#00DE85', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                            {item.instrumento || 'General'}
+                          </span>
+                        </td>
+
+                        {/* Contenido Pedagógico */}
+                        <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.contenido}>
+                          {item.contenido || '-'}
+                        </td>
+
+                        {/* Eliminar */}
+                        <td style={{ padding: '0.7rem 1rem', textAlign: 'center' }}>
+                          <button
+                            onClick={() => handleDelete(item)}
+                            title="Eliminar de la vista"
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: '44px',
-                              height: '28px',
-                              borderRadius: '4px',
-                              background: '#0d1518',
-                              border: '1px solid var(--accent)',
+                              background: 'transparent',
+                              border: 'none',
+                              color: '#ef4444',
                               cursor: 'pointer',
-                              overflow: 'hidden'
+                              padding: '0.4rem',
+                              borderRadius: '6px'
                             }}
                           >
-                            <img
-                              src={item.firma}
-                              alt="Firma"
-                              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                            />
-                          </div>
-                        ) : (
-                          <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>-</span>
-                        )}
-                      </td>
-
-                      {/* Fecha */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                        {item.fecha || '-'}
-                      </td>
-
-                      {/* Hora */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
-                        {item.hora || '-'}
-                      </td>
-
-                      {/* Profesor */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
-                        {item.profesor || '-'}
-                      </td>
-
-                      {/* Estudiante */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', fontWeight: 600, color: '#00DE85', whiteSpace: 'nowrap' }}>
-                        {item.estudiante || '-'}
-                      </td>
-
-                      {/* Instrumento */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
-                        <span style={{ background: 'rgba(0,222,133,0.1)', color: '#00DE85', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>
-                          {item.instrumento || 'General'}
-                        </span>
-                      </td>
-
-                      {/* Contenido Pedagógico */}
-                      <td style={{ padding: '0.7rem 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={item.contenido}>
-                        {item.contenido || '-'}
-                      </td>
-
-                      {/* Eliminar */}
-                      <td style={{ padding: '0.7rem 1rem', textAlign: 'center' }}>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          title="Eliminar planilla"
-                          style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: '#ef4444',
-                            cursor: 'pointer',
-                            padding: '0.4rem',
-                            borderRadius: '6px'
-                          }}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -643,7 +710,7 @@ export default function RespuestasPlanillasPage() {
 
             <div style={{ marginBottom: '1.2rem' }}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.3rem' }}>
-                Contenido Pedagógico:
+                Contenido Pedagógico / Observaciones:
               </span>
               <p style={{ background: 'var(--panel-bg)', padding: '0.8rem 1rem', borderRadius: '8px', border: '1px solid var(--glass-border)', fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.5, maxHeight: '120px', overflowY: 'auto' }}>
                 {selectedPlanilla.contenido}
@@ -654,13 +721,40 @@ export default function RespuestasPlanillasPage() {
               <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>
                 Firma Digital del Estudiante / Acudiente:
               </span>
-              <div style={{ background: '#0d1518', borderRadius: '10px', border: '1px solid var(--accent)', padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '140px' }}>
+              <div style={{ background: '#0d1518', borderRadius: '10px', border: '1px solid var(--accent)', padding: '0.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '140px', gap: '0.6rem' }}>
                 {selectedPlanilla.firma ? (
-                  <img
-                    src={selectedPlanilla.firma}
-                    alt="Firma Digital"
-                    style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
-                  />
+                  selectedPlanilla.firma.startsWith('data:image') ? (
+                    <img
+                      src={selectedPlanilla.firma}
+                      alt="Firma Digital"
+                      style={{ maxHeight: '130px', maxWidth: '100%', objectFit: 'contain' }}
+                    />
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '1rem' }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '0.8rem' }}>
+                        Firma y planilla archivada en Google Drive
+                      </p>
+                      <a
+                        href={selectedPlanilla.firma}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          background: 'var(--accent)',
+                          color: '#111',
+                          textDecoration: 'none',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '6px',
+                          fontWeight: 'bold',
+                          fontSize: '0.85rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem'
+                        }}
+                      >
+                        Abrir Archivo de Firma <ExternalLink size={14} />
+                      </a>
+                    </div>
+                  )
                 ) : (
                   <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Sin firma registrada</span>
                 )}

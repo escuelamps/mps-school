@@ -5,8 +5,8 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type');
 
-  if (!type || (type !== 'matriculas' && type !== 'activos' && type !== 'recitales')) {
-    return NextResponse.json({ error: 'Parámetro type inválido. Usa ?type=matriculas o ?type=activos' }, { status: 400 });
+  if (!type || (type !== 'matriculas' && type !== 'activos' && type !== 'recitales' && type !== 'planillas')) {
+    return NextResponse.json({ error: 'Parámetro type inválido. Usa ?type=matriculas, ?type=activos o ?type=planillas' }, { status: 400 });
   }
 
   try {
@@ -24,9 +24,7 @@ export async function GET(request) {
     if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
       const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
       if (match) {
-        // Extraer el cuerpo y quitarle absolutamente todos los espacios que Vercel le haya puesto
         const core = match[1].replace(/\s+/g, '');
-        // Reconstruir el formato PEM exacto que pide Google
         privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
       }
     }
@@ -47,6 +45,9 @@ export async function GET(request) {
     if (type === 'matriculas') {
       spreadsheetId = '17wVemsUOXN0sOAKbYC2SBjUPrjovZNDguNWI5-AsAnI';
       range = "'Respuestas de formulario 1'!A1:Z1000"; 
+    } else if (type === 'planillas') {
+      spreadsheetId = '19rXAPfclrzBe62DOXoKz0oADtgOT_N4vUYe77KRLMfw';
+      range = "'Respuestas de formulario 1'!A1:EM600";
     } else {
       spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
       range = "'Base de datos estudiantes 2026 - 2'!A1:K200"; 
@@ -58,6 +59,81 @@ export async function GET(request) {
     });
 
     const rows = response.data.values || [];
+
+    if (type === 'planillas' && rows.length > 1) {
+      const headers = rows[0];
+      const TEACHER_INSTRUMENTS = {
+        'Jorge Garcia': 'Guitarra / Piano',
+        'Sebastian Vergara': 'Guitarra / Producción',
+        'Andres Bernal': 'Piano',
+        'Carlos Macia': 'Violín / Piano',
+        'Jenny Rojas': 'Iniciación Musical',
+        'William Buitrago': 'Canto',
+        'Laura Mendoza': 'Piano / Violín',
+        'Shalom Prieto': 'Canto'
+      };
+
+      const parsedPlanillas = [];
+      rows.slice(1).forEach((row, i) => {
+        if (!row || row.length < 3 || !row[2]) return;
+        const rawDate = row[0] || '';
+        const teacher = (row[2] || '').trim();
+        if (!teacher) return;
+
+        let classDate = '';
+        let student = '';
+        let firmaUrl = '';
+        let duration = '';
+
+        row.forEach((cell, idx) => {
+          if (!cell || typeof cell !== 'string') return;
+          const val = cell.trim();
+          const header = (headers[idx] || '').trim();
+
+          if (val.includes('drive.google.com')) {
+            firmaUrl = val;
+          }
+          if (/fecha de clase/i.test(header) && val) {
+            classDate = val;
+          }
+          if (/la sesion fue de/i.test(header) && val) {
+            duration = val;
+          }
+
+          const bracketMatch = header.match(/\[(.*?)\]/);
+          if (bracketMatch && val && val !== '0' && val !== 'No') {
+            if (!student) student = bracketMatch[1].trim();
+          }
+
+          if (/^clases dictadas$/i.test(header) && val && !val.includes('drive.google.com')) {
+            if (!student) student = val;
+          }
+        });
+
+        if (!classDate && rawDate) {
+          classDate = rawDate.split(' ')[0];
+        }
+        const classTime = (rawDate.split(' ')[1] || '12:00:00').slice(0, 5);
+
+        if (!student) student = 'Clase General';
+
+        parsedPlanillas.push({
+          id: `sheet-${i + 2}`,
+          profesor: teacher,
+          estudiante: student,
+          fecha: classDate,
+          hora: classTime,
+          duracion: duration,
+          instrumento: TEACHER_INSTRUMENTS[teacher] || 'Música General',
+          contenido: `Clase de ${student} con ${teacher} (${duration || '1 hr'})`,
+          firma: firmaUrl,
+          source: 'google_sheets'
+        });
+      });
+
+      return NextResponse.json({ data: parsedPlanillas });
+    }
+
     return NextResponse.json({ data: rows });
   } catch (error) {
     console.error('Sheets Error:', error.message);
