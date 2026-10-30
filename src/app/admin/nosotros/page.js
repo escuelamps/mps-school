@@ -31,6 +31,7 @@ export default function ProfesoresPage() {
   const getTeacherName = (t) => {
     if (t.name && t.name.trim()) return t.name.trim();
     if (t.email === 'lpineda@escuelamps.com' || t.username === 'lpineda') return 'Laura Pineda';
+    if (t.email === 'william@escuelamps.com' || t.username === 'william') return 'William Cuartas';
     if (t.username) return t.username;
     return 'Profesor';
   };
@@ -45,7 +46,7 @@ export default function ProfesoresPage() {
       })
       .catch(() => router.replace('/admin'));
 
-    const qTeachers = query(collection(db, 'users'), where('role', '==', 'teacher'));
+    const qTeachers = query(collection(db, 'users'), where('role', 'in', ['teacher', 'admin']));
     const unsubTeachers = onSnapshot(qTeachers, (snapshot) => {
       const teacherList = snapshot.docs
         .map(d => ({ id: d.id, ...d.data() }))
