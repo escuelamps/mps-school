@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, User, Lock, LogIn, Eye, EyeOff } from 'lucide-react';
-import { auth } from '../../lib/firebase';
+import { auth, db } from '../../lib/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -24,6 +26,63 @@ export default function LoginPage() {
     }
   }, []);
 
+  const resolveEmailForLogin = async (rawIdentifier) => {
+    const clean = rawIdentifier.trim();
+    if (clean.includes('@')) {
+      return clean;
+    }
+
+    const cleanPhone = clean.replace(/\D/g, '');
+    const normalizeText = (t) => (t || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    const searchName = normalizeText(clean);
+
+    try {
+      const usersRef = collection(db, 'users');
+      const snap = await getDocs(query(usersRef, where('role', '==', 'student')));
+      
+      let match = null;
+
+      // 1. Coincidencia por teléfono (si tiene al menos 7 dígitos)
+      if (cleanPhone.length >= 7) {
+        match = snap.docs.find(d => {
+          const data = d.data();
+          const userPhone = (data.telefono || data.phone || data.celular || '').replace(/\D/g, '');
+          return userPhone && userPhone.includes(cleanPhone);
+        });
+      }
+
+      // 2. Coincidencia exacta o normalizada por nombre
+      if (!match && searchName) {
+        match = snap.docs.find(d => {
+          const data = d.data();
+          const docName = normalizeText(data.nombre || data.name || data.displayName || data.username || '');
+          return docName === searchName;
+        });
+      }
+
+      // 3. Coincidencia parcial por nombre
+      if (!match && searchName.length >= 3) {
+        match = snap.docs.find(d => {
+          const data = d.data();
+          const docName = normalizeText(data.nombre || data.name || data.displayName || data.username || '');
+          return docName.includes(searchName) || searchName.includes(docName);
+        });
+      }
+
+      if (match) {
+        return match.data().email;
+      }
+    } catch (err) {
+      console.error('Error buscando estudiante por nombre o celular:', err);
+    }
+
+    // Fallback con formato de correo interno
+    if (searchName) {
+      return `${clean.toLowerCase().replace(/\s+/g, '.')}@escuelamps.com`;
+    }
+
+    return null;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +106,14 @@ export default function LoginPage() {
         else router.push('/student');
       } else {
         // Login
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const targetEmail = await resolveEmailForLogin(email);
+        if (!targetEmail) {
+          setError('No encontramos ningún estudiante registrado con ese nombre o número de celular.');
+          setLoading(false);
+          return;
+        }
+
+        const userCredential = await signInWithEmailAndPassword(auth, targetEmail, password);
         const token = await userCredential.user.getIdToken();
         const res = await fetch('/api/auth/login', {
           method: 'POST',
@@ -63,8 +129,8 @@ export default function LoginPage() {
       console.error(err);
       if (err.code === 'auth/email-already-in-use') {
         setError('El correo electrónico ya está registrado.');
-      } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
-        setError('Correo o contraseña incorrectos.');
+      } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
+        setError('Nombre, celular o contraseña incorrectos.');
       } else if (err.code === 'auth/weak-password') {
         setError('La contraseña debe tener al menos 6 caracteres.');
       } else {
@@ -134,14 +200,16 @@ export default function LoginPage() {
               </div>
             )}
             <div>
-              <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Correo Electrónico</label>
+              <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                {isRegistering ? 'Correo Electrónico' : 'Nombre o Número de Celular'}
+              </label>
               <div style={{ position: 'relative' }}>
                 <User size={20} color="var(--text-secondary)" style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
                 <input 
-                  type="email" 
+                  type={isRegistering ? 'email' : 'text'} 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="estudiante@correo.com"
+                  placeholder={isRegistering ? 'estudiante@correo.com' : 'Ej: Juan Pérez o 3001234567'}
                   required
                   style={{
                     width: '100%', padding: '1rem 1rem 1rem 3rem', background: 'var(--bg-secondary)',
