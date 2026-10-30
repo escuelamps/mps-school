@@ -529,10 +529,11 @@ export default function AdminPage() {
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdm_EwrN8ux8nZatOyg0SQg1uONk7ztvCiTxCQL11DbUqH3XQ/formResponse"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                onClick={() => {
+                  setShowTeacherTools(false);
+                  router.push('/admin/planillas/registro');
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -542,20 +543,24 @@ export default function AdminPage() {
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--glass-border)',
                   color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontWeight: 600
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  transition: 'background 0.2s'
                 }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0, 222, 133, 0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <ClipboardCheck size={20} color="#00DE85" /> Formulario de Registro de Planilla
                 </span>
-                <ExternalLink size={16} color="var(--text-secondary)" />
-              </a>
+                <ArrowRight size={16} color="#00DE85" />
+              </div>
 
-              <a
-                href="https://docs.google.com/forms/d/1Ay7nQMB2JcIINSY_ozCRd4XMSIt-1ydOA3n10jj3Qgs/edit#responses"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                onClick={() => {
+                  setShowTeacherTools(false);
+                  router.push('/admin/planillas/respuestas');
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -565,20 +570,24 @@ export default function AdminPage() {
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--glass-border)',
                   color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontWeight: 600
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  transition: 'background 0.2s'
                 }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(56, 189, 248, 0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <FileSpreadsheet size={20} color="#38bdf8" /> Ver Respuestas y Firmas de Planillas
                 </span>
-                <ExternalLink size={16} color="var(--text-secondary)" />
-              </a>
+                <ArrowRight size={16} color="#38bdf8" />
+              </div>
 
-              <a
-                href="https://classroom.google.com/h/tv"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                onClick={() => {
+                  setShowTeacherTools(false);
+                  router.push('/admin/classroom');
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -588,20 +597,24 @@ export default function AdminPage() {
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--glass-border)',
                   color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontWeight: 600
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  transition: 'background 0.2s'
                 }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(168, 85, 247, 0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <BookOpen size={20} color="#a855f7" /> Google Classroom (Procesos)
                 </span>
-                <ExternalLink size={16} color="var(--text-secondary)" />
-              </a>
+                <ArrowRight size={16} color="#a855f7" />
+              </div>
 
-              <a
-                href="https://docs.google.com/spreadsheets/d/1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo/edit?gid=0#gid=0"
-                target="_blank"
-                rel="noopener noreferrer"
+              <div
+                onClick={() => {
+                  setShowTeacherTools(false);
+                  router.push('/admin/nosotros');
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -611,15 +624,18 @@ export default function AdminPage() {
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--glass-border)',
                   color: 'var(--text-primary)',
-                  textDecoration: 'none',
-                  fontWeight: 600
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  transition: 'background 0.2s'
                 }}
+                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(245, 158, 11, 0.1)'}
+                onMouseOut={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <Users size={20} color="#f59e0b" /> Base de Datos Profesores
                 </span>
-                <ExternalLink size={16} color="var(--text-secondary)" />
-              </a>
+                <ArrowRight size={16} color="#f59e0b" />
+              </div>
             </div>
           </div>
         </div>

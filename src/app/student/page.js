@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Book, Calendar, CreditCard, UploadCloud, CheckCircle, Smartphone } from 'lucide-react';
+import { LogOut, Book, Calendar, CreditCard, UploadCloud, CheckCircle, Smartphone, ExternalLink, Award } from 'lucide-react';
 import { auth } from '@/lib/firebase';
 import { ModalOverlay } from '@/components/Modals';
 
@@ -15,6 +15,9 @@ export default function StudentPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
+  const [classroomCourses, setClassroomCourses] = useState([]);
+  const [loadingClassroom, setLoadingClassroom] = useState(true);
+
   useEffect(() => {
     fetch('/api/auth/me')
       .then(res => res.json())
@@ -26,6 +29,14 @@ export default function StudentPage() {
           setLoading(false);
         }
       });
+
+    fetch('/api/classroom')
+      .then(res => res.json())
+      .then(data => {
+        setClassroomCourses(data.courses || []);
+        setLoadingClassroom(false);
+      })
+      .catch(() => setLoadingClassroom(false));
   }, [router]);
 
   const handleLogout = async () => {
@@ -52,14 +63,14 @@ export default function StudentPage() {
 
   const handleSubirRecibo = () => {
     setIsUploading(true);
-    // Simular el tiempo que tardaría la IA en leer el recibo
+    // Simular el tiempo de verificación del comprobante
     setTimeout(() => {
       setIsUploading(false);
       setUploadSuccess(true);
       setTimeout(() => {
         setUploadSuccess(false);
         setShowNequiModal(false);
-        alert('¡El sistema inteligente verificó tu pago exitosamente! Tus clases han sido habilitadas.');
+        alert('¡Tu comprobante ha sido verificado exitosamente! Tus clases han sido habilitadas.');
       }, 2500);
     }, 3000);
   };
@@ -137,6 +148,127 @@ export default function StudentPage() {
               Solicitar Clase
             </button>
           </div>
+        </div>
+
+        {/* PANEL DE GOOGLE CLASSROOM (PROCESOS Y TAREAS) */}
+        <div style={{ background: 'var(--bg-secondary)', padding: '2rem', borderRadius: '16px', border: '1px solid var(--glass-border)', gridColumn: '1 / -1' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+              <Book size={28} color="#00DE85" />
+              <div>
+                <h3 style={{ fontSize: '1.4rem', margin: 0, color: 'var(--text-primary)' }}>Mis Procesos y Tareas (Google Classroom)</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>Seguimiento académico y actividades de tus clases</p>
+              </div>
+            </div>
+
+            <a
+              href="https://classroom.google.com/h/tv"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: 'rgba(0, 222, 133, 0.1)',
+                color: '#00DE85',
+                border: '1px solid #00DE85',
+                textDecoration: 'none',
+                padding: '0.6rem 1.2rem',
+                borderRadius: '8px',
+                fontWeight: 600,
+                fontSize: '0.85rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              Abrir Google Classroom <ExternalLink size={14} />
+            </a>
+          </div>
+
+          {loadingClassroom ? (
+            <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              Cargando tus procesos académicos...
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.2rem' }}>
+              {classroomCourses.map(course => (
+                <div
+                  key={course.id}
+                  style={{
+                    background: 'var(--bg-primary)',
+                    borderRadius: '12px',
+                    border: '1px solid var(--glass-border)',
+                    padding: '1.2rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '1rem'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--accent)', background: 'rgba(0,222,133,0.1)', padding: '2px 8px', borderRadius: '4px' }}>
+                        {course.section || 'Aula Activa'}
+                      </span>
+                      {course.teacher && (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                          Profe: {course.teacher}
+                        </span>
+                      )}
+                    </div>
+                    <h4 style={{ color: 'var(--text-primary)', fontSize: '1.05rem', margin: '0.3rem 0 0.5rem 0', fontWeight: 'bold' }}>
+                      {course.name}
+                    </h4>
+                    {course.descriptionHeading && (
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', lineHeight: 1.4, margin: 0 }}>
+                        {course.descriptionHeading}
+                      </p>
+                    )}
+                  </div>
+
+                  {course.courseWork && course.courseWork.length > 0 && (
+                    <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '0.8rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block', marginBottom: '0.4rem' }}>
+                        Actividades Recientes:
+                      </span>
+                      {course.courseWork.slice(0, 2).map(cw => (
+                        <div key={cw.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-primary)', marginBottom: '0.3rem' }}>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>
+                            • {cw.title}
+                          </span>
+                          {cw.dueDate && (
+                            <span style={{ color: '#00DE85' }}>
+                              {cw.dueDate.day}/{cw.dueDate.month}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <a
+                    href={course.alternateLink || 'https://classroom.google.com/h/tv'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      color: 'var(--text-primary)',
+                      textDecoration: 'none',
+                      padding: '0.5rem 0.8rem',
+                      borderRadius: '6px',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.4rem',
+                      border: '1px solid var(--glass-border)'
+                    }}
+                  >
+                    Entrar al Aula <ExternalLink size={12} />
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
       </div>
