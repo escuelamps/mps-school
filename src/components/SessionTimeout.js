@@ -25,7 +25,8 @@ export default function SessionTimeout() {
     const handleLogout = async () => {
       try {
         await signOut(auth);
-        window.location.href = '/login?timeout=true';
+        const isAdmin = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+        window.location.href = isAdmin ? '/admin?timeout=true' : '/login?timeout=true';
       } catch (err) {
         console.error('Error auto-logging out:', err);
       }

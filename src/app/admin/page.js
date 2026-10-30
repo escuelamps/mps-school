@@ -23,6 +23,13 @@ export default function AdminPage() {
   const [showTeacherTools, setShowTeacherTools] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('timeout') === 'true') {
+        setError('Tu sesión ha expirado, por favor ingresa de nuevo');
+      }
+    }
+
     // Comprobar si ya está logueado al cargar
     fetch('/api/auth/me')
       .then(res => res.json())

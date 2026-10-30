@@ -18,8 +18,7 @@ export default function AdminInactivityProvider({ children }) {
       try {
         localStorage.removeItem('mps_admin_last_activity');
         await fetch('/api/auth/logout', { method: 'POST' });
-        router.push('/admin');
-        router.refresh();
+        window.location.href = '/admin?timeout=true';
       } catch (err) {
         console.error('Error cerrando sesión por inactividad:', err);
       }
