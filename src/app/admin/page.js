@@ -27,6 +27,12 @@ export default function AdminPage() {
       const params = new URLSearchParams(window.location.search);
       if (params.get('timeout') === 'true') {
         setError('Tu sesión ha expirado, por favor ingresa de nuevo');
+        setUsername(null);
+        setLoadingSession(false);
+        localStorage.removeItem('mps_admin_last_activity');
+        fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+        try { auth.signOut(); } catch(e) {}
+        return;
       }
     }
 
@@ -36,11 +42,14 @@ export default function AdminPage() {
       .then(data => {
         if (data.username) {
           setUsername(data.username);
+        } else {
+          setUsername(null);
         }
         setLoadingSession(false);
       })
       .catch(err => {
         console.error("Error al obtener sesión:", err);
+        setUsername(null);
         setLoadingSession(false);
       });
   }, []);
@@ -93,11 +102,12 @@ export default function AdminPage() {
     try {
       await auth.signOut();
     } catch(e) { console.error("Firebase logout error", e); }
+    localStorage.removeItem('mps_admin_last_activity');
     await fetch('/api/auth/logout', { method: 'POST' });
     setUsername(null);
     setLoginUsername('');
     setLoginPassword('');
-    router.refresh();
+    window.location.replace('/admin');
   };
 
   if (loadingSession) {

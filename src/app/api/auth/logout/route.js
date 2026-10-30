@@ -10,12 +10,13 @@ export async function POST() {
     value: '',
     httpOnly: true,
     expires: new Date(0),
+    maxAge: 0,
     path: '/'
   });
 
   // Limpiar rastros de las cookies antiguas si existen
-  response.cookies.set({ name: 'admin_session', value: '', expires: new Date(0), path: '/' });
-  response.cookies.set({ name: 'admin_username', value: '', expires: new Date(0), path: '/' });
+  response.cookies.set({ name: 'admin_session', value: '', expires: new Date(0), maxAge: 0, path: '/' });
+  response.cookies.set({ name: 'admin_username', value: '', expires: new Date(0), maxAge: 0, path: '/' });
   
   return response;
 }
