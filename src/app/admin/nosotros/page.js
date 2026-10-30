@@ -31,9 +31,17 @@ export default function ProfesoresPage() {
   const getTeacherName = (t) => {
     if (t.name && t.name.trim()) return t.name.trim();
     if (t.email === 'lpineda@escuelamps.com' || t.username === 'lpineda') return 'Laura Pineda';
-    if (t.email === 'william@escuelamps.com' || t.username === 'william') return 'William Cuartas';
+    if (t.email === 'william@escuelamps.com' || t.username === 'william') return 'William Buitrago';
     if (t.username) return t.username;
     return 'Profesor';
+  };
+
+  const getTeacherSubjects = (t) => {
+    if (t.subjects && t.subjects.length > 0) return t.subjects;
+    const subs = [t.subject1, t.subject2].filter(Boolean);
+    if (subs.length > 0) return subs;
+    if (t.username === 'william' || t.email === 'william@escuelamps.com') return ['Canto'];
+    return [];
   };
 
   useEffect(() => {
@@ -81,8 +89,9 @@ export default function ProfesoresPage() {
     
     setDocumentId(teacher.documentId || '');
     setBirthDate(teacher.birthDate || '');
-    setSubject1(teacher.subject1 || teacher.subjects?.[0] || '');
-    setSubject2(teacher.subject2 || teacher.subjects?.[1] || '');
+    const subjects = getTeacherSubjects(teacher);
+    setSubject1(teacher.subject1 || subjects[0] || '');
+    setSubject2(teacher.subject2 || subjects[1] || '');
     
     setPassword(''); // Don't fetch password, it's secure
     setHourlyRate(teacher.hourlyRate !== undefined && teacher.hourlyRate !== null ? String(teacher.hourlyRate) : '');
@@ -279,9 +288,9 @@ export default function ProfesoresPage() {
                       <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.3rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}><FileText size={12}/> CC: {teacher.documentId}</p>
                     )}
                     
-                    {((teacher.subjects && teacher.subjects.length > 0) ? teacher.subjects : [teacher.subject1, teacher.subject2].filter(Boolean)).length > 0 && (
+                    {getTeacherSubjects(teacher).length > 0 && (
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                        {((teacher.subjects && teacher.subjects.length > 0) ? teacher.subjects : [teacher.subject1, teacher.subject2].filter(Boolean)).map((sub, idx) => (
+                        {getTeacherSubjects(teacher).map((sub, idx) => (
                           <span key={idx} style={{ background: 'rgba(0,222,133,0.1)', color: '#00DE85', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>{sub}</span>
                         ))}
                       </div>
