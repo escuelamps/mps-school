@@ -58,8 +58,8 @@ export default function AdminClassroomPage() {
             <ArrowLeft size={24} color="#00DE85" />
           </button>
           <div>
-            <h1 className="admin-title">Google Classroom (Procesos)</h1>
-            <p className="admin-subtitle">Aulas virtuales, tareas asignadas y códigos de acceso</p>
+            <h1 className="admin-title">Clases MPS (Procesos)</h1>
+            <p className="admin-subtitle">Aulas de clase, tareas asignadas y códigos de acceso</p>
           </div>
         </div>
 
@@ -139,7 +139,7 @@ export default function AdminClassroomPage() {
         {loading ? (
           <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
             <Loader2 size={36} className="animate-spin" style={{ margin: '0 auto 1rem' }} />
-            <p>Conectando con Google Classroom...</p>
+            <p>Cargando clases y procesos...</p>
           </div>
         ) : filteredCourses.length === 0 ? (
           <div style={{ padding: '3rem', textAlign: 'center', background: 'var(--panel-bg)', borderRadius: '12px', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)' }}>

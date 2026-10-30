@@ -156,7 +156,7 @@ export default function StudentPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
               <Book size={28} color="#00DE85" />
               <div>
-                <h3 style={{ fontSize: '1.4rem', margin: 0, color: 'var(--text-primary)' }}>Mis Procesos y Tareas (Google Classroom)</h3>
+                <h3 style={{ fontSize: '1.4rem', margin: 0, color: 'var(--text-primary)' }}>Mis Procesos y Tareas (Clases MPS)</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: 0 }}>Seguimiento académico y actividades de tus clases</p>
               </div>
             </div>
@@ -179,7 +179,7 @@ export default function StudentPage() {
                 gap: '0.4rem'
               }}
             >
-              Abrir Google Classroom <ExternalLink size={14} />
+              Abrir Classroom Oficial <ExternalLink size={14} />
             </a>
           </div>
 

@@ -280,8 +280,8 @@ export default function AdminPage() {
               <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <ClipboardCheck size={32} />
               </div>
-              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Planillas y Aulas</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Registro de planillas docentes, firmas y Google Classroom de procesos.</p>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Planillas y Clases MPS</h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Registro de planillas docentes, firmas y seguimiento de Clases MPS.</p>
             </div>
           </>
         )}
@@ -605,7 +605,7 @@ export default function AdminPage() {
                 onMouseOut={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <BookOpen size={20} color="#a855f7" /> Google Classroom (Procesos)
+                  <BookOpen size={20} color="#a855f7" /> Clases MPS (Procesos)
                 </span>
                 <ArrowRight size={16} color="#a855f7" />
               </div>
