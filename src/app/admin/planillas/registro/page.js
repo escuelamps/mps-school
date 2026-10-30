@@ -285,10 +285,6 @@ export default function RegistroPlanillaPage() {
       setErrorMsg('Por favor selecciona la asignatura o instrumento.');
       return;
     }
-    if (!contenido.trim()) {
-      setErrorMsg('Por favor escribe el contenido pedagógico de la clase.');
-      return;
-    }
     if (!hasSignature) {
       setErrorMsg('La firma digital del estudiante o acudiente es obligatoria.');
       return;
@@ -305,7 +301,7 @@ export default function RegistroPlanillaPage() {
         fecha,
         hora,
         instrumento: instrumento.trim(),
-        contenido: contenido.trim(),
+        contenido: contenido.trim() || `Clase de ${estudiante.trim()} con ${profesor.trim()}`,
         firma: firmaUrl,
         createdAt: new Date().toISOString()
       });
@@ -558,22 +554,21 @@ export default function RegistroPlanillaPage() {
             </div>
           </div>
 
-          {/* Fila 3: Contenido Pedagógico */}
+          {/* Fila 3: Contenido Pedagógico (Opcional como en Google Form) */}
           <div>
             <label style={labelStyle}>
-              <FileText size={16} /> Contenido Pedagógico / Temas vistos *
+              <FileText size={16} /> Contenido Pedagógico / Observaciones (Opcional)
             </label>
             <textarea
               rows={4}
               value={contenido}
               onChange={(e) => setContenido(e.target.value)}
-              placeholder="Describe las obras, escalas, técnicas, repertorio y observaciones vistas durante la sesión..."
+              placeholder="Obras, escalas, técnicas o notas de la sesión (opcional)..."
               style={{
                 ...inputStyle,
                 resize: 'vertical',
                 lineHeight: 1.5
               }}
-              required
             />
           </div>
 
