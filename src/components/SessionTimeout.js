@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
-const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
 export default function SessionTimeout() {
   useEffect(() => {

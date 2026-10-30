@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 
-const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutos de inactividad
+const INACTIVITY_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutos de inactividad
 
 export default function AdminInactivityProvider({ children }) {
   const router = useRouter();
