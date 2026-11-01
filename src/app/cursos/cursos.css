@@ -4,7 +4,7 @@
 
 .cj-page-container {
   min-height: 100vh;
-  background-color: var(--rich-black, #000F11);
+  background-color: var(--bg-primary, #000F11);
   color: var(--text-primary, #F1F7F6);
   font-family: inherit;
   overflow-x: hidden;
@@ -16,7 +16,7 @@
   padding: 6rem 5% 5rem;
   background: radial-gradient(circle at 50% 20%, rgba(0, 222, 133, 0.08) 0%, transparent 60%),
               radial-gradient(circle at 90% 80%, rgba(9, 98, 76, 0.1) 0%, transparent 50%),
-              var(--rich-black, #000F11);
+              var(--bg-primary, #000F11);
   border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
   text-align: center;
 }
@@ -708,4 +708,221 @@
   max-width: 640px;
   margin: 0 auto 2.5rem;
   line-height: 1.7;
+}
+
+/* ==========================================================================
+   ADAPTACIÓN MODO CLARO (/CURSOS)
+   ========================================================================== */
+:root[data-theme='light'] .cj-page-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-hero-section {
+  background: radial-gradient(circle at 50% 20%, rgba(0, 222, 133, 0.12) 0%, transparent 60%),
+              radial-gradient(circle at 90% 80%, rgba(9, 98, 76, 0.08) 0%, transparent 50%),
+              var(--bg-primary);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+:root[data-theme='light'] .cj-hero-title {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-hero-title .highlight-gold {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:root[data-theme='light'] .cj-hero-subtitle {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-pill-badge {
+  background: rgba(0, 222, 133, 0.15);
+  border-color: rgba(9, 98, 76, 0.3);
+  color: #09624C;
+}
+
+:root[data-theme='light'] .cj-btn-secondary {
+  background: #ffffff;
+  color: var(--text-primary);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .cj-btn-secondary:hover {
+  background: rgba(0, 222, 133, 0.1);
+  border-color: #00DE85;
+  color: #09624C;
+}
+
+:root[data-theme='light'] .cj-stats-bar {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .cj-stat-number {
+  color: #09624C;
+}
+
+:root[data-theme='light'] .cj-stat-label {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-section-title {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-section-desc {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-spotlight-tab {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-spotlight-tab.active {
+  background: #00DE85;
+  color: #000F11;
+  border-color: #00DE85;
+}
+
+:root[data-theme='light'] .cj-spotlight-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+}
+
+:root[data-theme='light'] .cj-spotlight-name {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-spotlight-summary {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-spotlight-highlight-item {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-spotlight-badge {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-filter-btn {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-filter-btn:hover {
+  border-color: #00DE85;
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-filter-btn.active {
+  background: rgba(0, 222, 133, 0.2);
+  border-color: #00DE85;
+  color: #09624C;
+}
+
+:root[data-theme='light'] .cj-course-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme='light'] .cj-course-card:hover {
+  border-color: #00DE85;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='light'] .cj-course-title {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-course-desc {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-course-skill-item {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-course-badge-tag {
+  background: rgba(255, 255, 255, 0.95);
+  color: #09624C;
+  border-color: rgba(0, 222, 133, 0.3);
+}
+
+:root[data-theme='light'] .cj-level-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+:root[data-theme='light'] .cj-level-card:hover {
+  background: #ffffff;
+  border-color: #00DE85;
+}
+
+:root[data-theme='light'] .cj-level-num {
+  color: rgba(0, 0, 0, 0.07);
+}
+
+:root[data-theme='light'] .cj-level-title {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-level-desc {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-authority-box {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .cj-pillar-item {
+  background: var(--bg-primary);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme='light'] .cj-pillar-desc {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-faq-item {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme='light'] .cj-faq-question {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-faq-answer {
+  color: var(--text-secondary);
+}
+
+:root[data-theme='light'] .cj-cta-box {
+  background: linear-gradient(135deg, rgba(0, 222, 133, 0.15) 0%, rgba(241, 247, 246, 1) 100%);
+  border-color: rgba(0, 222, 133, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .cj-cta-box-title {
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .cj-cta-box-desc {
+  color: var(--text-secondary);
 }

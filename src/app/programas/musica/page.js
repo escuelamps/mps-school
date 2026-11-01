@@ -8,7 +8,7 @@ export default function MusicaPage() {
   const [isContactOpen, setIsContactOpen] = useState(false);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--rich-black)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       <HeaderV3 />
 
       <section style={{ position: 'relative', height: '60vh', minHeight: '400px', display: 'flex', alignItems: 'center', padding: '0 5%' }}>

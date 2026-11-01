@@ -8,7 +8,7 @@ import HeaderV3 from '@/components/HeaderV3';
 const AccordionItem = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div style={{ border: '1px solid rgba(255,255,255,0.1)', marginBottom: '1rem', borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s ease' }}>
+    <div style={{ border: '1px solid var(--glass-border)', marginBottom: '1rem', borderRadius: '8px', overflow: 'hidden', transition: 'all 0.3s ease' }}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
         style={{ 
@@ -84,35 +84,36 @@ export default function QuienesSomosPage() {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2.5rem' }}>
       {listaDocentes.map((docente, i) => (
         <div key={i} style={{ 
-          background: 'rgba(255,255,255,0.02)', 
+          background: 'var(--panel-bg)', 
           borderRadius: '20px', 
           overflow: 'hidden', 
-          border: '1px solid rgba(255,255,255,0.05)', 
+          border: '1px solid var(--glass-border)', 
           transition: 'all 0.3s ease',
           display: 'flex',
           flexDirection: 'column',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
         }} 
         onClick={() => setSelectedDocente(docente)}
         onMouseOver={(e)=>{
           e.currentTarget.style.transform='translateY(-5px)';
-          e.currentTarget.style.boxShadow='0 10px 20px rgba(0,222,133,0.1)';
+          e.currentTarget.style.boxShadow='0 12px 24px rgba(0,222,133,0.15)';
         }} 
         onMouseOut={(e)=>{
           e.currentTarget.style.transform='translateY(0)';
-          e.currentTarget.style.boxShadow='none';
+          e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.05)';
         }}>
           <div style={{ position: 'relative', height: '250px' }}>
             <img src={docente.img} alt={docente.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: docente.imgPos || 'top center' }} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))' }}>
-              <span style={{ background: 'var(--accent)', color: 'black', padding: '0.3rem 0.8rem', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 700 }}>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '1rem', background: 'linear-gradient(transparent, rgba(0,0,0,0.85))' }}>
+              <span style={{ background: 'var(--accent)', color: '#000F11', padding: '0.3rem 0.8rem', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 700 }}>
                 {docente.especialidad}
               </span>
             </div>
           </div>
           <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.2rem' }}>{docente.nombre}</h3>
-            <h4 style={{ color: 'var(--accent)', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: 500 }}>{docente.rol}</h4>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.2rem', color: 'var(--text-primary)' }}>{docente.nombre}</h3>
+            <h4 style={{ color: 'var(--accent)', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: 600 }}>{docente.rol}</h4>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6, flex: 1 }}>{docente.desc}</p>
           </div>
         </div>
@@ -121,7 +122,7 @@ export default function QuienesSomosPage() {
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--rich-black)', paddingBottom: '4rem' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: 'var(--text-primary)', paddingBottom: '4rem' }}>
       <HeaderV3 />
 
       {/* HERO QUIÉNES SOMOS */}
@@ -191,15 +192,15 @@ export default function QuienesSomosPage() {
                   {selectedDocente.especialidad}
                 </span>
                 
-                <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem', color: 'white' }}>{selectedDocente.nombre}</h2>
-                <h3 style={{ fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 500, marginBottom: '2rem' }}>{selectedDocente.rol}</h3>
+                <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem', color: 'var(--text-primary)' }}>{selectedDocente.nombre}</h2>
+                <h3 style={{ fontSize: '1.1rem', color: 'var(--accent)', fontWeight: 600, marginBottom: '2rem' }}>{selectedDocente.rol}</h3>
                 
-                <h4 style={{ color: 'white', fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>Perfil Profesional</h4>
+                <h4 style={{ color: 'var(--text-primary)', fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>Perfil Profesional</h4>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, marginBottom: '2rem' }}>
                   {selectedDocente.bio}
                 </p>
 
-                <h4 style={{ color: 'white', fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>Resumen</h4>
+                <h4 style={{ color: 'var(--text-primary)', fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>Resumen</h4>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7 }}>
                   {selectedDocente.desc}
                 </p>
