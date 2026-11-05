@@ -1,0 +1,650 @@
+/* ==========================================================================
+   CHECKOUT MPS - ESTILO HOTMART (HIGH CONVERTING 2-COLUMN FLOW)
+   ========================================================================== */
+
+.hotmart-checkout-wrapper {
+  min-height: 100vh;
+  background-color: var(--bg-primary, #000F11);
+  color: var(--text-primary, #F1F7F6);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding-bottom: 5rem;
+}
+
+/* TOP HEADER DE SEGURIDAD */
+.checkout-top-header {
+  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  background: var(--bg-secondary, #032221);
+  padding: 1rem 5%;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(10px);
+}
+
+.checkout-header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+
+.checkout-logo-img {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+}
+
+.checkout-security-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 222, 133, 0.08);
+  border: 1px solid rgba(0, 222, 133, 0.25);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent, #00DE85);
+}
+
+/* LAYOUT PRINCIPAL (2 COLUMNAS) */
+.checkout-main-grid {
+  max-width: 1180px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* COLUMNA IZQUIERDA: FORMULARIO */
+.checkout-form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.checkout-card {
+  background: var(--bg-secondary, #032221);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.2s ease;
+}
+
+.checkout-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
+}
+
+.checkout-step-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent, #00DE85);
+  color: #000F11;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.checkout-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary, #ffffff);
+}
+
+/* INPUTS Y CAMPOS */
+.checkout-input-group {
+  margin-bottom: 1.2rem;
+}
+
+.checkout-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.78));
+  margin-bottom: 0.45rem;
+}
+
+.checkout-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--bg-primary, #000F11);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  color: var(--text-primary, #ffffff);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.checkout-input:focus {
+  border-color: var(--accent, #00DE85);
+  box-shadow: 0 0 0 3px rgba(0, 222, 133, 0.15);
+}
+
+.checkout-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* PESTAÑAS DE METODO DE PAGO */
+.payment-tabs-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.6rem;
+}
+
+.payment-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1rem 0.8rem;
+  border-radius: 12px;
+  border: 2px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  background: var(--bg-primary, #000F11);
+  color: var(--text-primary, #ffffff);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.payment-tab-btn:hover {
+  border-color: rgba(0, 222, 133, 0.4);
+}
+
+.payment-tab-btn.active {
+  border-color: var(--accent, #00DE85);
+  background: rgba(0, 222, 133, 0.08);
+}
+
+.payment-tab-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.payment-tab-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+}
+
+/* DETALLE DE PAGO MERCADO PAGO */
+.mp-payment-box {
+  background: rgba(0, 158, 227, 0.04);
+  border: 1px solid rgba(0, 158, 227, 0.2);
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.mp-brand-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.mp-suboptions {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.mp-suboption-pill {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  background: var(--bg-primary, #000F11);
+  color: var(--text-primary, #ffffff);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.mp-suboption-pill.active {
+  border-color: #009ee3;
+  background: rgba(0, 158, 227, 0.15);
+  color: #38bdf8;
+}
+
+/* DETALLE DE PAGO NEQUI / BRE-B */
+.nequi-payment-box {
+  background: rgba(218, 0, 129, 0.04);
+  border: 1px solid rgba(218, 0, 129, 0.25);
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.nequi-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-primary, #000F11);
+  border: 1px dashed rgba(218, 0, 129, 0.4);
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+}
+
+.nequi-key-value {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f43f5e;
+  letter-spacing: 0.5px;
+}
+
+.copy-pill-btn {
+  background: rgba(218, 0, 129, 0.15);
+  border: 1px solid rgba(218, 0, 129, 0.35);
+  color: #fb7185;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.copy-pill-btn:hover {
+  background: rgba(218, 0, 129, 0.28);
+  transform: translateY(-1px);
+}
+
+.copy-pill-btn.copied {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+/* ORDER BUMP (CASILLA ESTILO HOTMART) */
+.checkout-order-bump {
+  background: linear-gradient(135deg, rgba(255, 174, 52, 0.08) 0%, rgba(255, 226, 159, 0.02) 100%);
+  border: 1.5px dashed #ffa41b;
+  border-radius: 14px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkout-order-bump:hover {
+  background: rgba(255, 174, 52, 0.12);
+}
+
+.order-bump-checkbox {
+  width: 22px;
+  height: 22px;
+  margin-top: 0.2rem;
+  cursor: pointer;
+  accent-color: #ffa41b;
+}
+
+.order-bump-content {
+  flex: 1;
+}
+
+.order-bump-tag {
+  display: inline-block;
+  background: #ffa41b;
+  color: #000F11;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.5px;
+}
+
+.order-bump-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary, #ffffff);
+  margin-bottom: 0.25rem;
+}
+
+.order-bump-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.75));
+  line-height: 1.4;
+}
+
+.order-bump-price {
+  font-weight: 800;
+  color: #ffa41b;
+  font-size: 0.95rem;
+}
+
+/* CTA BUTTON PRINCIPAL */
+.checkout-cta-btn {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 12px;
+  background: var(--accent, #00DE85);
+  color: #000F11;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  box-shadow: 0 10px 25px rgba(0, 222, 133, 0.3);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-transform: uppercase;
+}
+
+.checkout-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 222, 133, 0.42);
+  filter: brightness(1.05);
+}
+
+.checkout-cta-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* SELLOS DE CONFIANZA INFERIORES */
+.checkout-trust-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.8rem;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.65));
+}
+
+/* COLUMNA DERECHA: RESUMEN DE LA ORDEN (STICKY) */
+.checkout-summary-column {
+  position: sticky;
+  top: 5rem;
+}
+
+.summary-card {
+  background: var(--bg-secondary, #032221);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  border-radius: 16px;
+  padding: 1.8rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.summary-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1.2rem 0;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.summary-product-box {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.summary-product-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+}
+
+.summary-product-info {
+  flex: 1;
+}
+
+.summary-product-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent, #00DE85);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.summary-product-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary, #ffffff);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.summary-product-badge {
+  font-size: 0.78rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+}
+
+.summary-course-select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--bg-primary, #000F11);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  color: var(--text-primary, #ffffff);
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.4rem;
+  outline: none;
+}
+
+.summary-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.summary-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.78));
+  line-height: 1.4;
+}
+
+/* DESGLOSE DE PRECIO */
+.summary-price-breakdown {
+  border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  padding-top: 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.75));
+}
+
+.price-row.discount {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.price-row.total {
+  border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  padding-top: 0.9rem;
+  margin-top: 0.3rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary, #ffffff);
+}
+
+.price-total-number {
+  color: var(--accent, #00DE85);
+  font-size: 1.4rem;
+}
+
+/* GARANTIA Y SOPORTE WHATSAPP */
+.summary-guarantee-box {
+  background: rgba(0, 222, 133, 0.04);
+  border: 1px solid rgba(0, 222, 133, 0.15);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.guarantee-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.8));
+  line-height: 1.35;
+}
+
+.summary-support-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+  background: var(--bg-primary, #000F11);
+  color: var(--text-primary, #ffffff);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.summary-support-link:hover {
+  border-color: #25d366;
+  color: #25d366;
+}
+
+/* RESPONSIVE BREAKPOINT */
+@media (max-width: 960px) {
+  .checkout-main-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .checkout-summary-column {
+    position: static;
+    order: -1; /* Muestra el resumen primero en mobile estilo Hotmart */
+  }
+
+  .checkout-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   ADAPTACION MODO CLARO
+   ========================================================================== */
+:root[data-theme='light'] .hotmart-checkout-wrapper {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:root[data-theme='light'] .checkout-top-header {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme='light'] .checkout-card,
+:root[data-theme='light'] .summary-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+:root[data-theme='light'] .checkout-input,
+:root[data-theme='light'] .summary-course-select,
+:root[data-theme='light'] .summary-support-link {
+  background: #F8FAFC;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #0F172A;
+}
+
+:root[data-theme='light'] .payment-tab-btn {
+  background: #F8FAFC;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0F172A;
+}
+
+:root[data-theme='light'] .payment-tab-btn.active {
+  background: rgba(9, 98, 76, 0.08);
+  border-color: #09624C;
+}
+
+:root[data-theme='light'] .nequi-key-row {
+  background: #FFF1F2;
+  border-color: rgba(218, 0, 129, 0.3);
+}
+
+:root[data-theme='light'] .checkout-cta-btn {
+  background: #09624C;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(9, 98, 76, 0.25);
+}
+
+:root[data-theme='light'] .price-total-number {
+  color: #09624C;
+}
