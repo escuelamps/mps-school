@@ -1,5 +1,7 @@
 package com.escuelamps.app
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +41,7 @@ fun HomeScreen(
     onOpenNewPlanilla: () -> Unit = {},
     onOpenClasesMps: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val currentUser = auth.currentUser
@@ -165,6 +169,17 @@ fun HomeScreen(
                         onClick = {
                             scope.launch { drawerState.close() }
                             onOpenAccounting()
+                        }
+                    )
+
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Payment, contentDescription = null, tint = Color(0xFF00DE85)) },
+                        label = { Text("Pagar Matrícula o Mensualidad") },
+                        selected = false,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://escuelamps.com/checkout"))
+                            context.startActivity(intent)
                         }
                     )
 
@@ -445,6 +460,19 @@ fun HomeScreen(
                 icon = Icons.Filled.PointOfSale,
                 iconColor = Color(0xFF8B5CF6),
                 onClick = onOpenAccounting
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            DashboardCard(
+                title = "Pagar Matrícula o Mensualidad",
+                description = "Checkout seguro con Mercado Pago (Tarjetas, PSE) o Nequi / Bre-B.",
+                icon = Icons.Filled.Payment,
+                iconColor = Color(0xFF00DE85),
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://escuelamps.com/checkout"))
+                    context.startActivity(intent)
+                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
