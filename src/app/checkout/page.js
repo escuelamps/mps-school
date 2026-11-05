@@ -30,131 +30,91 @@ const COURSES_CATALOG = {
     id: 'canto',
     title: 'Técnica Vocal y Canto',
     category: 'Música • Voz',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80',
-    features: [
-      'Clases prácticas con técnica diafragmática y afinación',
-      'Acceso a cabinas insonorizadas y repertorio libre',
-      'Participación en recital semestral en vivo'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80'
   },
   piano: {
     id: 'piano',
     title: 'Piano y Teclados',
     category: 'Música • Teclados',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1520523839898-507127050587?w=600&q=80',
-    features: [
-      'Lectura de partituras, digitación y armonía moderna',
-      'Pianos acústicos y teclados sensibles al tacto',
-      'Ensamble grupal y recital semestral'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1520523839898-507127050587?w=600&q=80'
   },
   guitarra: {
     id: 'guitarra',
     title: 'Guitarra (Acústica y Eléctrica)',
     category: 'Música • Cuerdas',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&q=80',
-    features: [
-      'Ritmos, acordes, escalas y técnica con plectro o dedos',
-      'Amplificadores profesionales y pedales de efectos',
-      'Recital semestral en vivo'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=600&q=80'
   },
   bateria: {
     id: 'bateria',
     title: 'Batería, Percusión y Marimba',
     category: 'Música • Percusión',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=600&q=80',
-    features: [
-      'Independencia de extremidades, tempo y grooves',
-      'Baterías acústicas profesionales insonorizadas',
-      'Ensamble con otros instrumentos y recital'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=600&q=80'
   },
   bajo: {
     id: 'bajo',
     title: 'Bajo Eléctrico',
     category: 'Música • Cuerdas Graves',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1550985616-10810253b84d?w=600&q=80',
-    features: [
-      'Técnica de dedo, slap, muting y walking bass',
-      'Conexión métrica con la percusión',
-      'Recital semestral en vivo'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1550985616-10810253b84d?w=600&q=80'
   },
   violin: {
     id: 'violin',
     title: 'Violín y Cuerdas Clásicas',
     category: 'Música • Cuerdas Frotadas',
-    price: 230000,
-    originalPrice: 250000,
-    image: 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=600&q=80',
-    features: [
-      'Técnica del arco, postura ergonómica y afinación fina',
-      'Lectura de partituras y repertorio clásico y moderno',
-      'Recital semestral en vivo'
-    ]
+    groupPrice: 230000,
+    individualPrice: 320000,
+    originalGroup: 250000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=600&q=80'
   },
   produccion: {
     id: 'produccion',
     title: 'Producción Musical y Mezcla',
     category: 'Tecnología Sonora',
-    price: 280000,
-    originalPrice: 300000,
-    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80',
-    features: [
-      'Ableton Live, Logic Pro o FL Studio en estudios equipados',
-      'Síntesis analógica, mezcla y masterización para streaming',
-      'Entrega de proyecto musical terminado'
-    ]
+    groupPrice: 280000,
+    individualPrice: 360000,
+    originalGroup: 300000,
+    originalIndividual: 400000,
+    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80'
   },
   actuacion: {
     id: 'actuacion',
     title: 'Actuación y Expresión Escénica',
     category: 'Artes Escénicas',
-    price: 240000,
-    originalPrice: 260000,
-    image: 'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80',
-    features: [
-      'Expresión corporal, dicción y voz frente a cámara',
-      'Construcción de personajes y monólogos',
-      'Muestra escénica final'
-    ]
+    groupPrice: 240000,
+    individualPrice: 320000,
+    originalGroup: 260000,
+    originalIndividual: 350000,
+    image: 'https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80'
   },
   matricula: {
     id: 'matricula',
     title: 'Matrícula Anual Institucional',
     category: 'Registro Oficial MPS',
-    price: 120000,
-    originalPrice: 150000,
-    image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
-    features: [
-      'Habilitación de carné institucional y código de estudiante',
-      'Acceso a reservas de salas de ensayo',
-      'Descuentos en masterclasses y talleres exclusivos'
-    ]
-  },
-  personalizado: {
-    id: 'personalizado',
-    title: 'Clases 1 a 1 Personalizadas (Mensual)',
-    category: 'Formación VIP',
-    price: 320000,
-    originalPrice: 350000,
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    features: [
-      'Atención 100% individual y horario preferencial',
-      'Plan de estudio adaptado a tu velocidad y objetivos',
-      'Grabación de audio de tus sesiones de avance'
-    ]
+    groupPrice: 120000,
+    individualPrice: 120000,
+    originalGroup: 150000,
+    originalIndividual: 150000,
+    image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80'
   }
 };
 
@@ -208,6 +168,7 @@ function CheckoutContent() {
 
   // Selección de producto
   const [selectedCourseKey, setSelectedCourseKey] = useState('canto');
+  const [modality, setModality] = useState('grupal'); // 'grupal' | 'individual'
   const [customAmount, setCustomAmount] = useState(null);
   const [customTitle, setCustomTitle] = useState(null);
 
@@ -249,10 +210,15 @@ function CheckoutContent() {
     const typeParam = searchParams.get('type');
     const amountParam = searchParams.get('amount');
     const titleParam = searchParams.get('title');
+    const modalityParam = searchParams.get('modality') || searchParams.get('m');
 
     const key = courseParam || programParam || typeParam;
     if (key && COURSES_CATALOG[key.toLowerCase()]) {
       setSelectedCourseKey(key.toLowerCase());
+    }
+
+    if (modalityParam === 'individual' || modalityParam === '1a1' || modalityParam === 'personalizado') {
+      setModality('individual');
     }
 
     if (amountParam && !isNaN(Number(amountParam))) {
@@ -264,10 +230,33 @@ function CheckoutContent() {
   }, [searchParams]);
 
   const activeProduct = COURSES_CATALOG[selectedCourseKey] || COURSES_CATALOG.canto;
-  const basePrice = customAmount !== null ? customAmount : activeProduct.price;
-  const productTitle = customTitle || activeProduct.title;
-  const discountAmount = customAmount !== null ? 0 : (activeProduct.originalPrice - activeProduct.price);
+  const isMatricula = selectedCourseKey === 'matricula';
+  const currentPrice = isMatricula ? activeProduct.groupPrice : (modality === 'individual' ? activeProduct.individualPrice : activeProduct.groupPrice);
+  const currentOriginal = isMatricula ? activeProduct.originalGroup : (modality === 'individual' ? activeProduct.originalIndividual : activeProduct.originalGroup);
+  const basePrice = customAmount !== null ? customAmount : currentPrice;
+  const modalityText = isMatricula ? '' : (modality === 'individual' ? ' (Clase Individual 1 a 1)' : ' (Clase Grupal)');
+  const productTitle = (customTitle || activeProduct.title) + modalityText;
+  const discountAmount = customAmount !== null ? 0 : (currentOriginal - currentPrice);
   const totalPrice = basePrice + (includeKit ? KIT_PRICE : 0);
+
+  const productFeatures = isMatricula 
+    ? [
+        'Habilitación de carné institucional y código estudiantil',
+        'Acceso para reservar salas de ensayo insonorizadas',
+        'Descuentos en masterclasses y talleres exclusivos'
+      ]
+    : (modality === 'individual'
+        ? [
+            'Clases 1 a 1 personalizadas con docente exclusivo',
+            'Horario preferencial y avance a tu propio ritmo',
+            'Salas insonorizadas equipadas y recital semestral en vivo'
+          ]
+        : [
+            'Metodología práctica en grupos reducidos (máx 5 alumnos)',
+            'Ensambles musicales y dinámicas colaborativas',
+            'Salas insonorizadas equipadas y recital semestral en vivo'
+          ]
+      );
 
   // Formato de moneda COP
   const formatCOP = (val) => {
@@ -347,6 +336,7 @@ function CheckoutContent() {
           id: selectedCourseKey,
           titulo: productTitle,
           categoria: activeProduct.category,
+          modalidad: isMatricula ? 'institucional' : modality,
           precioBase: basePrice,
           kitIncluido: includeKit,
           precioKit: includeKit ? KIT_PRICE : 0,
@@ -987,7 +977,7 @@ function CheckoutContent() {
             {/* SELECTOR PARA CAMBIAR DE CURSO */}
             {customAmount === null && (
               <div>
-                <label className="checkout-label" style={{ fontSize: '0.8rem' }}>Cambiar de curso o programa:</label>
+                <label className="checkout-label" style={{ fontSize: '0.8rem' }}>Curso o programa:</label>
                 <select 
                   className="summary-course-select"
                   value={selectedCourseKey}
@@ -995,16 +985,76 @@ function CheckoutContent() {
                 >
                   {Object.entries(COURSES_CATALOG).map(([key, item]) => (
                     <option key={key} value={key}>
-                      {item.title} — {formatCOP(item.price)}
+                      {item.title}
                     </option>
                   ))}
                 </select>
               </div>
             )}
 
+            {/* SELECTOR CLASES GRUPALES VS INDIVIDUALES */}
+            {!isMatricula && customAmount === null && (
+              <div style={{ marginBottom: '1.2rem' }}>
+                <label className="checkout-label" style={{ fontSize: '0.8rem', marginBottom: '0.4rem' }}>
+                  Tipo de Clase:
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setModality('grupal')}
+                    style={{
+                      padding: '0.75rem 0.5rem',
+                      borderRadius: '10px',
+                      border: modality === 'grupal' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                      background: modality === 'grupal' ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                      color: modality === 'grupal' ? 'var(--accent)' : 'var(--text-primary)',
+                      fontWeight: 700,
+                      fontSize: '0.84rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.2rem',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>👥 Clases Grupales</span>
+                    <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
+                      {formatCOP(activeProduct.groupPrice)}/mes
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setModality('individual')}
+                    style={{
+                      padding: '0.75rem 0.5rem',
+                      borderRadius: '10px',
+                      border: modality === 'individual' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                      background: modality === 'individual' ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                      color: modality === 'individual' ? 'var(--accent)' : 'var(--text-primary)',
+                      fontWeight: 700,
+                      fontSize: '0.84rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '0.2rem',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>👤 Clases Individuales</span>
+                    <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
+                      {formatCOP(activeProduct.individualPrice)}/mes
+                    </span>
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* BENEFICIOS INCLUIDOS */}
             <ul className="summary-benefits-list">
-              {activeProduct.features.map((feat, i) => (
+              {productFeatures.map((feat, i) => (
                 <li key={i} className="summary-benefit-item">
                   <CheckCircle2 size={16} color="var(--accent)" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <span>{feat}</span>
@@ -1023,7 +1073,7 @@ function CheckoutContent() {
               <div className="price-row">
                 <span>Precio oficial:</span>
                 <span style={{ textDecoration: discountAmount > 0 ? 'line-through' : 'none' }}>
-                  {formatCOP(activeProduct.originalPrice || basePrice)}
+                  {formatCOP(currentOriginal || basePrice)}
                 </span>
               </div>
 
