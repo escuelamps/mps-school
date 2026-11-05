@@ -17,7 +17,8 @@ import {
   QrCode,
   Building2,
   FileCheck2,
-  AlertCircle
+  AlertCircle,
+  Search
 } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -157,22 +158,42 @@ const COURSES_CATALOG = {
   }
 };
 
-// BANCOS PARA PSE EN COLOMBIA
+// BANCOS Y ENTIDADES FINANCIERAS PARA PSE EN COLOMBIA (COMPLETO)
 const COLOMBIAN_BANKS = [
   'Bancolombia',
   'Nequi',
-  'Davivienda',
+  'Banco Davivienda',
   'Daviplata',
   'Banco de Bogotá',
   'BBVA Colombia',
+  'Banco Caja Social',
+  'Banco Falabella',
   'Banco de Occidente',
-  'Scotiabank Colpatria',
+  'Banco Agrario de Colombia',
+  'Banco Itaú Colombia',
   'Banco Popular',
   'Banco AV Villas',
+  'Banco Santander Colombia',
+  'Banco Pichincha',
+  'Banco GNB Sudameris',
+  'Banco Serfinanza',
+  'Bancoomeva',
+  'Banco Coopcentral',
+  'Bancamía',
+  'Banco W',
+  'Banco Unión',
   'Lulo Bank',
   'Nu Colombia (Nubank)',
   'RappiPay',
-  'Ualá'
+  'Dale! (Grupo Aval)',
+  'Ualá Colombia',
+  'Movii',
+  'Iris (Financiera Dann Regional)',
+  'Confiar Cooperativa Financiera',
+  'Cotrafa Cooperativa Financiera',
+  'Coofisam',
+  'Financiera Juriscoop',
+  'Coofinep Cooperativa Financiera'
 ];
 
 function CheckoutContent() {
@@ -205,6 +226,11 @@ function CheckoutContent() {
   const [cardCvc, setCardCvc] = useState('');
   const [installments, setInstallments] = useState('1');
   const [pseBank, setPseBank] = useState('Bancolombia');
+  const [bankSearch, setBankSearch] = useState('');
+
+  const filteredBanks = COLOMBIAN_BANKS.filter(b => 
+    b.toLowerCase().includes(bankSearch.toLowerCase())
+  );
 
   // Nequi estados
   const [copiedKey, setCopiedKey] = useState(false);
@@ -762,16 +788,39 @@ function CheckoutContent() {
                   {mpSubtype === 'pse' && (
                     <div>
                       <div className="checkout-input-group">
-                        <label className="checkout-label">Selecciona tu Banco (PSE)</label>
+                        <label className="checkout-label">Selecciona tu Banco o Entidad Financiera (PSE)</label>
+                        
+                        {/* Buscador de banco en tiempo real */}
+                        <div style={{ position: 'relative', marginBottom: '0.6rem' }}>
+                          <input 
+                            type="text"
+                            placeholder="Buscar banco (ej. RappiPay, Bancolombia, Davivienda...)"
+                            className="checkout-input"
+                            value={bankSearch}
+                            onChange={(e) => setBankSearch(e.target.value)}
+                            style={{ paddingLeft: '2.5rem' }}
+                          />
+                          <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }} />
+                        </div>
+
                         <select 
                           className="checkout-input"
                           value={pseBank}
                           onChange={(e) => setPseBank(e.target.value)}
                         >
-                          {COLOMBIAN_BANKS.map((b) => (
-                            <option key={b} value={b}>{b}</option>
-                          ))}
+                          {filteredBanks.length > 0 ? (
+                            filteredBanks.map((b) => (
+                              <option key={b} value={b}>{b}</option>
+                            ))
+                          ) : (
+                            <option value="" disabled>No se encontró ningún banco con "{bankSearch}"</option>
+                          )}
                         </select>
+                        {filteredBanks.length === 0 && (
+                          <span style={{ fontSize: '0.78rem', color: '#ef4444', marginTop: '0.3rem', display: 'block' }}>
+                            No encontramos "{bankSearch}". Revisa la ortografía o limpia el buscador para ver todas las entidades.
+                          </span>
+                        )}
                       </div>
                       <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: '0.5rem' }}>
                         Al pulsar <strong>Pagar con Mercado Pago</strong> serás redirigido de forma cifrada a la plataforma de PSE para autorizar la transacción en tu banco.
