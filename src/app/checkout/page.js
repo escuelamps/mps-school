@@ -350,6 +350,30 @@ function CheckoutContent() {
         createdAt: serverTimestamp()
       });
 
+      // Si es Mercado Pago, intentar generar link oficial de pago / PSE
+      if (paymentMethod === 'mercadopago') {
+        try {
+          const resPref = await fetch('/api/checkout/preference', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: productTitle,
+              price: totalPrice,
+              email: email.trim().toLowerCase(),
+              studentName: nombre.trim(),
+              orderId: docRef.id
+            })
+          });
+          const prefData = await resPref.json();
+          if (prefData.init_point) {
+            window.location.href = prefData.init_point;
+            return;
+          }
+        } catch (mpErr) {
+          console.error('Error invocando preferencia MP:', mpErr);
+        }
+      }
+
       setSuccessOrder({
         id: docRef.id,
         ...orderData
@@ -612,7 +636,7 @@ function CheckoutContent() {
                   className={`payment-tab-btn ${paymentMethod === 'nequi' ? 'active' : ''}`}
                   onClick={() => setPaymentMethod('nequi')}
                 >
-                  <Smartphone size={24} color={paymentMethod === 'nequi' ? '#da0081' : 'currentColor'} />
+                  <Smartphone size={24} color={paymentMethod === 'nequi' ? 'var(--accent)' : 'currentColor'} />
                   <span className="payment-tab-title">Nequi / Bre-B</span>
                   <span className="payment-tab-subtitle">Transferencia Directa @MIPRIMERSOL</span>
                 </button>
@@ -761,8 +785,8 @@ function CheckoutContent() {
               {paymentMethod === 'nequi' && (
                 <div className="nequi-payment-box">
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.2rem' }}>
-                    <QrCode size={22} color="#da0081" />
-                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#f43f5e' }}>
+                    <QrCode size={22} color="var(--accent)" />
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--accent)' }}>
                       Transferencia Directa Nequi / Bre-B
                     </span>
                   </div>

@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# android / gradle
+mps-mobile/**/build/
+mps-mobile/.gradle/
+.gradle/
+*.apk

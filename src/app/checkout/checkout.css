@@ -240,8 +240,8 @@
 
 /* DETALLE DE PAGO NEQUI / BRE-B */
 .nequi-payment-box {
-  background: rgba(218, 0, 129, 0.04);
-  border: 1px solid rgba(218, 0, 129, 0.25);
+  background: rgba(0, 222, 133, 0.04);
+  border: 1px solid rgba(0, 222, 133, 0.25);
   border-radius: 12px;
   padding: 1.4rem;
   margin-bottom: 1.5rem;
@@ -252,7 +252,7 @@
   align-items: center;
   justify-content: space-between;
   background: var(--bg-primary, #000F11);
-  border: 1px dashed rgba(218, 0, 129, 0.4);
+  border: 1px dashed rgba(0, 222, 133, 0.4);
   padding: 0.8rem 1rem;
   border-radius: 10px;
   margin-bottom: 0.8rem;
@@ -262,14 +262,14 @@
   font-family: monospace;
   font-size: 1.15rem;
   font-weight: 700;
-  color: #f43f5e;
+  color: var(--accent, #00DE85);
   letter-spacing: 0.5px;
 }
 
 .copy-pill-btn {
-  background: rgba(218, 0, 129, 0.15);
-  border: 1px solid rgba(218, 0, 129, 0.35);
-  color: #fb7185;
+  background: rgba(0, 222, 133, 0.12);
+  border: 1px solid rgba(0, 222, 133, 0.35);
+  color: var(--accent, #00DE85);
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -282,7 +282,7 @@
 }
 
 .copy-pill-btn:hover {
-  background: rgba(218, 0, 129, 0.28);
+  background: rgba(0, 222, 133, 0.25);
   transform: translateY(-1px);
 }
 
@@ -635,8 +635,22 @@
 }
 
 :root[data-theme='light'] .nequi-key-row {
-  background: #FFF1F2;
-  border-color: rgba(218, 0, 129, 0.3);
+  background: #F0FDF4;
+  border-color: rgba(9, 98, 76, 0.3);
+}
+
+:root[data-theme='light'] .nequi-key-value {
+  color: #09624C;
+}
+
+:root[data-theme='light'] .copy-pill-btn {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #09624C;
+}
+
+:root[data-theme='light'] .copy-pill-btn:hover {
+  background: #BBF7D0;
 }
 
 :root[data-theme='light'] .checkout-cta-btn {
