@@ -19,7 +19,10 @@ import {
   Building2,
   FileCheck2,
   AlertCircle,
-  Search
+  Search,
+  Calendar,
+  Clock,
+  Users
 } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { 
@@ -136,6 +139,16 @@ const COURSES_CATALOG = {
     originalIndividual: 390000,
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80'
   },
+  'mps-stage': {
+    id: 'mps-stage',
+    title: 'MPS Stage (Instrumento + Ensamble)',
+    category: 'Programa Semestral • En Vivo',
+    groupPrice: 280000,
+    individualPrice: 380000,
+    originalGroup: 320000,
+    originalIndividual: 420000,
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80'
+  },
   'mps-prep': {
     id: 'mps-prep',
     title: 'MPS Prep (Preparatorio Universitario)',
@@ -145,6 +158,130 @@ const COURSES_CATALOG = {
     originalGroup: 390000,
     originalIndividual: 520000,
     image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80'
+  }
+};
+
+
+// HORARIOS GRUPALES TRIMESTRALES OFICIALES (PARRILLA MPS LINK)
+const GROUP_SCHEDULES = {
+  canto: [
+    { id: 'canto-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Técnica Vocal)' },
+    { id: 'canto-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Técnica Vocal)' },
+    { id: 'canto-mie-7-9', label: 'Miércoles 7:00 pm - 9:00 pm (Canto Nocturno)' },
+    { id: 'canto-jue-7-9', label: 'Jueves 7:00 pm - 9:00 pm (Canto Nocturno)' },
+    { id: 'canto-sab-11-1', label: 'Sábado 11:00 am - 1:00 pm (Canto Grupal)' },
+  ],
+  guitarra: [
+    { id: 'guit-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Guitarra Grupal)' },
+    { id: 'guit-vie-4-6', label: 'Viernes 4:00 pm - 6:00 pm (Guitarra Grupal)' },
+    { id: 'guit-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Guitarra Grupal)' },
+  ],
+  piano: [
+    { id: 'piano-vie-4-6', label: 'Viernes 4:00 pm - 6:00 pm (Piano y Teclados)' },
+    { id: 'piano-vie-6-8', label: 'Viernes 6:00 pm - 8:00 pm (Piano y Teclados)' },
+    { id: 'piano-sab-8-10', label: 'Sábado 8:00 am - 10:00 am (Piano Matutino)' },
+    { id: 'piano-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Piano Medio Día)' },
+  ],
+  violin: [
+    { id: 'viol-jue-4-6', label: 'Jueves 4:00 pm - 6:00 pm (Violín y Cuerdas)' },
+    { id: 'viol-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Violín y Cuerdas)' },
+    { id: 'viol-vie-6-8', label: 'Viernes 6:00 pm - 8:00 pm (Violín y Cuerdas)' },
+  ],
+  actuacion: [
+    { id: 'act-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Teatro Jóvenes y Adultos)' },
+    { id: 'act-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Teatro Niños y Expresión)' },
+  ],
+  bateria: [
+    { id: 'bat-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Percusión y Ritmo)' },
+    { id: 'bat-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Percusión y Ritmo)' },
+  ],
+  bajo: [
+    { id: 'bajo-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Bajo y Ensamble)' },
+    { id: 'bajo-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Bajo y Ensamble)' },
+  ],
+  'mps-stage': [
+    { id: 'stage-mie-4-7', label: 'Miércoles 4:00 pm - 7:00 pm (Instrumento + Ensamble)' },
+    { id: 'stage-jue-4-7', label: 'Jueves 4:00 pm - 7:00 pm (Instrumento + Ensamble)' },
+    { id: 'stage-sab-9-12', label: 'Sábado 9:00 am - 12:00 m (Instrumento + Ensamble)' },
+    { id: 'stage-sab-2-5', label: 'Sábado 2:00 pm - 5:00 pm (Instrumento + Ensamble)' },
+  ],
+  produccion: [
+    { id: 'prod-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Teoría + Práctica DAW)' },
+    { id: 'prod-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Producción y Grabación)' },
+    { id: 'prod-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Mezcla y Máster)' },
+  ],
+  'mps-prep': [
+    { id: 'prep-mat-8-11', label: 'Lunes a Viernes 8:00 am - 11:00 am (15h/sem Matutino)' },
+    { id: 'prep-ves-2-5', label: 'Lunes a Viernes 2:00 pm - 5:00 pm (15h/sem Vespertino)' },
+  ],
+  'music-camp': [
+    { id: 'camp-mat-9-11', label: 'Lunes a Viernes 9:00 am - 11:00 am (Temporada Vacacional)' },
+    { id: 'camp-tar-2-4', label: 'Lunes a Viernes 2:00 pm - 4:00 pm (Temporada Vacacional)' },
+    { id: 'camp-tar-4-6', label: 'Lunes a Viernes 4:00 pm - 6:00 pm (Temporada Vacacional)' },
+  ]
+};
+
+// INFORMACIÓN OFICIAL ESTRUCTURADA DE LOS PROGRAMAS MPS (SEGÚN INFOGRAFÍAS)
+const PROGRAM_INFOS = {
+  'mps-stage': {
+    badge: 'PROGRAMA DE FORMACIÓN MUSICAL',
+    title: 'MPS STAGE: Instrumento + Ensamble',
+    tagline: 'Aprende tu instrumento. Toca con otros. Sube al Stage.',
+    duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas totales',
+    presentation: 'Presentación final del semestre según programación institucional',
+    components: [
+      { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual 1 estudiante • Técnica, lenguaje musical y repertorio' },
+      { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo grupal 3 a 8 estudiantes • Escucha activa, roles y montaje colectivo' }
+    ]
+  },
+  produccion: {
+    badge: 'PROGRAMA ESPECIALIZADO DE AUDIO',
+    title: 'MPS PRODUCER: Producción de Audio',
+    tagline: 'De tus ideas a canciones reales.',
+    duration: '1 Año académico (2 semestres de 16 semanas) • 2 h/semana • Máx 6 alumnos',
+    presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final + muestra pública',
+    components: [
+      { name: 'Teoría Grupal + Práctica Individual', hours: '2 h/semana', format: 'DAW, señal, grabación, microfonía, edición y mezcla' },
+      { name: 'Sesiones en Estudio Aliado', hours: 'Estudios Pro', format: 'Mínimo 2 sesiones (Sem 1) y 3 sesiones (Sem 2) en estudio comercial' }
+    ]
+  },
+  'mps-prep': {
+    badge: 'PROGRAMA PREUNIVERSITARIO MUSICAL',
+    title: 'MPS PREP: Preparatorio Universitario',
+    tagline: 'Prepara tu música. Profundiza tu lenguaje. Da el siguiente paso.',
+    duration: '1 Semestre académico (16 semanas) • 15 h/semana • 240 Horas estimadas',
+    presentation: 'Audición de simulacro y preparación para pruebas de admisión universitaria',
+    components: [
+      { name: 'Instrumento Principal', hours: '1 h/sem', format: 'Desarrollo técnico e interpretativo de repertorio avanzado' },
+      { name: 'Teclado Complementario', hours: '2 h/sem', format: 'Aplicación musical desde el teclado y armonía funcional' },
+      { name: 'Ensamble Colectivo', hours: '2 h/sem', format: 'Interpretación en grupo y desarrollo de la escucha activa' },
+      { name: 'Gramática y Audio', hours: '6 h/sem', format: 'Lectura rítmico-melódica, escalas, intervalos y entrenamiento auditivo' },
+      { name: 'Teoría Musical', hours: '4 h/sem', format: 'Fundamentos armónicos y conceptos musicales aplicados' }
+    ]
+  },
+  'music-camp': {
+    badge: 'TEMPORADA VACACIONAL INTENSIVA',
+    title: 'MPS MUSIC CAMP: Inmersión Musical',
+    tagline: 'Aprender, crear, ensayar, presentar.',
+    duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas totales',
+    presentation: 'Muestra escénica final ante familiares e invitados',
+    components: [
+      { name: 'Instrumento Semipersonalizado', hours: '8 Horas', format: 'Técnica, postura, ejercicios y montaje de repertorio' },
+      { name: 'Ensamble Musical en Vivo', hours: '8 Horas', format: 'Pulso colectivo, escucha, interacción y dinamismo grupal' },
+      { name: 'Taller Corporal y Performance', hours: '4 Horas', format: 'Expresión corporal, presencia escénica y desinhibición' }
+    ]
+  },
+  instrumento: {
+    badge: 'CURSO LIBRE DE INSTRUMENTO',
+    title: 'Curso Libre de Formación Instrumental',
+    tagline: 'Tu instrumento. Tu proceso. Tu música.',
+    duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link) o 1 a 1 (One)',
+    presentation: 'Recital y muestra semestral en auditorio oficial MPS',
+    components: [
+      { name: 'Modalidad MPS LINK (Grupal)', hours: '2 h/semana', format: '2 a 4 estudiantes del mismo instrumento • Trimestral con horario fijo' },
+      { name: 'Modalidad MPS ONE (1 a 1)', hours: '1 h/semana', format: '1 estudiante individualizado • Proceso y repertorio a tu propio ritmo' },
+      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu casa con docente asignado MPS' }
+    ]
   }
 };
 
@@ -199,6 +336,7 @@ function CheckoutContent() {
   // Selección de producto
   const [selectedCourseKey, setSelectedCourseKey] = useState('canto');
   const [modality, setModality] = useState('grupal'); // 'grupal' | 'individual'
+  const [selectedSchedule, setSelectedSchedule] = useState('');
   const [customAmount, setCustomAmount] = useState(null);
   const [customTitle, setCustomTitle] = useState(null);
 
@@ -264,6 +402,17 @@ function CheckoutContent() {
       setCustomTitle(decodeURIComponent(titleParam));
     }
   }, [searchParams]);
+
+  
+  // Actualizar horario predeterminado según el curso y modalidad seleccionados
+  useEffect(() => {
+    const schedules = GROUP_SCHEDULES[selectedCourseKey];
+    if (schedules && schedules.length > 0) {
+      setSelectedSchedule(schedules[0].label);
+    } else {
+      setSelectedSchedule('');
+    }
+  }, [selectedCourseKey, modality]);
 
   const activeProduct = COURSES_CATALOG[selectedCourseKey] || COURSES_CATALOG.canto;
   const isMatricula = selectedCourseKey === 'matricula';
@@ -428,6 +577,7 @@ function CheckoutContent() {
           titulo: productTitle,
           categoria: activeProduct.category,
           modalidad: isMatricula ? 'institucional' : modality,
+          horarioSeleccionado: !isMatricula && modality === 'grupal' ? (selectedSchedule || 'Grupal Trimestral - Por coordinar') : (isMatricula ? 'N/A' : 'Personalizado 1 a 1'),
           precioBase: basePrice,
           kitIncluido: includeKit,
           precioKit: includeKit ? KIT_PRICE : 0,
@@ -609,6 +759,12 @@ function CheckoutContent() {
                 <span style={{ color: 'var(--text-secondary)' }}>Referencia:</span>
                 <span style={{ fontWeight: 700, fontFamily: 'monospace' }}>{successOrder.id}</span>
               </div>
+                            {successOrder.producto.horarioSeleccionado && successOrder.producto.horarioSeleccionado !== 'N/A' && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Horario asignado:</span>
+                  <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{successOrder.producto.horarioSeleccionado}</span>
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Método:</span>
                 <span style={{ fontWeight: 700, textTransform: 'capitalize' }}>
@@ -771,9 +927,9 @@ function CheckoutContent() {
                   className={`payment-tab-btn ${paymentMethod === 'bold' ? 'active' : ''}`}
                   onClick={() => setPaymentMethod('bold')}
                 >
-                  <CreditCard size={24} color={paymentMethod === 'bold' ? '#ff2947' : 'currentColor'} />
-                  <span className="payment-tab-title">Bold Pagos Online</span>
-                  <span className="payment-tab-subtitle">Tarjetas, PSE, Nequi & Botón Bancolombia</span>
+                  <CreditCard size={24} color={paymentMethod === 'bold' ? 'var(--accent)' : 'currentColor'} />
+                  <span className="payment-tab-title">Pago en Línea Seguro</span>
+                  <span className="payment-tab-subtitle">Tarjeta Débito/Crédito, PSE o Bancolombia</span>
                 </button>
 
                 <button
@@ -792,15 +948,15 @@ function CheckoutContent() {
                 <div className="bold-payment-box">
                   <div className="bold-brand-bar">
                     <span className="bold-brand-title">
-                      <Lock size={16} /> Pasarela Oficial Bold
+                      <Lock size={16} /> Pago Encriptado SSL 256-bit
                     </span>
                     <span className="bold-brand-badge">
-                      Cifrado Bancario SSL 256-bit
+                      Aprobación Inmediata
                     </span>
                   </div>
 
                   <p className="bold-desc-text">
-                    Al hacer clic en <strong>Pagar con Bold</strong>, se abrirá la pasarela oficial para pagar de forma 100% segura mediante:
+                    Al confirmar, podrás ingresar los datos de tu tarjeta o pagar desde tu cuenta bancaria de forma 100% segura mediante:
                   </p>
 
                   <div className="bold-methods-grid">
@@ -810,7 +966,7 @@ function CheckoutContent() {
                     </div>
                     <div className="bold-method-card">
                       <Building2 size={18} color="#10b981" />
-                      <span className="bold-method-label">PSE Débito</span>
+                      <span className="bold-method-label">PSE (Cualquier Banco)</span>
                     </div>
                     <div className="bold-method-card">
                       <Smartphone size={18} color="#d946ef" />
@@ -820,6 +976,10 @@ function CheckoutContent() {
                       <CheckCircle2 size={18} color="#f59e0b" />
                       <span className="bold-method-label">Botón Bancolombia</span>
                     </div>
+                  </div>
+                  <div style={{ marginTop: '0.9rem', fontSize: '0.74rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
+                    <ShieldCheck size={14} color="var(--accent)" />
+                    <span>Transacción procesada de forma segura por Bold y vigilada por la Superfinanciera.</span>
                   </div>
                 </div>
               )}
@@ -931,13 +1091,13 @@ function CheckoutContent() {
                 type="submit" 
                 className="checkout-cta-btn"
                 disabled={submitting}
-                style={paymentMethod === 'bold' ? { background: 'linear-gradient(270deg, #ff2947 13.86%, #121e6c 83.33%)' } : {}}
+                
               >
                 <Lock size={20} />
                 {submitting 
-                  ? 'Abriendo Pasarela de Pago...' 
+                  ? 'Conectando con pasarela segura...' 
                   : paymentMethod === 'bold' 
-                    ? `Pagar con Bold ${formatCOP(totalPrice)} →` 
+                    ? `Pagar Inscripción ${formatCOP(totalPrice)} →` 
                     : `Confirmar Pedido ${formatCOP(totalPrice)}`}
               </button>
 
@@ -1060,6 +1220,66 @@ function CheckoutContent() {
                 </div>
               </div>
             )}
+
+                        {/* FICHA TÉCNICA E INFOGRAFÍA DEL PROGRAMA SELECCIONADO */}
+            {!isMatricula && (() => {
+              const pInfo = PROGRAM_INFOS[selectedCourseKey] || PROGRAM_INFOS.instrumento;
+              const courseSchedules = GROUP_SCHEDULES[selectedCourseKey] || [];
+
+              return (
+                <div className="program-detail-card">
+                  <div className="program-detail-header">
+                    <span className="program-detail-top-badge">
+                      <Sparkles size={13} /> {pInfo.badge}
+                    </span>
+                    <h4 className="program-detail-title">{pInfo.title}</h4>
+                    <p className="program-detail-tagline">“{pInfo.tagline}”</p>
+                  </div>
+
+                  <div className="program-duration-pill">
+                    <span>⏱️ {pInfo.duration}</span>
+                  </div>
+
+                  <div className="program-components-section-title">
+                    Estructura y Componentes:
+                  </div>
+                  <div className="program-components-list">
+                    {pInfo.components.map((c, idx) => (
+                      <div key={idx} className="program-component-item">
+                        <div>
+                          <div className="program-comp-name">{c.name}</div>
+                          <span className="program-comp-format">{c.format}</span>
+                        </div>
+                        <span className="program-comp-hours">{c.hours}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* SELECTOR DE HORARIO GRUPAL TRIMESTRAL (SI MODALIDAD ES GRUPAL / LINK) */}
+                  {modality === 'grupal' && courseSchedules.length > 0 && (
+                    <div className="schedule-selector-box">
+                      <div className="schedule-selector-title">
+                        <span>📅 Horario Grupal Trimestral (Fijo)</span>
+                      </div>
+                      <p className="schedule-selector-desc">
+                        Selecciona tu franja semanal de 2 horas (grupos reducidos de 2 a 4 alumnos):
+                      </p>
+                      <select 
+                        className="schedule-options-select"
+                        value={selectedSchedule}
+                        onChange={(e) => setSelectedSchedule(e.target.value)}
+                      >
+                        {courseSchedules.map((sch) => (
+                          <option key={sch.id} value={sch.label}>
+                            {sch.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* BENEFICIOS INCLUIDOS */}
             <ul className="summary-benefits-list">
