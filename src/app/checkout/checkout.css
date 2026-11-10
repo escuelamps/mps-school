@@ -239,6 +239,69 @@
 }
 
 /* DETALLE DE PAGO NEQUI / BRE-B */
+.bold-payment-box {
+  background: rgba(255, 41, 71, 0.04);
+  border: 1px solid rgba(255, 41, 71, 0.25);
+  border-radius: 12px;
+  padding: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.bold-brand-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.bold-brand-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ff2947;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  letter-spacing: 0.3px;
+}
+
+.bold-brand-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.bold-desc-text {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.bold-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+}
+
+.bold-method-card {
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--glass-border, rgba(0, 0, 0, 0.08));
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.bold-method-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+}
+
 .nequi-payment-box {
   background: rgba(0, 222, 133, 0.04);
   border: 1px solid rgba(0, 222, 133, 0.25);

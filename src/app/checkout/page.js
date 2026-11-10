@@ -789,38 +789,36 @@ function CheckoutContent() {
 
               {/* DETALLE BOLD PAGOS */}
               {paymentMethod === 'bold' && (
-                <div className="mp-payment-box" style={{ borderColor: 'rgba(255, 41, 71, 0.35)', background: 'linear-gradient(180deg, rgba(18, 30, 108, 0.2) 0%, rgba(13, 20, 24, 0.7) 100%)' }}>
-                  <div className="mp-brand-bar">
-                    <span style={{ fontSize: '0.92rem', fontWeight: 800, color: '#ff2947', display: 'flex', alignItems: 'center', gap: '0.45rem', letterSpacing: '0.3px' }}>
+                <div className="bold-payment-box">
+                  <div className="bold-brand-bar">
+                    <span className="bold-brand-title">
                       <Lock size={16} /> Pasarela Oficial Bold
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: '#cbd5e1', fontWeight: 600 }}>
+                    <span className="bold-brand-badge">
                       Cifrado Bancario SSL 256-bit
                     </span>
                   </div>
 
-                  <div style={{ padding: '1rem 0', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                    <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                      Al hacer clic en <strong>Pagar con Bold</strong>, se abrirá la pasarela oficial donde podrás pagar de forma 100% segura mediante:
-                    </p>
+                  <p className="bold-desc-text">
+                    Al hacer clic en <strong>Pagar con Bold</strong>, se abrirá la pasarela oficial para pagar de forma 100% segura mediante:
+                  </p>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.6rem' }}>
-                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <CreditCard size={18} color="#38bdf8" />
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Tarjetas Crédito / Débito</span>
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Building2 size={18} color="#00de85" />
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>PSE Débito</span>
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Smartphone size={18} color="#e879f9" />
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Nequi & Daviplata</span>
-                      </div>
-                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <CheckCircle2 size={18} color="#fbbf24" />
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Botón Bancolombia</span>
-                      </div>
+                  <div className="bold-methods-grid">
+                    <div className="bold-method-card">
+                      <CreditCard size={18} color="#0284c7" />
+                      <span className="bold-method-label">Tarjetas Crédito / Débito</span>
+                    </div>
+                    <div className="bold-method-card">
+                      <Building2 size={18} color="#10b981" />
+                      <span className="bold-method-label">PSE Débito</span>
+                    </div>
+                    <div className="bold-method-card">
+                      <Smartphone size={18} color="#d946ef" />
+                      <span className="bold-method-label">Nequi & Daviplata</span>
+                    </div>
+                    <div className="bold-method-card">
+                      <CheckCircle2 size={18} color="#f59e0b" />
+                      <span className="bold-method-label">Botón Bancolombia</span>
                     </div>
                   </div>
                 </div>
