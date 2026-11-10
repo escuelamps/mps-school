@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Script from 'next/script';
 import { 
   ShieldCheck, 
   Lock, 
@@ -205,8 +206,8 @@ function CheckoutContent() {
   const [includeKit, setIncludeKit] = useState(false);
   const KIT_PRICE = 35000;
 
-  // Método de pago: 'mercadopago' | 'nequi'
-  const [paymentMethod, setPaymentMethod] = useState('mercadopago');
+  // Método de pago: 'bold' | 'nequi'
+  const [paymentMethod, setPaymentMethod] = useState('bold');
 
   // Subtipo Mercado Pago: 'tarjeta' | 'pse'
   const [mpSubtype, setMpSubtype] = useState('tarjeta');
@@ -396,12 +397,8 @@ function CheckoutContent() {
     if (email !== emailConfirm) errors.emailConfirm = 'Los correos no coinciden';
     if (!telefono.trim() || telefono.length < 7) errors.telefono = 'Ingresa tu celular o WhatsApp';
 
-    if (paymentMethod === 'mercadopago' && mpSubtype === 'tarjeta') {
-      const cleanCard = cardNumber.replace(/\s/g, '');
-      if (cleanCard.length < 15) errors.cardNumber = 'Ingresa los 16 dígitos de la tarjeta';
-      if (!cardHolder.trim()) errors.cardHolder = 'Ingresa el nombre como figura en la tarjeta';
-      if (cardExpiry.length < 5) errors.cardExpiry = 'Ingresa MM/AA';
-      if (cardCvc.length < 3) errors.cardCvc = 'Ingresa CVC';
+    if (paymentMethod === 'bold' && mpSubtype === 'tarjeta') {
+      // Bold procesa los datos bancarios y de tarjeta en su pasarela cifrada oficial
     }
 
     setFormErrors(errors);
@@ -443,20 +440,19 @@ function CheckoutContent() {
           descuento: appliedCoupon.valor,
           cuponId: appliedCoupon.id
         } : null,
-        metodoPago: paymentMethod, // 'mercadopago' | 'nequi'
-        detallePago: paymentMethod === 'mercadopago' 
+        metodoPago: paymentMethod, // 'bold' | 'nequi'
+        detallePago: paymentMethod === 'bold' 
           ? {
-              tipo: mpSubtype,
-              cuotas: mpSubtype === 'tarjeta' ? installments : '1',
-              bancoPSE: mpSubtype === 'pse' ? pseBank : 'N/A',
-              ultimosDigitos: mpSubtype === 'tarjeta' ? cardNumber.slice(-4) : 'N/A'
+              pasarela: 'Bold Pagos Oficial',
+              moneda: 'COP',
+              monto: totalPrice
             }
           : {
               llaveBreB: '@MIPRIMERSOL',
               telefonoNequi: '3023557760',
               comprobanteAdjunto: !!comprobanteFile
             },
-        estado: paymentMethod === 'mercadopago' ? 'APROBADO_MERCADOPAGO' : 'PENDIENTE_VERIFICACION',
+        estado: paymentMethod === 'bold' ? 'PENDIENTE_PAGO_BOLD' : 'PENDIENTE_VERIFICACION',
         fecha: new Date().toISOString(),
         origen: 'checkout_web_hotmart'
       };
@@ -481,10 +477,10 @@ function CheckoutContent() {
         }
       }
 
-      // Si es Mercado Pago, intentar generar link oficial de pago / PSE
-      if (paymentMethod === 'mercadopago') {
+      // Si es Bold, generar firma e invocar el checkout oficial de Bold
+      if (paymentMethod === 'bold') {
         try {
-          const resPref = await fetch('/api/checkout/preference', {
+          const resBold = await fetch('/api/checkout/bold', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -492,16 +488,28 @@ function CheckoutContent() {
               price: totalPrice,
               email: email.trim().toLowerCase(),
               studentName: nombre.trim(),
-              orderId: docRef.id
+              orderId: docRef.id,
+              phone: telefono.trim()
             })
           });
-          const prefData = await resPref.json();
-          if (prefData.init_point) {
-            window.location.href = prefData.init_point;
+          const boldData = await resBold.json();
+
+          if (boldData.success && typeof window !== 'undefined' && window.BoldCheckout) {
+            const checkout = new window.BoldCheckout({
+              orderId: boldData.orderId,
+              currency: boldData.currency,
+              amount: String(boldData.amount),
+              apiKey: boldData.apiKey,
+              integritySignature: boldData.integritySignature,
+              description: boldData.description,
+              redirectionUrl: boldData.redirectionUrl
+            });
+            checkout.open();
+            setSubmitting(false);
             return;
           }
-        } catch (mpErr) {
-          console.error('Error invocando preferencia MP:', mpErr);
+        } catch (boldErr) {
+          console.error('Error invocando pasarela Bold:', boldErr);
         }
       }
 
@@ -604,7 +612,7 @@ function CheckoutContent() {
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Método:</span>
                 <span style={{ fontWeight: 700, textTransform: 'capitalize' }}>
-                  {successOrder.metodoPago === 'mercadopago' ? 'Mercado Pago (Online)' : 'Nequi / Bre-B'}
+                  {successOrder.metodoPago === 'bold' ? 'Bold (Online Seguro)' : successOrder.metodoPago === 'mercadopago' ? 'Mercado Pago (Online)' : 'Nequi / Bre-B'}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -750,16 +758,22 @@ function CheckoutContent() {
                 <h2 className="checkout-card-title">Selecciona la Forma de Pago</h2>
               </div>
 
-              {/* SELECTOR DE PESTAÑAS: MERCADO PAGO VS NEQUI */}
+              {/* SCRIPT OFICIAL BOLD PAYMENT BUTTON */}
+              <Script 
+                src="https://checkout.bold.co/library/boldPaymentButton.js" 
+                strategy="afterInteractive" 
+              />
+
+              {/* SELECTOR DE PESTAÑAS: BOLD VS NEQUI */}
               <div className="payment-tabs-container">
                 <button
                   type="button"
-                  className={`payment-tab-btn ${paymentMethod === 'mercadopago' ? 'active' : ''}`}
-                  onClick={() => setPaymentMethod('mercadopago')}
+                  className={`payment-tab-btn ${paymentMethod === 'bold' ? 'active' : ''}`}
+                  onClick={() => setPaymentMethod('bold')}
                 >
-                  <CreditCard size={24} color={paymentMethod === 'mercadopago' ? '#009ee3' : 'currentColor'} />
-                  <span className="payment-tab-title">Mercado Pago</span>
-                  <span className="payment-tab-subtitle">Tarjetas Débito / Crédito & PSE</span>
+                  <CreditCard size={24} color={paymentMethod === 'bold' ? '#ff2947' : 'currentColor'} />
+                  <span className="payment-tab-title">Bold Pagos Online</span>
+                  <span className="payment-tab-subtitle">Tarjetas, PSE, Nequi & Botón Bancolombia</span>
                 </button>
 
                 <button
@@ -773,165 +787,42 @@ function CheckoutContent() {
                 </button>
               </div>
 
-              {/* DETALLE MERCADO PAGO */}
-              {paymentMethod === 'mercadopago' && (
-                <div className="mp-payment-box">
+              {/* DETALLE BOLD PAGOS */}
+              {paymentMethod === 'bold' && (
+                <div className="mp-payment-box" style={{ borderColor: 'rgba(255, 41, 71, 0.35)', background: 'linear-gradient(180deg, rgba(18, 30, 108, 0.2) 0%, rgba(13, 20, 24, 0.7) 100%)' }}>
                   <div className="mp-brand-bar">
-                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <Lock size={15} /> Pasarela Segura Mercado Pago
+                    <span style={{ fontSize: '0.92rem', fontWeight: 800, color: '#ff2947', display: 'flex', alignItems: 'center', gap: '0.45rem', letterSpacing: '0.3px' }}>
+                      <Lock size={16} /> Pasarela Oficial Bold
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      Visa • Mastercard • Amex • PSE
+                    <span style={{ fontSize: '0.75rem', color: '#cbd5e1', fontWeight: 600 }}>
+                      Cifrado Bancario SSL 256-bit
                     </span>
                   </div>
 
-                  {/* SUBOPCIONES: TARJETA VS PSE */}
-                  <div className="mp-suboptions">
-                    <button
-                      type="button"
-                      className={`mp-suboption-pill ${mpSubtype === 'tarjeta' ? 'active' : ''}`}
-                      onClick={() => setMpSubtype('tarjeta')}
-                    >
-                      <CreditCard size={16} /> Tarjeta de Crédito / Débito
-                    </button>
-                    <button
-                      type="button"
-                      className={`mp-suboption-pill ${mpSubtype === 'pse' ? 'active' : ''}`}
-                      onClick={() => setMpSubtype('pse')}
-                    >
-                      <Building2 size={16} /> PSE (Débito Bancario)
-                    </button>
+                  <div style={{ padding: '1rem 0', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                      Al hacer clic en <strong>Pagar con Bold</strong>, se abrirá la pasarela oficial donde podrás pagar de forma 100% segura mediante:
+                    </p>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.6rem' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <CreditCard size={18} color="#38bdf8" />
+                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Tarjetas Crédito / Débito</span>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Building2 size={18} color="#00de85" />
+                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>PSE Débito</span>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Smartphone size={18} color="#e879f9" />
+                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Nequi & Daviplata</span>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.65rem 0.8rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <CheckCircle2 size={18} color="#fbbf24" />
+                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#f8fafc' }}>Botón Bancolombia</span>
+                      </div>
+                    </div>
                   </div>
-
-                  {/* FORMULARIO DE TARJETA */}
-                  {mpSubtype === 'tarjeta' && (
-                    <div>
-                      <div className="checkout-input-group">
-                        <label className="checkout-label">Número de tarjeta</label>
-                        <input 
-                          type="text"
-                          placeholder="4500 0000 0000 0000"
-                          className="checkout-input"
-                          value={cardNumber}
-                          onChange={handleCardNumberChange}
-                        />
-                        {formErrors.cardNumber && (
-                          <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                            {formErrors.cardNumber}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="checkout-input-group">
-                        <label className="checkout-label">Nombre impreso en la tarjeta</label>
-                        <input 
-                          type="text"
-                          placeholder="Como aparece en el plástico"
-                          className="checkout-input"
-                          value={cardHolder}
-                          onChange={(e) => setCardHolder(e.target.value.toUpperCase())}
-                        />
-                        {formErrors.cardHolder && (
-                          <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                            {formErrors.cardHolder}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="checkout-grid-2">
-                        <div className="checkout-input-group">
-                          <label className="checkout-label">Vencimiento (MM/AA)</label>
-                          <input 
-                            type="text"
-                            placeholder="MM/AA"
-                            className="checkout-input"
-                            value={cardExpiry}
-                            onChange={handleExpiryChange}
-                          />
-                          {formErrors.cardExpiry && (
-                            <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                              {formErrors.cardExpiry}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="checkout-input-group">
-                          <label className="checkout-label">Código CVC / CVV</label>
-                          <input 
-                            type="password"
-                            placeholder="123"
-                            maxLength={4}
-                            className="checkout-input"
-                            value={cardCvc}
-                            onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ''))}
-                          />
-                          {formErrors.cardCvc && (
-                            <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                              {formErrors.cardCvc}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="checkout-input-group">
-                        <label className="checkout-label">Cuotas</label>
-                        <select 
-                          className="checkout-input"
-                          value={installments}
-                          onChange={(e) => setInstallments(e.target.value)}
-                        >
-                          <option value="1">1 cuota de {formatCOP(totalPrice)} (Sin interés)</option>
-                          <option value="3">3 cuotas de {formatCOP(totalPrice / 3)}</option>
-                          <option value="6">6 cuotas de {formatCOP(totalPrice / 6)}</option>
-                          <option value="12">12 cuotas de {formatCOP(totalPrice / 12)}</option>
-                        </select>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* FORMULARIO PSE */}
-                  {mpSubtype === 'pse' && (
-                    <div>
-                      <div className="checkout-input-group">
-                        <label className="checkout-label">Selecciona tu Banco o Entidad Financiera (PSE)</label>
-                        
-                        {/* Buscador de banco en tiempo real */}
-                        <div style={{ position: 'relative', marginBottom: '0.6rem' }}>
-                          <input 
-                            type="text"
-                            placeholder="Buscar banco (ej. RappiPay, Bancolombia, Davivienda...)"
-                            className="checkout-input"
-                            value={bankSearch}
-                            onChange={(e) => setBankSearch(e.target.value)}
-                            style={{ paddingLeft: '2.5rem' }}
-                          />
-                          <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)' }} />
-                        </div>
-
-                        <select 
-                          className="checkout-input"
-                          value={pseBank}
-                          onChange={(e) => setPseBank(e.target.value)}
-                        >
-                          {filteredBanks.length > 0 ? (
-                            filteredBanks.map((b) => (
-                              <option key={b} value={b}>{b}</option>
-                            ))
-                          ) : (
-                            <option value="" disabled>No se encontró ningún banco con "{bankSearch}"</option>
-                          )}
-                        </select>
-                        {filteredBanks.length === 0 && (
-                          <span style={{ fontSize: '0.78rem', color: '#ef4444', marginTop: '0.3rem', display: 'block' }}>
-                            No encontramos "{bankSearch}". Revisa la ortografía o limpia el buscador para ver todas las entidades.
-                          </span>
-                        )}
-                      </div>
-                      <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: '0.5rem' }}>
-                        Al pulsar <strong>Pagar con Mercado Pago</strong> serás redirigido de forma cifrada a la plataforma de PSE para autorizar la transacción en tu banco.
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
 
@@ -1042,9 +933,14 @@ function CheckoutContent() {
                 type="submit" 
                 className="checkout-cta-btn"
                 disabled={submitting}
+                style={paymentMethod === 'bold' ? { background: 'linear-gradient(270deg, #ff2947 13.86%, #121e6c 83.33%)' } : {}}
               >
                 <Lock size={20} />
-                {submitting ? 'Procesando Pago Seguro...' : `Pagar Ahora ${formatCOP(totalPrice)}`}
+                {submitting 
+                  ? 'Abriendo Pasarela de Pago...' 
+                  : paymentMethod === 'bold' 
+                    ? `Pagar con Bold ${formatCOP(totalPrice)} →` 
+                    : `Confirmar Pedido ${formatCOP(totalPrice)}`}
               </button>
 
               {/* SELLOS DE CONFIANZA INFERIORES */}
