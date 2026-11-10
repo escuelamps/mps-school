@@ -21,7 +21,16 @@ import {
   Search
 } from 'lucide-react';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  query, 
+  where, 
+  getDocs, 
+  updateDoc, 
+  doc 
+} from 'firebase/firestore';
 import './checkout.css';
 
 // CATÁLOGO OFICIAL DE PRODUCTOS Y CURSOS MPS
@@ -115,6 +124,26 @@ const COURSES_CATALOG = {
     originalGroup: 150000,
     originalIndividual: 150000,
     image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80'
+  },
+  'music-camp': {
+    id: 'music-camp',
+    title: 'Music Camp (Vacacional Musical)',
+    category: 'Programa Vacacional • 4 a 14 años',
+    groupPrice: 250000,
+    individualPrice: 350000,
+    originalGroup: 280000,
+    originalIndividual: 390000,
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80'
+  },
+  'mps-prep': {
+    id: 'mps-prep',
+    title: 'MPS Prep (Preparatorio Universitario)',
+    category: 'Admisiones Universidad • Alto Rendimiento',
+    groupPrice: 350000,
+    individualPrice: 480000,
+    originalGroup: 390000,
+    originalIndividual: 520000,
+    image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80'
   }
 };
 
@@ -203,6 +232,12 @@ function CheckoutContent() {
   const [formErrors, setFormErrors] = useState({});
   const [successOrder, setSuccessOrder] = useState(null);
 
+  // Cupón de descuento
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+
   // Leer query params al cargar
   useEffect(() => {
     const courseParam = searchParams.get('course') || searchParams.get('c');
@@ -234,10 +269,69 @@ function CheckoutContent() {
   const currentPrice = isMatricula ? activeProduct.groupPrice : (modality === 'individual' ? activeProduct.individualPrice : activeProduct.groupPrice);
   const currentOriginal = isMatricula ? activeProduct.originalGroup : (modality === 'individual' ? activeProduct.originalIndividual : activeProduct.originalGroup);
   const basePrice = customAmount !== null ? customAmount : currentPrice;
-  const modalityText = isMatricula ? '' : (modality === 'individual' ? ' (Clase Individual 1 a 1)' : ' (Clase Grupal)');
+  const modalityText = isMatricula ? '' : (modality === 'individual' ? ' - MPS One (Individual)' : ' - MPS Link (Grupal)');
   const productTitle = (customTitle || activeProduct.title) + modalityText;
   const discountAmount = customAmount !== null ? 0 : (currentOriginal - currentPrice);
-  const totalPrice = basePrice + (includeKit ? KIT_PRICE : 0);
+  const couponDiscount = appliedCoupon ? (Number(appliedCoupon.valor) || 0) : 0;
+  const totalPrice = Math.max(0, basePrice + (includeKit ? KIT_PRICE : 0) - couponDiscount);
+
+  // Validación y aplicación de cupón
+  const handleApplyCoupon = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const clean = couponCode.trim().toUpperCase();
+    if (!clean) return;
+
+    setCouponLoading(true);
+    setCouponError('');
+
+    try {
+      const q = query(
+        collection(db, 'cupones_descuento'),
+        where('codigo', '==', clean)
+      );
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        setCouponError('Código no válido o vencido');
+        setAppliedCoupon(null);
+        setCouponLoading(false);
+        return;
+      }
+
+      const docSnap = snap.docs[0];
+      const data = docSnap.data();
+
+      // Validación interna de vigencia (30 días) y estado activo
+      const now = new Date();
+      let isExpired = false;
+      if (data.expiresAt) {
+        const expDate = data.expiresAt.toDate ? data.expiresAt.toDate() : new Date(data.expiresAt);
+        if (now > expDate) {
+          isExpired = true;
+        }
+      }
+
+      if (data.estado !== 'ACTIVO' || isExpired) {
+        setCouponError('Código no válido o vencido');
+        setAppliedCoupon(null);
+        setCouponLoading(false);
+        return;
+      }
+
+      setAppliedCoupon({
+        id: docSnap.id,
+        codigo: data.codigo,
+        valor: Number(data.valor) || 0
+      });
+      setCouponError('');
+    } catch (err) {
+      console.error('Error validando cupón:', err);
+      setCouponError('Código no válido o vencido');
+      setAppliedCoupon(null);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
 
   const productFeatures = isMatricula 
     ? [
@@ -340,8 +434,15 @@ function CheckoutContent() {
           precioBase: basePrice,
           kitIncluido: includeKit,
           precioKit: includeKit ? KIT_PRICE : 0,
+          cuponAplicado: appliedCoupon ? appliedCoupon.codigo : null,
+          descuentoCupon: couponDiscount,
           totalCOP: totalPrice
         },
+        cupon: appliedCoupon ? {
+          codigo: appliedCoupon.codigo,
+          descuento: appliedCoupon.valor,
+          cuponId: appliedCoupon.id
+        } : null,
         metodoPago: paymentMethod, // 'mercadopago' | 'nequi'
         detallePago: paymentMethod === 'mercadopago' 
           ? {
@@ -352,7 +453,7 @@ function CheckoutContent() {
             }
           : {
               llaveBreB: '@MIPRIMERSOL',
-              telefonoNequi: '3008934407',
+              telefonoNequi: '3023557760',
               comprobanteAdjunto: !!comprobanteFile
             },
         estado: paymentMethod === 'mercadopago' ? 'APROBADO_MERCADOPAGO' : 'PENDIENTE_VERIFICACION',
@@ -365,6 +466,20 @@ function CheckoutContent() {
         ...orderData,
         createdAt: serverTimestamp()
       });
+
+      // Si se aplicó un cupón, marcarlo como USADO en Firestore
+      if (appliedCoupon?.id) {
+        try {
+          await updateDoc(doc(db, 'cupones_descuento', appliedCoupon.id), {
+            estado: 'USADO',
+            usadoEn: serverTimestamp(),
+            usadoPor: email.trim().toLowerCase(),
+            pedidoId: docRef.id
+          });
+        } catch (cupErr) {
+          console.error('Error al actualizar estado del cupón a USADO:', cupErr);
+        }
+      }
 
       // Si es Mercado Pago, intentar generar link oficial de pago / PSE
       if (paymentMethod === 'mercadopago') {
@@ -852,12 +967,12 @@ function CheckoutContent() {
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Línea Nequi Directa
                       </div>
-                      <div className="nequi-key-value">300 893 4407</div>
+                      <div className="nequi-key-value">302 355 77 60</div>
                     </div>
                     <button 
                       type="button" 
                       className={`copy-pill-btn ${copiedPhone ? 'copied' : ''}`}
-                      onClick={() => handleCopy('3008934407', 'phone')}
+                      onClick={() => handleCopy('3023557760', 'phone')}
                     >
                       {copiedPhone ? <Check size={14} /> : <Copy size={14} />}
                       {copiedPhone ? '¡Copiado!' : 'Copiar Celular'}
@@ -914,7 +1029,7 @@ function CheckoutContent() {
                     Kit de Iniciación y Material MPS (+{formatCOP(KIT_PRICE)})
                   </div>
                   <div className="order-bump-desc">
-                    Incluye cuaderno de pauta musical oficial, afinador digital o baquetas según tu instrumento, más stickers y carné oficial.
+                    Incluye cuadernos de pauta musical oficial, convenios externos y beneficios con Yamaha, más stickers y carné institucional.
                   </div>
                 </div>
                 <div className="order-bump-price">
@@ -1018,7 +1133,7 @@ function CheckoutContent() {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    <span>👥 Clases Grupales</span>
+                    <span>👥 MPS Link (Grupal)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
                       {formatCOP(activeProduct.groupPrice)}/mes
                     </span>
@@ -1043,7 +1158,7 @@ function CheckoutContent() {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    <span>👤 Clases Individuales</span>
+                    <span>👤 MPS One (1 a 1)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
                       {formatCOP(activeProduct.individualPrice)}/mes
                     </span>
@@ -1068,6 +1183,106 @@ function CheckoutContent() {
               )}
             </ul>
 
+            {/* CÓDIGO DE DESCUENTO */}
+            <div style={{
+              margin: '1rem 0',
+              padding: '0.9rem',
+              background: 'rgba(255, 255, 255, 0.03)',
+              borderRadius: '12px',
+              border: '1px solid var(--glass-border)'
+            }}>
+              <label className="checkout-label" style={{ fontSize: '0.8rem', marginBottom: '0.4rem', display: 'block' }}>
+                Código de descuento:
+              </label>
+
+              {appliedCoupon ? (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.65rem 0.85rem',
+                  background: 'rgba(0, 222, 133, 0.12)',
+                  border: '1px solid var(--accent)',
+                  borderRadius: '8px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', fontWeight: 700, fontSize: '0.85rem' }}>
+                    <CheckCircle2 size={16} />
+                    <span>{appliedCoupon.codigo} (-{formatCOP(appliedCoupon.valor)})</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAppliedCoupon(null);
+                      setCouponCode('');
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#ef4444',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      padding: '0.2rem 0.4rem'
+                    }}
+                  >
+                    Quitar
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <input
+                    type="text"
+                    className="checkout-input"
+                    placeholder="Ej: MPS-DESCUENTO"
+                    value={couponCode}
+                    onChange={(e) => {
+                      setCouponCode(e.target.value.toUpperCase());
+                      if (couponError) setCouponError('');
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleApplyCoupon();
+                      }
+                    }}
+                    style={{
+                      fontSize: '0.85rem',
+                      padding: '0.65rem 0.8rem',
+                      letterSpacing: '1px',
+                      textTransform: 'uppercase'
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={couponLoading || !couponCode.trim()}
+                    style={{
+                      padding: '0.65rem 1.1rem',
+                      borderRadius: '8px',
+                      background: 'var(--accent)',
+                      color: '#062920',
+                      border: 'none',
+                      fontWeight: 700,
+                      fontSize: '0.85rem',
+                      cursor: couponLoading || !couponCode.trim() ? 'not-allowed' : 'pointer',
+                      opacity: couponLoading || !couponCode.trim() ? 0.6 : 1,
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {couponLoading ? '...' : 'Aplicar'}
+                  </button>
+                </div>
+              )}
+
+              {couponError && (
+                <div style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.4rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <AlertCircle size={14} />
+                  <span>{couponError}</span>
+                </div>
+              )}
+            </div>
+
             {/* DESGLOSE FINANCIERO */}
             <div className="summary-price-breakdown">
               <div className="price-row">
@@ -1081,6 +1296,13 @@ function CheckoutContent() {
                 <div className="price-row discount">
                   <span>Descuento de bienvenida:</span>
                   <span>-{formatCOP(discountAmount)}</span>
+                </div>
+              )}
+
+              {appliedCoupon && (
+                <div className="price-row discount" style={{ color: 'var(--accent)', fontWeight: 700 }}>
+                  <span>Descuento Cupón ({appliedCoupon.codigo}):</span>
+                  <span>-{formatCOP(appliedCoupon.valor)}</span>
                 </div>
               )}
 

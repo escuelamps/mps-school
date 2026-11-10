@@ -26,24 +26,57 @@ export async function POST(request) {
     const email = verifyData.users[0].email;
     let role = 'user';
     let username = email.split('@')[0];
+    let cargo = null;
+    let cargoTitle = null;
 
-    // Determine role by email prefix
-    if (email === 'william@escuelamps.com' || email === 'lpineda@escuelamps.com' || email === 'juanse@escuelamps.com') {
-        role = 'admin';
-    } else if (email.startsWith('profe-')) {
-        role = 'teacher';
-        username = username.replace('profe-', '');
-    } else if (email.startsWith('estudiante-')) {
-        role = 'student';
-        username = username.replace('estudiante-', '');
-    } else {
-        // Fallback to student if no prefix is provided for regular users
-        role = 'student';
+    // Bloqueo de cuentas personales antiguas
+    if (email === 'william@escuelamps.com' || email === 'juanse@escuelamps.com' || email === 'lpineda@escuelamps.com') {
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Usuario o contraseña incorrectos' 
+      }, { status: 401 });
     }
 
-    // 4. Set the secure session cookie (we use JSON to store both username and role)
-    const sessionData = JSON.stringify({ username, role, email });
-    const response = NextResponse.json({ success: true, username, role });
+    // Mapeo institucional por CARGOS acordado en reunión de TICs:
+    if (email === 'direccion@escuelamps.com') {
+      role = 'admin';
+      cargo = 'direccion';
+      cargoTitle = 'Dirección General';
+      username = 'Dirección';
+    } else if (email === 'coordinacion@escuelamps.com') {
+      role = 'admin';
+      cargo = 'coordinacion_academica';
+      cargoTitle = 'Coordinación Académica';
+      username = 'Coordinación';
+    } else if (email === 'administracion@escuelamps.com' || email === 'contabilidad@escuelamps.com') {
+      role = 'admin';
+      cargo = 'administracion';
+      cargoTitle = 'Administración y Contabilidad';
+      username = 'Administración';
+    } else if (email === 'recepcion@escuelamps.com' || email === 'secretaria@escuelamps.com') {
+      role = 'admin';
+      cargo = 'recepcion';
+      cargoTitle = 'Recepción y Reservas';
+      username = 'Recepción';
+    } else if (email.startsWith('profe-')) {
+      role = 'teacher';
+      cargo = 'docente';
+      cargoTitle = 'Docente MPS';
+      username = username.replace('profe-', '');
+    } else if (email.startsWith('estudiante-')) {
+      role = 'student';
+      cargo = 'estudiante';
+      cargoTitle = 'Estudiante MPS';
+      username = username.replace('estudiante-', '');
+    } else {
+      role = 'student';
+      cargo = 'estudiante';
+      cargoTitle = 'Estudiante MPS';
+    }
+
+    // 4. Set the secure session cookie (almacena cargo, username, role y email)
+    const sessionData = JSON.stringify({ username, role, cargo, cargoTitle, email });
+    const response = NextResponse.json({ success: true, username, role, cargo, cargoTitle });
     
     response.cookies.set({
       name: 'mps_admin_session', // Keeping the name so existing admin works, but it's now a generic session

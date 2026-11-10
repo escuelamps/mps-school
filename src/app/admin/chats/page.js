@@ -23,7 +23,8 @@ export default function ChatsDashboard() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        if (!data.username || (data.username !== 'william' && data.username !== 'lpineda')) {
+        const isAllowed = data.cargo === 'direccion' || data.cargo === 'recepcion';
+        if (!data.username || !isAllowed) {
           router.replace('/admin');
         }
       })

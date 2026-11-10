@@ -53,7 +53,8 @@ export default function AdminContabilidad() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        if (!data.username || data.username !== 'lpineda') {
+        const isAllowed = data.cargo === 'direccion' || data.cargo === 'administracion';
+        if (!data.username || !isAllowed) {
           router.replace('/admin');
         }
       })

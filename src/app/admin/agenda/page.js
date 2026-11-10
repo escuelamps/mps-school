@@ -65,7 +65,8 @@ export default function AgendaProDashboard() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        if (!data.username || (data.username !== 'william' && data.username !== 'lpineda')) {
+        const isAllowed = data.cargo === 'direccion' || data.cargo === 'recepcion' || data.cargo === 'coordinacion_academica';
+        if (!data.username || !isAllowed) {
           router.replace('/admin');
         }
       })

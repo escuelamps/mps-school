@@ -223,8 +223,8 @@ export default function HeaderV3() {
           <img src="/images/logo2.png" alt="MPS Escuela Logo" style={{ height: '75px', objectFit: 'contain' }} className="nav-logo" />
         </Link>
         <div className="desktop-nav" style={{ gap: '2rem', alignItems: 'center' }}>
-          <Link href="/cursos" className="nav-link">Cursos</Link>
-          <Link href="/#programas" className="nav-link">Programas</Link>
+          <Link href="/cursos" className="nav-link">Cursos y Talleres</Link>
+          <Link href="/#programas" className="nav-link">Programas Académicos</Link>
           <Link href="/quienes-somos" className="nav-link">Quiénes Somos</Link>
           <button onClick={() => setIsEventModalOpen(true)} className="nav-link" style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1rem', cursor: 'pointer' }}>Eventos</button>
           <button onClick={() => setIsLoginOpen(true)} className="btn-primary" style={{ padding: '0.6rem 1.5rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1rem' }}>
@@ -237,8 +237,8 @@ export default function HeaderV3() {
         
         {/* Menú Móvil Desplegable */}
         <div className="mobile-menu" style={{ display: isMobileMenuOpen ? 'flex' : 'none' }}>
-          <Link href="/cursos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Cursos</Link>
-          <Link href="/#programas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Programas</Link>
+          <Link href="/cursos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Cursos y Talleres</Link>
+          <Link href="/#programas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Programas Académicos</Link>
           <Link href="/quienes-somos" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', fontSize: '1.2rem', fontWeight: 500 }}>Quiénes Somos</Link>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsEventModalOpen(true);}} style={{ color: 'var(--accent)', background: 'none', border: 'none', fontFamily: 'inherit', fontSize: '1.2rem', fontWeight: 500, cursor: 'pointer', padding: 0 }}>Eventos</button>
           <button onClick={() => {setIsMobileMenuOpen(false); setIsLoginOpen(true);}} className="btn-primary" style={{ padding: '0.8rem', textAlign: 'center', marginTop: '1rem', textDecoration: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: '1.1rem' }}>

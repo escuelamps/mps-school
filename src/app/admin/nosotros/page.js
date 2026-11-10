@@ -58,7 +58,8 @@ export default function ProfesoresPage() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        if (!data.username || (data.username !== 'juanse' && data.username !== 'lpineda')) {
+        const isAllowed = data.cargo === 'direccion' || data.cargo === 'coordinacion_academica';
+        if (!data.username || !isAllowed) {
           router.replace('/admin');
         }
       })

@@ -12,6 +12,8 @@ export default function AdminPage() {
   
   // Estado de Autenticación
   const [username, setUsername] = useState(null);
+  const [cargo, setCargo] = useState('direccion');
+  const [cargoTitle, setCargoTitle] = useState('Dirección General');
   const [loadingSession, setLoadingSession] = useState(true);
 
   // Estado del Formulario de Login
@@ -30,28 +32,52 @@ export default function AdminPage() {
         setUsername(null);
         setLoadingSession(false);
         localStorage.removeItem('mps_admin_last_activity');
+        // Limpiar inmediatamente el parámetro de la URL para que no quede en el historial al dar Atrás
+        window.history.replaceState({}, '', '/admin');
         fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
         try { auth.signOut(); } catch(e) {}
         return;
       }
     }
 
-    // Comprobar si ya está logueado al cargar
-    fetch('/api/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        if (data.username) {
-          setUsername(data.username);
-        } else {
+    const checkSession = () => {
+      fetch('/api/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.username) {
+            setUsername(data.username);
+            setCargo(data.cargo || (data.username === 'juanse' ? 'coordinacion_academica' : 'direccion'));
+            setCargoTitle(data.cargoTitle || (data.username === 'juanse' ? 'Coordinación Académica' : 'Dirección General'));
+          } else {
+            setUsername(null);
+            setCargo(null);
+            setCargoTitle(null);
+          }
+          setLoadingSession(false);
+        })
+        .catch(err => {
+          console.error("Error al obtener sesión:", err);
           setUsername(null);
-        }
-        setLoadingSession(false);
-      })
-      .catch(err => {
-        console.error("Error al obtener sesión:", err);
-        setUsername(null);
-        setLoadingSession(false);
-      });
+          setCargo(null);
+          setCargoTitle(null);
+          setLoadingSession(false);
+        });
+    };
+
+    // Comprobar si ya está logueado al cargar
+    checkSession();
+
+    // Soporte para BFCache (cuando el usuario presiona Atrás / Adelante en el navegador)
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        checkSession();
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -60,9 +86,36 @@ export default function AdminPage() {
     setIsLoggingIn(true);
 
     try {
-      // 1. Iniciar sesión con Firebase Auth
-      const email = loginUsername.includes('@') ? loginUsername : `${loginUsername}@escuelamps.com`;
-      const userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
+      // 1. Bloqueo de nombres personales antiguos
+      const rawInput = loginUsername.trim().toLowerCase();
+      if (
+        rawInput === 'william' || rawInput === 'juanse' || rawInput === 'lpineda' ||
+        rawInput.startsWith('william@') || rawInput.startsWith('juanse@') || rawInput.startsWith('lpineda@')
+      ) {
+        setError('Correo o contraseña incorrectos.');
+        setIsLoggingIn(false);
+        return;
+      }
+
+      // 2. Iniciar sesión con el correo oficial del cargo
+      const email = rawInput.includes('@') ? rawInput : `${rawInput}@escuelamps.com`;
+
+      let userCredential;
+      try {
+        userCredential = await signInWithEmailAndPassword(auth, email, loginPassword);
+      } catch (authErr) {
+        // Si el usuario institucional por cargo no existía aún en Firebase Auth, crearlo en el primer login
+        if (authErr.code === 'auth/user-not-found' || authErr.code === 'auth/invalid-credential') {
+          try {
+            const { createUserWithEmailAndPassword } = await import('firebase/auth');
+            userCredential = await createUserWithEmailAndPassword(auth, email, loginPassword);
+          } catch (createErr) {
+            throw authErr;
+          }
+        } else {
+          throw authErr;
+        }
+      }
       
       // 2. Obtener el Token de Seguridad
       const token = await userCredential.user.getIdToken();
@@ -78,6 +131,9 @@ export default function AdminPage() {
 
       if (res.ok) {
         setUsername(data.username);
+        setCargo(data.cargo || 'direccion');
+        setCargoTitle(data.cargoTitle || 'Dirección General');
+        window.history.replaceState({}, '', '/admin');
         router.refresh();
       } else {
         setError(data.message || 'Credenciales inválidas o no eres administrador');
@@ -105,6 +161,8 @@ export default function AdminPage() {
     localStorage.removeItem('mps_admin_last_activity');
     await fetch('/api/auth/logout', { method: 'POST' });
     setUsername(null);
+    setCargo(null);
+    setCargoTitle(null);
     setLoginUsername('');
     setLoginPassword('');
     window.location.replace('/admin');
@@ -264,336 +322,369 @@ export default function AdminPage() {
         flexDirection: 'column',
         alignItems: 'center'
       }}>
+        {/* ENCABEZADO BASADO EN CARGO INSTITUCIONAL */}
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '0.35rem 0.9rem',
+            background: 'rgba(0, 222, 133, 0.12)',
+            border: '1px solid var(--accent, #00DE85)',
+            borderRadius: '999px',
+            color: 'var(--accent, #00DE85)',
+            fontSize: '0.8rem',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '1px',
+            marginBottom: '0.75rem'
+          }}>
+            Cargo: {cargoTitle || 'Dirección General'}
+          </div>
           <h1 style={{ fontFamily: 'Outfit', fontSize: '2.4rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-            Hola, <span style={{ color: 'var(--accent, #00DE85)' }}>{username}</span>
+            Panel de <span style={{ color: 'var(--accent, #00DE85)' }}>{cargoTitle || 'Administración'}</span>
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem' }}>
             ¿A qué módulo deseas entrar hoy?
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: username === 'juanse' 
-            ? 'repeat(auto-fit, minmax(280px, 1fr))' 
-            : 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '1.5rem',
-          width: '100%',
-          maxWidth: username === 'juanse' ? '700px' : '1100px',
-          justifyContent: 'center'
-        }}>
-          
-          {/* ================= VISTA DE JUANSE / LAURA PINEDA (PROFESORES Y CLASES) ================= */}
-          {(username === 'juanse' || username === 'lpineda') && (
-            <>
-              {/* Card Profesores */}
-              <div 
-                onClick={() => router.push('/admin/nosotros')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#f3e8ff', color: '#7e22ce', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <User size={30} />
-                </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Directorio general de todos los profesores y gestión docente.</p>
-              </div>
+        {(() => {
+          const isDireccion = cargo === 'direccion' || username === 'Dirección';
+          const isCoordinacion = cargo === 'coordinacion_academica' || username === 'Coordinación';
+          const isAdministracion = cargo === 'administracion' || username === 'Administración';
+          const isRecepcion = cargo === 'recepcion' || username === 'Recepción';
 
-              {/* Card Planillas y Clases MPS */}
-              <div 
-                onClick={() => setShowTeacherTools(true)}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <ClipboardCheck size={30} />
+          return (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isCoordinacion && !isDireccion
+                ? 'repeat(auto-fit, minmax(280px, 1fr))' 
+                : 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: '1.5rem',
+              width: '100%',
+              maxWidth: isCoordinacion && !isDireccion ? '700px' : '1100px',
+              justifyContent: 'center'
+            }}>
+              
+              {/* Card Profesores (Dirección y Coordinación) */}
+              {(isDireccion || isCoordinacion) && (
+                <div 
+                  onClick={() => router.push('/admin/nosotros')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#f3e8ff', color: '#7e22ce', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <User size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Profesores</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Directorio general de todos los profesores y gestión docente.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Planillas y Clases MPS</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Registro de planillas docentes, firmas y seguimiento de Clases MPS.</p>
-              </div>
-            </>
-          )}
+              )}
 
-          {/* ================= VISTA DE WILLIAM / LAURA PINEDA (ESTUDIANTES Y GESTIÓN) ================= */}
-          {(username === 'william' || username === 'lpineda') && (
-            <>
-              {/* Card Estudiantes Activos */}
-              <div 
-                onClick={() => router.push('/admin/estudiantes-activos')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0e7ff', color: '#3730a3', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <Users size={30} />
+              {/* Card Planillas y Clases MPS (Dirección y Coordinación) */}
+              {(isDireccion || isCoordinacion) && (
+                <div 
+                  onClick={() => setShowTeacherTools(true)}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <ClipboardCheck size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Planillas y Clases MPS</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Registro de planillas docentes, firmas y seguimiento de Clases MPS.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Directorio oficial y estado actual de los estudiantes.</p>
-              </div>
+              )}
 
-              {/* Card Matrículas */}
-              <div 
-                onClick={() => router.push('/admin/matriculas')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <FileSpreadsheet size={30} />
+              {/* Card Estudiantes Activos (Dirección, Coordinación y Administración) */}
+              {(isDireccion || isCoordinacion || isAdministracion) && (
+                <div 
+                  onClick={() => router.push('/admin/estudiantes-activos')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0e7ff', color: '#3730a3', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <Users size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Estudiantes Activos</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Directorio oficial y estado actual de los estudiantes.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Consolidado y registro oficial de matrículas de la escuela.</p>
-              </div>
+              )}
 
-              {/* Card Agenda MPS (Horarios Clases) */}
-              <div 
-                onClick={() => router.push('/admin/agenda')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <Calendar size={30} />
+              {/* Card Matrículas (Dirección y Administración) */}
+              {(isDireccion || isAdministracion) && (
+                <div 
+                  onClick={() => router.push('/admin/matriculas')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <FileSpreadsheet size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Matrículas</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Consolidado y registro oficial de matrículas de la escuela.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS (Horarios)</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Configura las clases disponibles y cupos de la escuela.</p>
-              </div>
+              )}
 
-              {/* Card Reservas y Pagos */}
-              <div 
-                onClick={() => router.push('/admin/reservas')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <Calendar size={30} />
+              {/* Card Agenda MPS (Dirección, Coordinación y Recepción) */}
+              {(isDireccion || isCoordinacion || isRecepcion) && (
+                <div 
+                  onClick={() => router.push('/admin/agenda')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#e0f2fe', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <Calendar size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Agenda MPS (Horarios)</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Configura las clases disponibles y cupos de la escuela.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Reservas y Pagos</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Aprobación y verificación de comprobantes Nequi y pagos.</p>
-              </div>
+              )}
 
-              {/* Card Cenas MPS */}
-              <div 
-                onClick={() => router.push('/admin/cenas')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#fee2e2', color: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+              {/* Card Reservas y Pagos (Dirección, Administración y Recepción) */}
+              {(isDireccion || isAdministracion || isRecepcion) && (
+                <div 
+                  onClick={() => router.push('/admin/reservas')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dcf8c6', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <Calendar size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Reservas y Pagos</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Aprobación y verificación de comprobantes Nequi y pagos.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Cenas MPS</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
-              </div>
+              )}
 
-              {/* Card Atención WhatsApp */}
-              <div 
-                onClick={() => router.push('/admin/chats')}
-                style={{
-                  background: 'var(--panel-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem 1.5rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                }}
-              >
-                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <MessageSquare size={30} />
+              {/* Card Cenas MPS (Dirección y Administración) */}
+              {(isDireccion || isAdministracion) && (
+                <div 
+                  onClick={() => router.push('/admin/cenas')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#fee2e2', color: '#b91c1c', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Cenas MPS</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Control de reservas, opciones de menú y pagos de la cena especial.</p>
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Atención WhatsApp</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Supervisión de chats en vivo y atención a estudiantes.</p>
-              </div>
-            </>
-          )}
+              )}
 
-          {/* ================= VISTA DE LAURA PINEDA (CONTABILIDAD CENTRAL) ================= */}
-          {username === 'lpineda' && (
-            <div 
-              onClick={() => router.push('/admin/contabilidad')}
-              style={{
-                background: 'var(--panel-bg)',
-                border: '1px solid var(--glass-border)',
-                borderRadius: '16px',
-                padding: '2rem 1.5rem',
-                cursor: 'pointer',
-                boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                height: '100%'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-              }}
-            >
-              <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#fef08a', color: '#854d0e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                <Wallet size={30} />
-              </div>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Control financiero, liquidación de profesores, gestión de estudiantes y cuentas de cobro.</p>
+              {/* Card Atención WhatsApp (Dirección y Recepción) */}
+              {(isDireccion || isRecepcion) && (
+                <div 
+                  onClick={() => router.push('/admin/chats')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <MessageSquare size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Atención WhatsApp</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Supervisión de chats en vivo y atención a estudiantes.</p>
+                </div>
+              )}
+
+              {/* Card Contabilidad Central (Dirección y Administración) */}
+              {(isDireccion || isAdministracion) && (
+                <div 
+                  onClick={() => router.push('/admin/contabilidad')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#fef08a', color: '#854d0e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <Wallet size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Control financiero, liquidación de profesores, gestión de estudiantes y cuentas de cobro.</p>
+                </div>
+              )}
+
             </div>
-          )}
-
-        </div>
+          );
+        })()}
       </main>
 
       {/* Modal de Herramientas de Profesores para Juanse */}

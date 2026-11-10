@@ -11,16 +11,20 @@ export function middleware(request) {
     }
 
     let username = authCookie.value;
+    let cargo = null;
     try {
       const parsed = JSON.parse(authCookie.value);
       if (parsed.username) {
         username = parsed.username;
       }
+      if (parsed.cargo) {
+        cargo = parsed.cargo;
+      }
     } catch (e) {
       // Ignorar si no es JSON (ej. sesión vieja legacy)
     }
 
-    if (path.startsWith('/admin/contabilidad') && username !== 'lpineda') {
+    if (path.startsWith('/admin/contabilidad') && cargo !== 'direccion' && cargo !== 'administracion') {
       return NextResponse.redirect(new URL('/admin', request.url));
     }
   }

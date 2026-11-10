@@ -495,6 +495,63 @@ export default function CursosPage() {
         </div>
       </section>
 
+      {/* SECCIÓN MODALIDADES INSTITUCIONALES (MPS ONE, MPS LINK, MPS HOME) */}
+      <section className="cj-section" style={{ borderTop: '1px solid var(--glass-border)', borderBottom: '1px solid var(--glass-border)', background: 'rgba(255, 255, 255, 0.015)' }}>
+        <div className="cj-section-header">
+          <span className="cj-section-tag">Modalidades Oficiales MPS</span>
+          <h2 className="cj-section-title">Elige cómo quieres aprender</h2>
+          <p className="cj-section-desc">
+            Diseñadas para adaptarse a tus objetivos, disponibilidad y ritmo de aprendizaje musical.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', maxWidth: '1100px', margin: '0 auto', padding: '0 1rem' }}>
+          
+          {/* MPS One */}
+          <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', borderRadius: '8px', background: 'rgba(0, 222, 133, 0.12)', color: 'var(--accent, #00DE85)', fontWeight: 800, fontSize: '0.85rem', marginBottom: '1rem', width: 'fit-content' }}>
+              MPS ONE
+            </div>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Clases Únicas y Personalizadas (1 a 1)</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.5, flex: 1, marginBottom: '1.25rem' }}>
+              Atención exclusiva con un profesor dedicado. Avanza a tu propio ritmo, profundiza en tu instrumento y selecciona el repertorio que más te apasiona.
+            </p>
+            <div style={{ fontSize: '0.82rem', color: 'var(--accent, #00DE85)', fontWeight: 600 }}>
+              • Horarios flexibles • Avance individualizado
+            </div>
+          </div>
+
+          {/* MPS Link */}
+          <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.12)', color: '#3b82f6', fontWeight: 800, fontSize: '0.85rem', marginBottom: '1rem', width: 'fit-content' }}>
+              MPS LINK
+            </div>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Clases Grupales y Ensambles</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.5, flex: 1, marginBottom: '1.25rem' }}>
+              Aprende en comunidad, comparte con compañeros de tu mismo nivel y desarrolla escucha activa, trabajo en equipo y preparación para recitales.
+            </p>
+            <div style={{ fontSize: '0.82rem', color: '#3b82f6', fontWeight: 600 }}>
+              • Grupos reducidos • Ensamble en vivo
+            </div>
+          </div>
+
+          {/* MPS Home */}
+          <div style={{ background: 'var(--panel-bg)', border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'inline-block', padding: '0.3rem 0.8rem', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.12)', color: '#a855f7', fontWeight: 800, fontSize: '0.85rem', marginBottom: '1rem', width: 'fit-content' }}>
+              MPS HOME
+            </div>
+            <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Clases a Domicilio</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.5, flex: 1, marginBottom: '1.25rem' }}>
+              La excelencia formativa de Escuela MPS directo en la comodidad de tu hogar. Profesores certificados que se desplazan con material pedagógico oficial.
+            </p>
+            <div style={{ fontSize: '0.82rem', color: '#a855f7', fontWeight: 600 }}>
+              • Comodidad total • Profesores certificados
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* GRID COMPARATIVO Y CATÁLOGO DETALLADO */}
       <section id="catalogo" className="cj-section">
         <div className="cj-section-header">
@@ -562,15 +619,23 @@ export default function CursosPage() {
                   ))}
                 </ul>
 
-                <div className="cj-course-footer">
-                  <span className="cj-course-mode">{course.level}</span>
+                <div className="cj-course-footer" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <Link
+                    href={`/checkout?course=${course.id}`}
+                    className="cj-course-link-btn"
+                    style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}
+                  >
+                    Inscribirme <ArrowRight size={15} />
+                  </Link>
                   <a
                     href={getWhatsAppLink(`Hola MPS! Deseo consultar horarios y cupos para el curso de: ${course.title}`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="cj-course-link-btn"
+                    style={{ background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', padding: '0.6rem 0.8rem' }}
+                    title="Hablar con Asesor"
                   >
-                    Inscribirme <ArrowRight size={15} />
+                    Asesor
                   </a>
                 </div>
               </div>

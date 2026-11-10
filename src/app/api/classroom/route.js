@@ -120,6 +120,24 @@ const DEFAULT_MPS_COURSES = [
 ];
 
 export async function GET(request) {
+  // Proteger acceso: Restringido a perfiles autorizados (Administración y Docentes)
+  const authCookie = request.cookies.get('mps_admin_session');
+  if (!authCookie || !authCookie.value) {
+    return NextResponse.json({ 
+      success: false, 
+      message: 'Acceso restringido. Debes iniciar sesión con una cuenta autorizada para consultar Classroom.' 
+    }, { status: 401 });
+  }
+
+  try {
+    const session = JSON.parse(authCookie.value);
+    if (session.role !== 'admin' && session.role !== 'teacher') {
+      return NextResponse.json({ success: false, message: 'Permisos insuficientes para consultar este recurso.' }, { status: 403 });
+    }
+  } catch (authErr) {
+    return NextResponse.json({ success: false, message: 'Sesión no válida.' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const courseId = searchParams.get('courseId');
 

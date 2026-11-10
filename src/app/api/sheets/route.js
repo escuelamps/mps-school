@@ -5,8 +5,28 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type');
 
-  if (!type || (type !== 'matriculas' && type !== 'activos' && type !== 'recitales' && type !== 'planillas')) {
-    return NextResponse.json({ error: 'Parámetro type inválido. Usa ?type=matriculas, ?type=activos o ?type=planillas' }, { status: 400 });
+  if (!type || (type !== 'matriculas' && type !== 'activos' && type !== 'recitales' && type !== 'planillas' && type !== 'profesores')) {
+    return NextResponse.json({ error: 'Parámetro type inválido. Usa ?type=matriculas, ?type=activos, ?type=planillas o ?type=profesores' }, { status: 400 });
+  }
+
+  // Protección de seguridad acordada en reunión de TICs:
+  // Restringir bases de datos privadas (matrículas, estudiantes activos, profesores y planillas) exclusivamente a perfiles autorizados
+  if (type === 'matriculas' || type === 'activos' || type === 'planillas' || type === 'profesores') {
+    const authCookie = request.cookies.get('mps_admin_session');
+    if (!authCookie || !authCookie.value) {
+      return NextResponse.json({ 
+        error: 'Acceso restringido. Inicia sesión con una cuenta autorizada de coordinación o administración para acceder a esta información.' 
+      }, { status: 401 });
+    }
+
+    try {
+      const session = JSON.parse(authCookie.value);
+      if (session.role !== 'admin' && session.role !== 'teacher') {
+        return NextResponse.json({ error: 'Permisos insuficientes para consultar este recurso.' }, { status: 403 });
+      }
+    } catch (authErr) {
+      return NextResponse.json({ error: 'Sesión no válida.' }, { status: 401 });
+    }
   }
 
   try {
@@ -48,15 +68,31 @@ export async function GET(request) {
     } else if (type === 'planillas') {
       spreadsheetId = '19rXAPfclrzBe62DOXoKz0oADtgOT_N4vUYe77KRLMfw';
       range = "'Respuestas de formulario 1'!A1:EM600";
+    } else if (type === 'profesores') {
+      spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
+      range = "'RESUMEN PROFESORES'!A1:J150";
     } else {
       spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
-      range = "'Base de datos estudiantes 2026 - 2'!A1:K200"; 
+      range = "'Base de datos estudiantes 2026-2'!A1:K500"; 
     }
 
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-    });
+    let response;
+    try {
+      response = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range,
+      });
+    } catch (getErr) {
+      if (type === 'activos' && range.includes('2026-2')) {
+        range = "'Base de datos estudiantes 2026 - 2'!A1:K500";
+        response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range,
+        });
+      } else {
+        throw getErr;
+      }
+    }
 
     const rows = response.data.values || [];
 
@@ -202,17 +238,34 @@ export async function POST(request) {
       rangeToUpdate = `'Respuestas de formulario 1'!A${rowNumber}:Z${rowNumber}`; 
     } else if (type === 'activos') {
       spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
-      rangeToUpdate = `'Base de datos estudiantes 2026 - 2'!A${rowNumber}:K${rowNumber}`; 
+      rangeToUpdate = `'Base de datos estudiantes 2026-2'!A${rowNumber}:K${rowNumber}`; 
     }
 
-    const response = await sheets.spreadsheets.values.update({
-      spreadsheetId,
-      range: rangeToUpdate,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [values]
+    let response;
+    try {
+      response = await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: rangeToUpdate,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [values]
+        }
+      });
+    } catch (updateErr) {
+      if (type === 'activos' && rangeToUpdate.includes('2026-2')) {
+        rangeToUpdate = `'Base de datos estudiantes 2026 - 2'!A${rowNumber}:K${rowNumber}`;
+        response = await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: rangeToUpdate,
+          valueInputOption: 'USER_ENTERED',
+          requestBody: {
+            values: [values]
+          }
+        });
+      } else {
+        throw updateErr;
       }
-    });
+    }
 
     return NextResponse.json({ success: true, updatedRange: response.data.updatedRange });
   } catch (error) {
