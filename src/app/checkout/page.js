@@ -38,44 +38,58 @@ import {
 } from 'firebase/firestore';
 import './checkout.css';
 
-// 5 PROGRAMAS ACADÉMICOS OFICIALES MPS (TODOS EN $500.000)
+// 5 PROGRAMAS ACADÉMICOS OFICIALES MPS (CON INFORMACIÓN COMPLETA DE INFOGRAFÍAS Y $500.000)
 const OFFICIAL_PROGRAMS = {
-  'curso-libre': {
-    id: 'curso-libre',
-    title: 'Curso Libre de Instrumento',
-    category: 'Formación Instrumental Continua',
-    badge: 'CURSO LIBRE OFICIAL MPS',
-    tagline: 'Tu instrumento. Tu proceso. Tu música.',
-    duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link) o 1 a 1 (One)',
-    presentation: 'Recital y muestra semestral en auditorio oficial MPS',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    homePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
-    components: [
-      { name: 'Modalidad MPS LINK (Grupal Semipersonalizado)', hours: '2 h/semana', format: '2 a 4 alumnos del mismo instrumento • Horario trimestral fijo' },
-      { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual • Avance a tu propio ritmo' },
-      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu residencia con docente asignado MPS' }
-    ]
-  },
   'mps-stage': {
     id: 'mps-stage',
     title: 'MPS STAGE (Instrumento + Ensamble)',
     category: 'Programa de Formación Musical • Semestral',
     badge: 'PROGRAMA DE FORMACIÓN MUSICAL',
     tagline: 'Aprende tu instrumento. Toca con otros. Sube al Stage.',
+    description: 'Programa que combina el desarrollo personalizado del instrumento con la experiencia real de tocar en un ensamble. El estudiante no solo aprende a interpretar su instrumento de forma individual, sino también a escuchar, acompañar, comunicarse y construir música con otros dentro de una banda.',
     duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas en total',
-    presentation: 'Presentación final del semestre según programación institucional',
+    presentation: 'Presentación final y concierto en vivo al cierre de semestre según programación institucional.',
     image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80',
     linkPrice: 500000,
     onePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
     components: [
-      { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual 1 estudiante • Técnica, lenguaje musical y repertorio' },
-      { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo colectivo 3 a 8 estudiantes • Escucha activa, roles y montaje en vivo' }
+      { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual (1 estudiante) • Técnica, lenguaje musical y repertorio' },
+      { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo colectivo (3 a 8 estudiantes) • Pulso, escucha activa, roles y montaje en vivo' }
+    ],
+    develops: [
+      'Técnica instrumental: postura, digitación, coordinación, afinación y sonoridad',
+      'Lenguaje musical: lectura rítmico-melódica, escalas, acordes y estructura',
+      'Interpretación: dinámicas, fraseo, expresión, estilo e improvisación',
+      'Ensamble: pulso colectivo, escucha activa y respuesta musical en grupo',
+      'Roles en arreglo: comprensión de la función de cada instrumento en la banda',
+      'Experiencia escénica: montaje de repertorio y presentación oficial en vivo'
+    ]
+  },
+  'curso-libre': {
+    id: 'curso-libre',
+    title: 'Curso Libre de Instrumento',
+    category: 'Formación Instrumental Continua',
+    badge: 'CURSO LIBRE OFICIAL MPS',
+    tagline: 'Tu instrumento. Tu proceso. Tu música.',
+    description: 'Línea de formación musical orientada al desarrollo técnico, musical e interpretativo del estudiante a través del aprendizaje de un instrumento o de la técnica vocal. El proceso se organiza mediante una Ruta de Aprendizaje Personalizada (RAP) adaptada a tus metas, edad y ritmo.',
+    duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link), 1 a 1 (One) o Domicilio (Home)',
+    presentation: 'Recital semestral en auditorio oficial MPS con sonido e iluminación profesional.',
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
+    linkPrice: 500000,
+    onePrice: 500000,
+    homePrice: 500000,
+    components: [
+      { name: 'Modalidad MPS LINK (Semipersonalizado)', hours: '2 h/semana', format: '2 a 4 estudiantes del mismo instrumento • Horario trimestral fijo • Aprendizaje colectivo' },
+      { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual • Atención exclusiva y avance a tu propio ritmo' },
+      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu residencia con docente asignado MPS' }
+    ],
+    develops: [
+      'Postura, digitación, técnica y coordinación motriz en el instrumento',
+      'Lectura musical, ritmo y aplicación práctica de conceptos teóricos',
+      'Habilidades auditivas, afinación y escucha consciente',
+      'Selección y montaje progresivo de repertorio a tu gusto',
+      'Expresión musical, estilo e improvisación según tu nivel',
+      'Hábitos de estudio, práctica constante y autonomía progresiva'
     ]
   },
   'mps-producer': {
@@ -84,16 +98,27 @@ const OFFICIAL_PROGRAMS = {
     category: 'Programa Especializado • Tecnología Sonora',
     badge: 'PROGRAMA ESPECIALIZADO DE AUDIO',
     tagline: 'De tus ideas a canciones reales.',
+    description: 'Programa especializado para desarrollar las competencias necesarias para crear, grabar, editar, mezclar, masterizar y gestionar proyectos musicales desde una perspectiva técnica, creativa y profesional. Combina teoría grupal, práctica individual y sesiones en estudios de grabación comerciales aliados.',
     duration: '1 Año académico (2 semestres de 16 semanas) • 2 h/semana • Máx 6 alumnos',
-    presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final + muestra pública',
+    presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final terminado + muestra pública.',
     image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80',
     linkPrice: 500000,
     onePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
     components: [
-      { name: 'Teoría Grupal + Práctica Individual', hours: '2 h/semana', format: '5 Módulos: DAW, microfonía, edición, mezcla/máster y dirección' },
-      { name: 'Sesiones en Estudio Aliado', hours: 'Estudios Pro', format: 'Mínimo 2 sesiones (Sem 1) y 3 sesiones (Sem 2) en estudio comercial' }
+      { name: 'Módulo 1: Gestión de Proyectos', hours: 'Teoría/DAW', format: 'Objetivos creativos y comerciales, flujo de trabajo, propiedad intelectual y distribución' },
+      { name: 'Módulo 2: Fundamentos de Audio', hours: 'Teoría/DAW', format: 'DAW, señal, grabación, microfonía, latencia, acústica y procesadores' },
+      { name: 'Módulo 3: Procesos de Audio', hours: 'Práctica', format: 'Edición, MIDI, mezcla, máster y entregables para plataformas digitales' },
+      { name: 'Módulo 4: Audición Crítica', hours: 'Análisis', format: 'Análisis técnico y estético de referentes y lenguajes de producción' },
+      { name: 'Módulo 5: Dirección Musical', hours: 'Estudio Pro', format: 'Composición, arreglos, estructuras y dirección de sesiones con músicos' },
+      { name: 'Prácticas en Estudios Aliados', hours: 'Min 2-3 Ses.', format: 'Mínimo 2 sesiones (Sem 1) y 3 sesiones (Sem 2) en estudio comercial profesional' }
+    ],
+    develops: [
+      'Operar DAWs profesionales con autonomía total',
+      'Técnicas avanzadas de microfonía y captura sonora en estudio',
+      'Flujo completo de edición digital, afinación y cuantización MIDI',
+      'Mezcla profesional (ecualización, compresión, saturación y balance)',
+      'Masterización y estándares de sonoridad para Spotify y Apple Music',
+      'Construcción de un portafolio de producción con obras reales'
     ]
   },
   'mps-prep': {
@@ -102,19 +127,26 @@ const OFFICIAL_PROGRAMS = {
     category: 'Admisiones Universidad • Alto Rendimiento',
     badge: 'PROGRAMA PREUNIVERSITARIO MUSICAL',
     tagline: 'Prepara tu música. Profundiza tu lenguaje. Da el siguiente paso.',
+    description: 'Proceso intensivo de formación de alto rendimiento que integra instrumento principal, teclado complementario, ensamble colectivo, gramática musical y teoría armónica, para construir una base sólida y asegurar el ingreso a facultades de música a nivel superior.',
     duration: '1 Semestre académico (16 semanas) • 15 h/semana • 240 Horas estimadas',
-    presentation: 'Audición de simulacro y preparación intensiva de admisión universitaria',
+    presentation: 'Audición de simulacro y preparación intensiva de pruebas de admisión universitaria.',
     image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80',
     linkPrice: 500000,
     onePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
     components: [
-      { name: 'Instrumento Principal', hours: '1 h/sem', format: 'Desarrollo técnico e interpretativo de repertorio avanzado' },
-      { name: 'Teclado Complementario', hours: '2 h/sem', format: 'Aplicación musical desde el teclado y armonía funcional' },
-      { name: 'Ensamble Colectivo', hours: '2 h/sem', format: 'Interpretación en grupo y desarrollo de la escucha activa' },
-      { name: 'Gramática y Audio', hours: '6 h/sem', format: 'Lectura rítmico-melódica, escalas, intervalos y dictado' },
-      { name: 'Teoría Musical', hours: '4 h/sem', format: 'Fundamentos armónicos y conceptos musicales aplicados' }
+      { name: 'Instrumento Principal', hours: '1 h/semana', format: 'Desarrollo técnico, repertorio avanzado e interpretación' },
+      { name: 'Teclado Complementario', hours: '2 h/semana', format: 'Aplicación musical desde el teclado y armonía funcional' },
+      { name: 'Ensamble Colectivo', hours: '2 h/semana', format: 'Interpretación en grupo y desarrollo de la escucha activa' },
+      { name: 'Gramática y Audio', hours: '6 h/semana', format: 'Lectura rítmico-melódica, claves, intervalos y entrenamiento auditivo' },
+      { name: 'Teoría Musical y Armonía', hours: '4 h/semana', format: 'Fundamentos armónicos, enlaces de acordes y análisis formal' }
+    ],
+    develops: [
+      'Lectura a primera vista fluida en claves de Sol, Fa y Do',
+      'Entrenamiento auditivo: reconocimiento de intervalos, tríadas y tétradas',
+      'Dictado rítmico, melódico y armónico intensivo',
+      'Técnica avanzada y montaje de obras exigidas para audición',
+      'Simulacros reales de exámenes de admisión universitaria',
+      'Metodología de estudio intensivo avalada por docentes graduados'
     ]
   },
   'mps-music-camp': {
@@ -123,17 +155,24 @@ const OFFICIAL_PROGRAMS = {
     category: 'Temporada Vacacional • Niños y Jóvenes',
     badge: 'TEMPORADA VACACIONAL INTENSIVA',
     tagline: 'Aprender, crear, ensayar, presentar.',
-    duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas totales',
-    presentation: 'Muestra escénica final en auditorio ante familiares',
+    description: 'Dos semanas para aprender, crear, ensayar y vivir la música en un entorno dinámico, colectivo y profesional. Combina el aprendizaje instrumental, el ensamble de banda y el taller corporal y de performance escénico.',
+    duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas en total',
+    presentation: 'Muestra escénica final en auditorio ante familiares e invitados.',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
     linkPrice: 500000,
     onePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
     components: [
-      { name: 'Instrumento Semipersonalizado', hours: '8 Horas', format: 'Técnica, postura, ejercicios y montaje de repertorio' },
-      { name: 'Ensamble Musical en Vivo', hours: '8 Horas', format: 'Pulso colectivo, escucha, interacción y dinamismo grupal' },
-      { name: 'Taller Corporal y Performance', hours: '4 Horas', format: 'Expresión corporal, presencia escénica y desinhibición' }
+      { name: 'Instrumento Semipersonalizado', hours: '8 Horas (Total)', format: 'Técnica, postura, ejercicios y montaje por instrumento' },
+      { name: 'Ensamble Musical en Vivo', hours: '8 Horas (Total)', format: 'Pulso, escucha, interacción y dinámica de banda' },
+      { name: 'Taller Corporal y Performance', hours: '4 Horas (Total)', format: 'Expresión corporal, soltura escénica y desinhibición' }
+    ],
+    develops: [
+      'Fortalecimiento rápido de habilidades técnicas en el instrumento',
+      'Experiencia real de tocar en una banda con otros músicos',
+      'Desarrollo de presencia escénica y manejo corporal en tarima',
+      'Mejora de la escucha, coordinación y ritmo grupal',
+      'Montaje acelerado de canciones para presentación final',
+      'Convivencia artística y trabajo cooperativo en equipo'
     ]
   },
   matricula: {
@@ -142,16 +181,20 @@ const OFFICIAL_PROGRAMS = {
     category: 'Registro Oficial MPS',
     badge: 'REGISTRO INSTITUCIONAL',
     tagline: 'Tu carné, reserva de salas y beneficios exclusivos de estudiante.',
+    description: 'Habilita tu condición de estudiante activo en la Escuela MPS, tu código de matrícula, reservas de salas de ensayo y convenios institucionales.',
     duration: 'Vigencia Anual (12 Meses)',
-    presentation: 'Carné oficial con convenios Yamaha y aliados',
+    presentation: 'Carné institucional oficial con beneficios Yamaha y aliados.',
     image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
     linkPrice: 500000,
     onePrice: 500000,
-    originalLink: 500000,
-    originalOne: 500000,
     components: [
-      { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios' },
-      { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Espacios insonorizados equipados' }
+      { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios comerciales' },
+      { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Acceso a salas insonorizadas y equipadas' }
+    ],
+    develops: [
+      'Acceso a la plataforma y reservas de espacios de ensayo',
+      'Descuentos en masterclasses y clínicas especiales',
+      'Participación en festivales y eventos institucionales'
     ]
   }
 };
@@ -1353,49 +1396,94 @@ function CheckoutContent() {
               </div>
             )}
 
-            {/* FICHA TÉCNICA E INFOGRAFÍA DEL PROGRAMA SELECCIONADO */}
+            {/* CUADRO COMPLETO CON TODA LA INFORMACIÓN DEL PROGRAMA */}
             {!isMatricula && (
-              <div className="program-detail-card">
-                <div className="program-detail-header">
-                  <span className="program-detail-top-badge">
+              <div className="program-detail-card" style={{ background: 'var(--bg-primary)', border: '1.5px solid var(--accent)', borderRadius: '14px', padding: '1.3rem', margin: '1.2rem 0', boxShadow: '0 8px 25px rgba(0, 222, 133, 0.08)' }}>
+                
+                {/* ENCABEZADO Y BADGE */}
+                <div className="program-detail-header" style={{ marginBottom: '0.8rem' }}>
+                  <span className="program-detail-top-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(0, 222, 133, 0.15)', color: 'var(--accent)', padding: '0.3rem 0.7rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     <Sparkles size={13} /> {activeProgram.badge}
                   </span>
-                  <h4 className="program-detail-title">{activeProgram.title}</h4>
-                  <p className="program-detail-tagline">“{activeProgram.tagline}”</p>
+                  <h4 className="program-detail-title" style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)', margin: '0.4rem 0 0.2rem 0' }}>
+                    {activeProgram.title}
+                  </h4>
+                  <p className="program-detail-tagline" style={{ fontSize: '0.86rem', color: 'var(--accent)', fontStyle: 'italic', margin: 0, fontWeight: 600 }}>
+                    “{activeProgram.tagline}”
+                  </p>
                 </div>
 
-                <div className="program-duration-pill">
+                {/* ¿EN QUÉ CONSISTE? (DESCRIPCIÓN DE LA INFOGRAFÍA) */}
+                <div style={{ background: 'rgba(0, 0, 0, 0.03)', padding: '0.85rem', borderRadius: '10px', margin: '0.8rem 0', borderLeft: '3px solid var(--accent)' }}>
+                  <div style={{ fontSize: '0.74rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.3rem' }}>
+                    📖 ¿En qué consiste este programa?
+                  </div>
+                  <p style={{ fontSize: '0.84rem', color: 'var(--text-primary)', lineHeight: 1.5, margin: 0 }}>
+                    {activeProgram.description}
+                  </p>
+                </div>
+
+                {/* DURACIÓN E INTENSIDAD */}
+                <div className="program-duration-pill" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(0, 222, 133, 0.08)', border: '1px solid rgba(0, 222, 133, 0.25)', padding: '0.6rem 0.8rem', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', margin: '0.8rem 0' }}>
                   <span>⏱️ {activeProgram.duration}</span>
                 </div>
 
-                <div className="program-components-section-title">
-                  Estructura y Componentes:
+                {/* ESTRUCTURA Y COMPONENTES */}
+                <div className="program-components-section-title" style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.6px', margin: '1rem 0 0.5rem 0' }}>
+                  🎯 Estructura y Componentes de Formación:
                 </div>
-                <div className="program-components-list">
+                <div className="program-components-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {activeProgram.components.map((c, idx) => (
-                    <div key={idx} className="program-component-item">
-                      <div>
-                        <div className="program-comp-name">{c.name}</div>
-                        <span className="program-comp-format">{c.format}</span>
+                    <div key={idx} className="program-component-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0, 0, 0, 0.02)', border: '1px solid var(--glass-border)', padding: '0.6rem 0.75rem', borderRadius: '8px' }}>
+                      <div style={{ paddingRight: '0.5rem' }}>
+                        <div className="program-comp-name" style={{ fontWeight: 700, fontSize: '0.82rem', color: 'var(--text-primary)' }}>{c.name}</div>
+                        <span className="program-comp-format" style={{ fontSize: '0.73rem', color: 'var(--text-secondary)', display: 'block', marginTop: '0.15rem', lineHeight: 1.35 }}>{c.format}</span>
                       </div>
-                      <span className="program-comp-hours">{c.hours}</span>
+                      <span className="program-comp-hours" style={{ fontWeight: 800, color: 'var(--accent)', background: 'rgba(0, 222, 133, 0.12)', padding: '0.25rem 0.55rem', borderRadius: '6px', fontSize: '0.74rem', whiteSpace: 'nowrap' }}>
+                        {c.hours}
+                      </span>
                     </div>
                   ))}
                 </div>
 
+                {/* ¿QUÉ DESARROLLA EL ESTUDIANTE? */}
+                {activeProgram.develops && (
+                  <div style={{ marginTop: '1rem' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '0.5rem' }}>
+                      🚀 ¿Qué desarrolla el estudiante?
+                    </div>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                      {activeProgram.develops.map((dev, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.45rem', fontSize: '0.8rem', color: 'var(--text-primary)', lineHeight: 1.4 }}>
+                          <CheckCircle2 size={14} color="var(--accent)" style={{ flexShrink: 0, marginTop: '3px' }} />
+                          <span>{dev}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* CIERRE / PRESENTACIÓN EN VIVO */}
+                <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.8rem', background: 'rgba(0, 0, 0, 0.03)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  <Sparkles size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
+                  <span><strong>Cierre del Proceso:</strong> {activeProgram.presentation}</span>
+                </div>
+
                 {/* SELECTOR DE HORARIO GRUPAL TRIMESTRAL (SI MODALIDAD ES GRUPAL / LINK) */}
                 {modality === 'grupal' && activeSchedules.length > 0 && (
-                  <div className="schedule-selector-box">
-                    <div className="schedule-selector-title">
-                      <span>📅 Horario Grupal Trimestral (Fijo)</span>
+                  <div className="schedule-selector-box" style={{ marginTop: '1rem', background: 'rgba(0, 222, 133, 0.06)', border: '1.5px solid var(--accent)', borderRadius: '10px', padding: '0.9rem' }}>
+                    <div className="schedule-selector-title" style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.2rem' }}>
+                      <Calendar size={16} color="var(--accent)" />
+                      <span>Horario Grupal Trimestral (Fijo de la Libreta)</span>
                     </div>
-                    <p className="schedule-selector-desc">
+                    <p className="schedule-selector-desc" style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', margin: '0 0 0.6rem 0', lineHeight: 1.4 }}>
                       Selecciona tu franja semanal de 2 horas (grupos reducidos de 2 a 4 alumnos):
                     </p>
                     <select 
                       className="schedule-options-select"
                       value={selectedSchedule}
                       onChange={(e) => setSelectedSchedule(e.target.value)}
+                      style={{ width: '100%', padding: '0.65rem 0.8rem', background: 'var(--bg-primary)', border: '1.5px solid var(--accent)', borderRadius: '8px', fontSize: '0.84rem', fontWeight: 600, color: 'var(--text-primary)', outline: 'none' }}
                     >
                       {activeSchedules.map((sch) => (
                         <option key={sch.id} value={sch.label}>
@@ -1405,6 +1493,32 @@ function CheckoutContent() {
                     </select>
                   </div>
                 )}
+
+                {/* CUADRO DESTACADO: KIT DE BIENVENIDA SELECCIONADO */}
+                {includeKit && (
+                  <div style={{
+                    marginTop: '1.1rem',
+                    padding: '0.9rem',
+                    background: 'rgba(255, 164, 27, 0.1)',
+                    border: '1.5px solid #ffa41b',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.6rem',
+                    boxShadow: '0 4px 12px rgba(255, 164, 27, 0.12)'
+                  }}>
+                    <Sparkles size={20} color="#ffa41b" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '0.86rem', color: '#ffa41b', marginBottom: '0.2rem' }}>
+                        🎁 Kit de Iniciación y Material MPS Incluido (+ {formatCOP(KIT_PRICE)})
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.45 }}>
+                        Incluye cuadernos de pauta musical oficial, convenios externos y beneficios con Yamaha, stickers institucionales y carné estudiantil.
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               </div>
             )}
 
