@@ -38,7 +38,7 @@ import {
 } from 'firebase/firestore';
 import './checkout.css';
 
-// 5 PROGRAMAS ACADÉMICOS OFICIALES MPS (SEGÚN DOCUMENTOS CURRICULARES E INFOGRAFÍAS)
+// 5 PROGRAMAS ACADÉMICOS OFICIALES MPS (TODOS EN $500.000)
 const OFFICIAL_PROGRAMS = {
   'curso-libre': {
     id: 'curso-libre',
@@ -49,11 +49,11 @@ const OFFICIAL_PROGRAMS = {
     duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link) o 1 a 1 (One)',
     presentation: 'Recital y muestra semestral en auditorio oficial MPS',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 230000,
-    onePrice: 320000,
-    homePrice: 380000,
-    originalLink: 250000,
-    originalOne: 350000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    homePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Modalidad MPS LINK (Grupal Semipersonalizado)', hours: '2 h/semana', format: '2 a 4 alumnos del mismo instrumento • Horario trimestral fijo' },
       { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual • Avance a tu propio ritmo' },
@@ -69,10 +69,10 @@ const OFFICIAL_PROGRAMS = {
     duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas en total',
     presentation: 'Presentación final del semestre según programación institucional',
     image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80',
-    linkPrice: 280000,
-    onePrice: 380000,
-    originalLink: 320000,
-    originalOne: 420000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual 1 estudiante • Técnica, lenguaje musical y repertorio' },
       { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo colectivo 3 a 8 estudiantes • Escucha activa, roles y montaje en vivo' }
@@ -87,10 +87,10 @@ const OFFICIAL_PROGRAMS = {
     duration: '1 Año académico (2 semestres de 16 semanas) • 2 h/semana • Máx 6 alumnos',
     presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final + muestra pública',
     image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80',
-    linkPrice: 320000,
-    onePrice: 420000,
-    originalLink: 350000,
-    originalOne: 460000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Teoría Grupal + Práctica Individual', hours: '2 h/semana', format: '5 Módulos: DAW, microfonía, edición, mezcla/máster y dirección' },
       { name: 'Sesiones en Estudio Aliado', hours: 'Estudios Pro', format: 'Mínimo 2 sesiones (Sem 1) y 3 sesiones (Sem 2) en estudio comercial' }
@@ -105,10 +105,10 @@ const OFFICIAL_PROGRAMS = {
     duration: '1 Semestre académico (16 semanas) • 15 h/semana • 240 Horas estimadas',
     presentation: 'Audición de simulacro y preparación intensiva de admisión universitaria',
     image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80',
-    linkPrice: 450000,
-    onePrice: 580000,
-    originalLink: 490000,
-    originalOne: 650000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Instrumento Principal', hours: '1 h/sem', format: 'Desarrollo técnico e interpretativo de repertorio avanzado' },
       { name: 'Teclado Complementario', hours: '2 h/sem', format: 'Aplicación musical desde el teclado y armonía funcional' },
@@ -126,10 +126,10 @@ const OFFICIAL_PROGRAMS = {
     duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas totales',
     presentation: 'Muestra escénica final en auditorio ante familiares',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 290000,
-    onePrice: 390000,
-    originalLink: 330000,
-    originalOne: 440000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Instrumento Semipersonalizado', hours: '8 Horas', format: 'Técnica, postura, ejercicios y montaje de repertorio' },
       { name: 'Ensamble Musical en Vivo', hours: '8 Horas', format: 'Pulso colectivo, escucha, interacción y dinamismo grupal' },
@@ -145,10 +145,10 @@ const OFFICIAL_PROGRAMS = {
     duration: 'Vigencia Anual (12 Meses)',
     presentation: 'Carné oficial con convenios Yamaha y aliados',
     image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
-    linkPrice: 120000,
-    onePrice: 120000,
-    originalLink: 150000,
-    originalOne: 150000,
+    linkPrice: 500000,
+    onePrice: 500000,
+    originalLink: 500000,
+    originalOne: 500000,
     components: [
       { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios' },
       { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Espacios insonorizados equipados' }
@@ -167,7 +167,7 @@ const INSTRUMENTS_LIST = [
   { id: 'actuacion', name: 'Actuación y Expresión Escénica' }
 ];
 
-// HORARIOS GRUPALES TRIMESTRALES (DE LA LIBRETA MANUSCRITA OFICIAL)
+// HORARIOS GRUPALES TRIMESTRALES (DE LA LIBRETA MANUSCRITA)
 const GROUP_SCHEDULES = {
   canto: [
     { id: 'canto-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Técnica Vocal)' },
@@ -226,10 +226,36 @@ const GROUP_SCHEDULES = {
   ]
 };
 
+// BANCOS PARA PSE EN COLOMBIA
+const COLOMBIAN_BANKS = [
+  'Bancolombia',
+  'Nequi',
+  'Banco Davivienda',
+  'Daviplata',
+  'Banco de Bogotá',
+  'BBVA Colombia',
+  'Banco Caja Social',
+  'Banco Falabella',
+  'Banco de Occidente',
+  'Banco Agrario de Colombia',
+  'Banco Itaú Colombia',
+  'Banco Popular',
+  'Banco AV Villas',
+  'Banco Santander Colombia',
+  'Banco Pichincha',
+  'Banco GNB Sudameris',
+  'Nu Colombia (Nubank)',
+  'Lulo Bank',
+  'RappiPay',
+  'Dale! (Grupo Aval)',
+  'Ualá Colombia',
+  'Movii'
+];
+
 function CheckoutContent() {
   const searchParams = useSearchParams();
 
-  // Estados del formulario del comprador
+  // Estados del comprador
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [emailConfirm, setEmailConfirm] = useState('');
@@ -248,8 +274,19 @@ function CheckoutContent() {
   const [includeKit, setIncludeKit] = useState(false);
   const KIT_PRICE = 35000;
 
-  // Método de pago: 'bold' (por defecto) | 'nequi' (desplegable)
-  const [paymentMethod, setPaymentMethod] = useState('bold');
+  // Método de pago: 'tarjeta' | 'pse' | 'nequi'
+  const [paymentSubtype, setPaymentSubtype] = useState('tarjeta'); // 'tarjeta' | 'pse'
+  const [showOtherMethods, setShowOtherMethods] = useState(false); // Desplegable Nequi / Bre-B
+
+  // Campos de Tarjeta de Crédito / Débito
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cardCvc, setCardCvc] = useState('');
+  const [installments, setInstallments] = useState('1');
+
+  // Campos de PSE
+  const [pseBank, setPseBank] = useState('Bancolombia');
 
   // Nequi estados
   const [copiedKey, setCopiedKey] = useState(false);
@@ -266,6 +303,23 @@ function CheckoutContent() {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState('');
+
+  // Formateadores de Tarjeta
+  const handleCardNumberChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length > 16) val = val.slice(0, 16);
+    val = val.replace(/(\d{4})(?=\d)/g, '$1 ');
+    setCardNumber(val);
+  };
+
+  const handleExpiryChange = (e) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length > 4) val = val.slice(0, 4);
+    if (val.length >= 2) {
+      val = val.slice(0, 2) + '/' + val.slice(2);
+    }
+    setCardExpiry(val);
+  };
 
   // Leer query params al cargar
   useEffect(() => {
@@ -324,15 +378,11 @@ function CheckoutContent() {
   const isMatricula = selectedProgramKey === 'matricula';
   const hasInstrumentChoice = selectedProgramKey === 'curso-libre' || selectedProgramKey === 'mps-stage';
 
-  const currentPrice = isMatricula ? activeProgram.linkPrice : (modality === 'individual' ? activeProgram.onePrice : activeProgram.linkPrice);
-  const currentOriginal = isMatricula ? activeProgram.originalLink : (modality === 'individual' ? activeProgram.originalOne : activeProgram.originalLink);
-  const basePrice = customAmount !== null ? customAmount : currentPrice;
-
+  const basePrice = customAmount !== null ? customAmount : 500000;
   const instrumentLabel = hasInstrumentChoice ? ` (${INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument})` : '';
   const modalityLabel = isMatricula ? '' : (modality === 'individual' ? ' - MPS One (Individual)' : ' - MPS Link (Grupal Trimestral)');
   const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel;
 
-  const discountAmount = customAmount !== null ? 0 : (currentOriginal - currentPrice);
   const couponDiscount = appliedCoupon ? (Number(appliedCoupon.valor) || 0) : 0;
   const totalPrice = Math.max(0, basePrice + (includeKit ? KIT_PRICE : 0) - couponDiscount);
 
@@ -393,8 +443,10 @@ function CheckoutContent() {
   };
 
   // Manejo del Submit del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e, forceMethod = null) => {
+    if (e) e.preventDefault();
+
+    const activeMethod = forceMethod || (showOtherMethods ? 'nequi' : paymentSubtype);
 
     const errors = {};
     if (!nombre.trim()) errors.nombre = 'Ingresa tu nombre completo';
@@ -403,6 +455,15 @@ function CheckoutContent() {
       errors.emailConfirm = 'Los correos no coinciden';
     }
     if (!telefono.trim() || telefono.length < 7) errors.telefono = 'Ingresa un número de celular de contacto válido';
+
+    // Validación de tarjeta si el método es tarjeta
+    if (activeMethod === 'tarjeta') {
+      const cleanCard = cardNumber.replace(/\s/g, '');
+      if (cleanCard.length < 15) errors.cardNumber = 'Ingresa los 16 dígitos de la tarjeta';
+      if (!cardHolder.trim()) errors.cardHolder = 'Ingresa el nombre como figura en la tarjeta';
+      if (cardExpiry.length < 5) errors.cardExpiry = 'Ingresa MM/AA';
+      if (cardCvc.length < 3) errors.cardCvc = 'Ingresa CVC (3 o 4 dígitos)';
+    }
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
@@ -439,19 +500,31 @@ function CheckoutContent() {
           descuento: appliedCoupon.valor,
           cuponId: appliedCoupon.id
         } : null,
-        metodoPago: paymentMethod, // 'bold' | 'nequi'
-        detallePago: paymentMethod === 'bold' 
+        metodoPago: activeMethod, // 'tarjeta' | 'pse' | 'nequi'
+        detallePago: activeMethod === 'tarjeta'
           ? {
               pasarela: 'Bold Pagos Oficial',
+              tipo: 'Tarjeta Crédito/Débito',
+              titular: cardHolder,
+              ultimosDigitos: cardNumber.replace(/\s/g, '').slice(-4),
+              cuotas: installments,
               moneda: 'COP',
               monto: totalPrice
             }
-          : {
-              llaveBreB: '@MIPRIMERSOL',
-              telefonoNequi: '3023557760',
-              comprobanteAdjunto: !!comprobanteFile
-            },
-        estado: paymentMethod === 'bold' ? 'PENDIENTE_PAGO_BOLD' : 'PENDIENTE_VERIFICACION',
+          : activeMethod === 'pse'
+            ? {
+                pasarela: 'Bold PSE Oficial',
+                tipo: 'PSE Débito Bancario',
+                banco: pseBank,
+                moneda: 'COP',
+                monto: totalPrice
+              }
+            : {
+                llaveBreB: '@MIPRIMERSOL',
+                telefonoNequi: '3023557760',
+                comprobanteAdjunto: !!comprobanteFile
+              },
+        estado: activeMethod === 'nequi' ? 'PENDIENTE_VERIFICACION' : 'PENDIENTE_PAGO_BOLD',
         fecha: new Date().toISOString(),
         origen: 'checkout_web_mps'
       };
@@ -476,8 +549,8 @@ function CheckoutContent() {
         }
       }
 
-      // Si es Bold, generar firma e invocar el checkout oficial de Bold
-      if (paymentMethod === 'bold') {
+      // Si es Bold (tarjeta o PSE), abrir pasarela segura de confirmación
+      if (activeMethod !== 'nequi') {
         try {
           const resBold = await fetch('/api/checkout/bold', {
             method: 'POST',
@@ -523,7 +596,7 @@ function CheckoutContent() {
         id: 'MPS-' + Math.floor(100000 + Math.random() * 900000),
         cliente: { nombre, email, telefono },
         producto: { titulo: productTitle, totalCOP: totalPrice, horarioSeleccionado: selectedSchedule },
-        metodoPago: paymentMethod
+        metodoPago: activeMethod
       });
     } finally {
       setSubmitting(false);
@@ -616,7 +689,7 @@ function CheckoutContent() {
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Método:</span>
                 <span style={{ fontWeight: 700, textTransform: 'capitalize' }}>
-                  {successOrder.metodoPago === 'bold' ? 'Pago en Línea Seguro' : 'Transferencia Nequi / Bre-B'}
+                  {successOrder.metodoPago === 'tarjeta' ? 'Tarjeta Crédito / Débito' : successOrder.metodoPago === 'pse' ? 'PSE Débito' : 'Transferencia Nequi / Bre-B'}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -755,7 +828,7 @@ function CheckoutContent() {
               </div>
             </div>
 
-            {/* PASO 2: PAGO SEGURO */}
+            {/* PASO 2: MÉTODO DE PAGO */}
             <div className="checkout-card">
               <div className="checkout-card-header">
                 <div className="checkout-step-bubble">2</div>
@@ -768,47 +841,197 @@ function CheckoutContent() {
                 strategy="afterInteractive" 
               />
 
-              {/* BLOQUE PRINCIPAL: TUS PAGOS SON SEGUROS GRACIAS A BOLD */}
-              <div className="bold-payment-box" style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', padding: '1.25rem', borderRadius: '14px', marginBottom: '1.2rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <ShieldCheck size={22} color="var(--accent)" />
-                    <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                      Tus pagos son seguros gracias a
-                    </span>
-                    {/* LOGO OFICIAL BOLD */}
-                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.2rem 0.55rem', borderRadius: '6px', background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
-                      <span style={{ fontWeight: 900, fontSize: '1.1rem', color: '#111827', letterSpacing: '-0.5px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                        bold<span style={{ color: '#ff2947' }}>.</span>
-                      </span>
-                    </span>
-                  </div>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', background: 'rgba(0, 222, 133, 0.1)', padding: '0.25rem 0.6rem', borderRadius: '20px' }}>
-                    ✓ Vigilado Superfinanciera
-                  </span>
-                </div>
+              {/* SUBOPCIONES: TARJETA VS PSE */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1.2rem' }}>
+                <button
+                  type="button"
+                  onClick={() => { setPaymentSubtype('tarjeta'); setShowOtherMethods(false); }}
+                  style={{
+                    padding: '0.85rem 1rem',
+                    borderRadius: '10px',
+                    border: paymentSubtype === 'tarjeta' && !showOtherMethods ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                    background: paymentSubtype === 'tarjeta' && !showOtherMethods ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                    color: paymentSubtype === 'tarjeta' && !showOtherMethods ? 'var(--accent)' : 'var(--text-primary)',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <CreditCard size={18} />
+                  <span>Tarjeta de Crédito / Débito</span>
+                </button>
 
-                <div className="bold-methods-grid">
-                  <div className="bold-method-card">
-                    <CreditCard size={18} color="#0284c7" />
-                    <span className="bold-method-label">Tarjetas Crédito / Débito</span>
-                  </div>
-                  <div className="bold-method-card">
-                    <Building2 size={18} color="#10b981" />
-                    <span className="bold-method-label">PSE (Cualquier Banco)</span>
-                  </div>
-                  <div className="bold-method-card">
-                    <Smartphone size={18} color="#d946ef" />
-                    <span className="bold-method-label">Nequi & Daviplata</span>
-                  </div>
-                  <div className="bold-method-card">
-                    <CheckCircle2 size={18} color="#f59e0b" />
-                    <span className="bold-method-label">Botón Bancolombia</span>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => { setPaymentSubtype('pse'); setShowOtherMethods(false); }}
+                  style={{
+                    padding: '0.85rem 1rem',
+                    borderRadius: '10px',
+                    border: paymentSubtype === 'pse' && !showOtherMethods ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                    background: paymentSubtype === 'pse' && !showOtherMethods ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                    color: paymentSubtype === 'pse' && !showOtherMethods ? 'var(--accent)' : 'var(--text-primary)',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <Building2 size={18} />
+                  <span>PSE (Débito Bancario)</span>
+                </button>
               </div>
 
-              {/* ORDER BUMP ESTILO HOTMART (KIT DE BIENVENIDA) */}
+              {/* FORMULARIO DE TARJETA DIRECTO EN PANTALLA */}
+              {paymentSubtype === 'tarjeta' && !showOtherMethods && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.6rem' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Lock size={15} color="var(--accent)" /> Ingresa los datos de tu tarjeta
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                      Visa • Mastercard • Amex
+                    </span>
+                  </div>
+
+                  <div className="checkout-input-group">
+                    <label className="checkout-label">Número de tarjeta</label>
+                    <input 
+                      type="text"
+                      placeholder="4500 0000 0000 0000"
+                      className="checkout-input"
+                      value={cardNumber}
+                      onChange={handleCardNumberChange}
+                    />
+                    {formErrors.cardNumber && (
+                      <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
+                        {formErrors.cardNumber}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="checkout-input-group">
+                    <label className="checkout-label">Nombre impreso en la tarjeta</label>
+                    <input 
+                      type="text"
+                      placeholder="Como aparece en el plástico"
+                      className="checkout-input"
+                      value={cardHolder}
+                      onChange={(e) => setCardHolder(e.target.value.toUpperCase())}
+                    />
+                    {formErrors.cardHolder && (
+                      <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
+                        {formErrors.cardHolder}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="checkout-grid-2">
+                    <div className="checkout-input-group">
+                      <label className="checkout-label">Vencimiento (MM/AA)</label>
+                      <input 
+                        type="text"
+                        placeholder="MM/AA"
+                        className="checkout-input"
+                        value={cardExpiry}
+                        onChange={handleExpiryChange}
+                      />
+                      {formErrors.cardExpiry && (
+                        <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
+                          {formErrors.cardExpiry}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="checkout-input-group">
+                      <label className="checkout-label">Código de Seguridad (CVC / CVV)</label>
+                      <input 
+                        type="password"
+                        placeholder="123"
+                        maxLength={4}
+                        className="checkout-input"
+                        value={cardCvc}
+                        onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ''))}
+                      />
+                      {formErrors.cardCvc && (
+                        <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
+                          {formErrors.cardCvc}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="checkout-input-group" style={{ marginBottom: 0 }}>
+                    <label className="checkout-label">Número de cuotas</label>
+                    <select 
+                      className="checkout-input"
+                      value={installments}
+                      onChange={(e) => setInstallments(e.target.value)}
+                    >
+                      <option value="1">1 cuota de {formatCOP(totalPrice)} (Sin interés)</option>
+                      <option value="2">2 cuotas de {formatCOP(totalPrice / 2)}</option>
+                      <option value="3">3 cuotas de {formatCOP(totalPrice / 3)}</option>
+                      <option value="6">6 cuotas de {formatCOP(totalPrice / 6)}</option>
+                      <option value="12">12 cuotas de {formatCOP(totalPrice / 12)}</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {/* FORMULARIO PSE */}
+              {paymentSubtype === 'pse' && !showOtherMethods && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.6rem' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Building2 size={16} color="var(--accent)" /> Pago Seguro PSE
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                      Débito desde cuenta de ahorros o corriente
+                    </span>
+                  </div>
+
+                  <div className="checkout-input-group" style={{ marginBottom: 0 }}>
+                    <label className="checkout-label">Selecciona tu banco:</label>
+                    <select 
+                      className="checkout-input"
+                      value={pseBank}
+                      onChange={(e) => setPseBank(e.target.value)}
+                    >
+                      {COLOMBIAN_BANKS.map((banco, idx) => (
+                        <option key={idx} value={banco}>
+                          {banco}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {/* SELLO DE SEGURIDAD BOLD */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.6rem', padding: '0.6rem 0.8rem', background: 'rgba(0, 222, 133, 0.05)', borderRadius: '8px', border: '1px solid rgba(0, 222, 133, 0.2)', marginBottom: '1.2rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                  <ShieldCheck size={16} color="var(--accent)" />
+                  <span>Tus pagos son procesados de forma segura con</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.1rem 0.45rem', borderRadius: '4px', background: '#ffffff', border: '1px solid #e2e8f0' }}>
+                    <span style={{ fontWeight: 900, fontSize: '0.95rem', color: '#111827', letterSpacing: '-0.5px' }}>
+                      bold<span style={{ color: '#ff2947' }}>.</span>
+                    </span>
+                  </span>
+                </div>
+                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)' }}>
+                  ✓ Vigilado Superfinanciera
+                </span>
+              </div>
+
+              {/* ORDER BUMP (KIT DE BIENVENIDA) */}
               <div 
                 className="checkout-order-bump"
                 onClick={() => setIncludeKit(!includeKit)}
@@ -834,8 +1057,8 @@ function CheckoutContent() {
                 </div>
               </div>
 
-              {/* BOTÓN CTA PRINCIPAL DE PAGO ONLINE SEGURO */}
-              {paymentMethod === 'bold' && (
+              {/* BOTÓN CTA PRINCIPAL */}
+              {!showOtherMethods && (
                 <button 
                   type="submit" 
                   className="checkout-cta-btn"
@@ -843,22 +1066,22 @@ function CheckoutContent() {
                 >
                   <Lock size={20} />
                   {submitting 
-                    ? 'Conectando con pasarela segura...' 
+                    ? 'Procesando pago seguro...' 
                     : `Pagar Inscripción ${formatCOP(totalPrice)} →`}
                 </button>
               )}
 
-              {/* DESPLEGABLE: OTRAS FORMAS DE PAGO */}
+              {/* DESPLEGABLE: OTRAS FORMAS DE PAGO (NEQUI / BRE-B CON QR) */}
               <div style={{ marginTop: '1.4rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1.2rem' }}>
                 <button
                   type="button"
-                  onClick={() => setPaymentMethod(paymentMethod === 'nequi' ? 'bold' : 'nequi')}
+                  onClick={() => setShowOtherMethods(!showOtherMethods)}
                   style={{
                     width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    background: paymentMethod === 'nequi' ? 'rgba(0, 222, 133, 0.08)' : 'var(--bg-primary)',
+                    background: showOtherMethods ? 'rgba(0, 222, 133, 0.08)' : 'var(--bg-primary)',
                     border: '1px solid var(--glass-border)',
                     padding: '0.85rem 1rem',
                     borderRadius: '10px',
@@ -871,21 +1094,41 @@ function CheckoutContent() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                     <Smartphone size={18} color="var(--accent)" />
-                    <span>Otras formas de pago (Transferencia directa Nequi / Bre-B)</span>
+                    <span>Otras formas de pago (Transferencia directa Nequi / Bre-B con QR)</span>
                   </div>
                   <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {paymentMethod === 'nequi' ? '▲ Ocultar' : '▼ Desplegar'}
+                    {showOtherMethods ? '▲ Ocultar' : '▼ Desplegar'}
                   </span>
                 </button>
 
-                {paymentMethod === 'nequi' && (
+                {showOtherMethods && (
                   <div style={{ marginTop: '1rem' }}>
                     <div className="nequi-payment-box">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.2rem' }}>
-                        <QrCode size={22} color="var(--accent)" />
-                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--accent)' }}>
-                          Transferencia Manual a Cuenta Institucional
-                        </span>
+                      
+                      {/* CÓDIGO QR OFICIAL DE /CENA */}
+                      <div style={{ textAlign: 'center', marginBottom: '1.2rem' }}>
+                        <div style={{
+                          width: '180px',
+                          height: '180px',
+                          background: '#ffffff',
+                          padding: '10px',
+                          borderRadius: '14px',
+                          margin: '0 auto 0.8rem auto',
+                          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: '1.5px solid var(--accent)'
+                        }}>
+                          <img 
+                            src="/images/qr.png" 
+                            alt="Código QR Nequi y Bre-B MPS" 
+                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
+                          />
+                        </div>
+                        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0 }}>
+                          Escanea desde tu app de <strong>Nequi</strong> o <strong>Bancolombia</strong> para transferir
+                        </p>
                       </div>
 
                       <div className="nequi-key-row">
@@ -953,7 +1196,8 @@ function CheckoutContent() {
                       </div>
 
                       <button 
-                        type="submit" 
+                        type="button" 
+                        onClick={(e) => handleSubmit(e, 'nequi')}
                         className="checkout-cta-btn"
                         disabled={submitting}
                         style={{ marginTop: '1.2rem' }}
@@ -1077,7 +1321,7 @@ function CheckoutContent() {
                   >
                     <span>👥 MPS Link (Grupal)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(activeProgram.linkPrice)}/mes
+                      {formatCOP(500000)}
                     </span>
                   </button>
 
@@ -1102,7 +1346,7 @@ function CheckoutContent() {
                   >
                     <span>👤 MPS One (1 a 1)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(activeProgram.onePrice)}/mes
+                      {formatCOP(500000)}
                     </span>
                   </button>
                 </div>
@@ -1290,17 +1534,8 @@ function CheckoutContent() {
             <div className="summary-price-breakdown">
               <div className="price-row">
                 <span>Precio oficial:</span>
-                <span style={{ textDecoration: discountAmount > 0 ? 'line-through' : 'none' }}>
-                  {formatCOP(currentOriginal || basePrice)}
-                </span>
+                <span>{formatCOP(basePrice)}</span>
               </div>
-
-              {discountAmount > 0 && (
-                <div className="price-row discount">
-                  <span>Descuento de bienvenida:</span>
-                  <span>-{formatCOP(discountAmount)}</span>
-                </div>
-              )}
 
               {appliedCoupon && (
                 <div className="price-row discount" style={{ color: 'var(--accent)', fontWeight: 700 }}>
