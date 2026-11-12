@@ -300,27 +300,49 @@ export default function AdminPage() {
           </span>
         </div>
 
-        <button 
-          onClick={handleLogout}
-          style={{ 
-            background: 'rgba(239, 68, 68, 0.08)', 
-            border: '1px solid rgba(239, 68, 68, 0.2)', 
-            color: '#ef4444', 
-            cursor: 'pointer', 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            fontWeight: 600,
-            fontSize: '0.9rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '8px',
-            transition: 'all 0.2s ease'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.16)'}
-          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)'}
-        >
-          <LogOut size={16} /> Cerrar sesión
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <button 
+            onClick={() => router.push('/admin/tarifas')}
+            style={{ 
+              background: 'rgba(0, 222, 133, 0.12)', 
+              border: '1px solid var(--accent, #00DE85)', 
+              color: 'var(--accent, #00DE85)', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.4rem', 
+              fontWeight: 700,
+              fontSize: '0.85rem',
+              padding: '0.45rem 0.9rem',
+              borderRadius: '8px',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <DollarSign size={16} /> Tarifas y Precios
+          </button>
+
+          <button 
+            onClick={handleLogout}
+            style={{ 
+              background: 'rgba(239, 68, 68, 0.08)', 
+              border: '1px solid rgba(239, 68, 68, 0.2)', 
+              color: '#ef4444', 
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem', 
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '8px',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.16)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)'}
+          >
+            <LogOut size={16} /> Cerrar sesión
+          </button>
+        </div>
       </header>
 
       {/* Contenido principal */}
@@ -694,40 +716,38 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* Card Tarifas y Costos (Dirección, Administración y Coordinación) */}
-              {(isDireccion || isAdministracion || isCoordinacion) && (
-                <div 
-                  onClick={() => router.push('/admin/tarifas')}
-                  style={{
-                    background: 'var(--panel-bg)',
-                    border: '1px solid var(--glass-border)',
-                    borderRadius: '16px',
-                    padding: '2rem 1.5rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    height: '100%'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'none';
-                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
-                  }}
-                >
-                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#ecfdf5', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                    <DollarSign size={30} />
-                  </div>
-                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Tarifas y Costos</h2>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Configuración dinámica de precios oficiales, paquetes de clases individuales, grupales y a domicilio.</p>
+              {/* Card Tarifas y Costos Oficiales MPS */}
+              <div 
+                onClick={() => router.push('/admin/tarifas')}
+                style={{
+                  background: 'var(--panel-bg)',
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: '16px',
+                  padding: '2rem 1.5rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  height: '100%'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                }}
+              >
+                <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#ecfdf5', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <DollarSign size={30} />
                 </div>
-              )}
+                <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Tarifas y Costos</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Configuración dinámica de precios oficiales, paquetes de clases individuales, grupales y a domicilio.</p>
+              </div>
 
             </div>
           );

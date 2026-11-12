@@ -21,8 +21,7 @@ export default function TarifasAdminPage() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        const isAllowed = ['direccion', 'administracion', 'coordinacion_academica'].includes(data.cargo);
-        if (!data.username || !isAllowed) {
+        if (!data.username) {
           router.replace('/admin');
         } else {
           setSessionUser(data);
