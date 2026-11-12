@@ -1,6 +1,29 @@
 import { google } from 'googleapis';
 import { NextResponse } from 'next/server';
 
+function getGoogleAuth() {
+  let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
+  }
+  privateKey = privateKey.replace(/\\n/g, '\n');
+  if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+    const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
+    if (match) {
+      const core = match[1].replace(/\s+/g, '');
+      privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
+    }
+  }
+
+  return new google.auth.GoogleAuth({
+    credentials: {
+      client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      private_key: privateKey,
+    },
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type');
@@ -30,32 +53,7 @@ export async function GET(request) {
   }
 
   try {
-    let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
-    
-    // 1. Quitar comillas si las tiene
-    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-      privateKey = privateKey.slice(1, -1);
-    }
-    
-    // 2. Reemplazar "\\n" literales por saltos de línea reales
-    privateKey = privateKey.replace(/\\n/g, '\n');
-    
-    // 3. Si Vercel aplanó todo quitando los saltos de línea (causa del DECODER error)
-    if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
-      const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
-      if (match) {
-        const core = match[1].replace(/\s+/g, '');
-        privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
-      }
-    }
-
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: privateKey,
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
+    const auth = getGoogleAuth();
 
     const sheets = google.sheets({ version: 'v4', auth });
     
@@ -196,26 +194,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Faltan parámetros rowNumber o values.' }, { status: 400 });
     }
 
-    let privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY || '';
-    if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-      privateKey = privateKey.slice(1, -1);
-    }
-    privateKey = privateKey.replace(/\\n/g, '\n');
-    if (!privateKey.includes('\n') && privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
-      const match = privateKey.match(/-----BEGIN PRIVATE KEY-----(.*)-----END PRIVATE KEY-----/s);
-      if (match) {
-        const core = match[1].replace(/\s+/g, '');
-        privateKey = `-----BEGIN PRIVATE KEY-----\n${core}\n-----END PRIVATE KEY-----\n`;
-      }
-    }
-
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-        private_key: privateKey,
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
+    const auth = getGoogleAuth();
 
     const sheets = google.sheets({ version: 'v4', auth });
     

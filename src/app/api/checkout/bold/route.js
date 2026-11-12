@@ -6,9 +6,17 @@ export async function POST(request) {
     const data = await request.json();
     const { title, price, email, studentName, orderId, phone } = data;
 
-    // Llaves Bold (Producción por defecto)
-    const apiKey = process.env.BOLD_IDENTITY_KEY || 'sXJLbfDixiYWVBlS3eOGNnxXuqbEWRhsVYvhZ_Ct9NM';
-    const secretKey = process.env.BOLD_SECRET_KEY || 'zbnVywe9C2jTSJBbhGRzuA';
+    // Llaves Bold (exclusivamente desde variables de entorno)
+    const apiKey = process.env.BOLD_IDENTITY_KEY;
+    const secretKey = process.env.BOLD_SECRET_KEY;
+
+    if (!apiKey || !secretKey) {
+      console.error('Error de configuración: BOLD_IDENTITY_KEY o BOLD_SECRET_KEY no configuradas en variables de entorno.');
+      return NextResponse.json(
+        { error: 'Configuración de pasarela de pago incompleta en el servidor.' },
+        { status: 500 }
+      );
+    }
 
     const cleanOrderId = orderId || `MPS-${Date.now()}`;
     const amountStr = String(Math.round(Number(price) || 0));

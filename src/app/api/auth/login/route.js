@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const FIREBASE_API_KEY = "AIzaSyBLbVAmpri8BRRlA98MoP-I7i4wjZslQ28";
+const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY;
 
 export async function POST(request) {
   try {
