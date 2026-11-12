@@ -499,15 +499,7 @@ function CheckoutContent() {
     }
     if (!telefono.trim() || telefono.length < 7) errors.telefono = 'Ingresa un número de celular de contacto válido';
 
-    // Validación de tarjeta si el método es tarjeta
-    if (activeMethod === 'tarjeta') {
-      const cleanCard = cardNumber.replace(/\s/g, '');
-      if (cleanCard.length < 15) errors.cardNumber = 'Ingresa los 16 dígitos de la tarjeta';
-      if (!cardHolder.trim()) errors.cardHolder = 'Ingresa el nombre como figura en la tarjeta';
-      if (cardExpiry.length < 5) errors.cardExpiry = 'Ingresa MM/AA';
-      if (cardCvc.length < 3) errors.cardCvc = 'Ingresa CVC (3 o 4 dígitos)';
-    }
-
+    // Validación de datos personales obligatorios
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
@@ -933,128 +925,37 @@ function CheckoutContent() {
                 </button>
               </div>
 
-              {/* FORMULARIO DE TARJETA DIRECTO EN PANTALLA */}
+              {/* INFORMACIÓN PAGO CON TARJETA VÍA BOLD */}
               {paymentSubtype === 'tarjeta' && !showOtherMethods && (
                 <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.6rem' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <Lock size={15} color="var(--accent)" /> Ingresa los datos de tu tarjeta
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Lock size={16} color="var(--accent)" /> Pago Seguro con Tarjeta Crédito o Débito
                     </span>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                       Visa • Mastercard • Amex
                     </span>
                   </div>
-
-                  <div className="checkout-input-group">
-                    <label className="checkout-label">Número de tarjeta</label>
-                    <input 
-                      type="text"
-                      placeholder="4500 0000 0000 0000"
-                      className="checkout-input"
-                      value={cardNumber}
-                      onChange={handleCardNumberChange}
-                    />
-                    {formErrors.cardNumber && (
-                      <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                        {formErrors.cardNumber}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="checkout-input-group">
-                    <label className="checkout-label">Nombre impreso en la tarjeta</label>
-                    <input 
-                      type="text"
-                      placeholder="Como aparece en el plástico"
-                      className="checkout-input"
-                      value={cardHolder}
-                      onChange={(e) => setCardHolder(e.target.value.toUpperCase())}
-                    />
-                    {formErrors.cardHolder && (
-                      <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                        {formErrors.cardHolder}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="checkout-grid-2">
-                    <div className="checkout-input-group">
-                      <label className="checkout-label">Vencimiento (MM/AA)</label>
-                      <input 
-                        type="text"
-                        placeholder="MM/AA"
-                        className="checkout-input"
-                        value={cardExpiry}
-                        onChange={handleExpiryChange}
-                      />
-                      {formErrors.cardExpiry && (
-                        <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                          {formErrors.cardExpiry}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="checkout-input-group">
-                      <label className="checkout-label">Código de Seguridad (CVC / CVV)</label>
-                      <input 
-                        type="password"
-                        placeholder="123"
-                        maxLength={4}
-                        className="checkout-input"
-                        value={cardCvc}
-                        onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ''))}
-                      />
-                      {formErrors.cardCvc && (
-                        <span style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.2rem', display: 'block' }}>
-                          {formErrors.cardCvc}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="checkout-input-group" style={{ marginBottom: 0 }}>
-                    <label className="checkout-label">Número de cuotas</label>
-                    <select 
-                      className="checkout-input"
-                      value={installments}
-                      onChange={(e) => setInstallments(e.target.value)}
-                    >
-                      <option value="1">1 cuota de {formatCOP(totalPrice)} (Sin interés)</option>
-                      <option value="2">2 cuotas de {formatCOP(totalPrice / 2)}</option>
-                      <option value="3">3 cuotas de {formatCOP(totalPrice / 3)}</option>
-                      <option value="6">6 cuotas de {formatCOP(totalPrice / 6)}</option>
-                      <option value="12">12 cuotas de {formatCOP(totalPrice / 12)}</option>
-                    </select>
-                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                    Al pulsar en <strong>Pagar Inscripción</strong>, se abrirá la pasarela oficial protegida de <strong>Bold</strong> para ingresar tu tarjeta de forma 100% segura con cifrado bancario de extremo a extremo y diferir tus cuotas.
+                  </p>
                 </div>
               )}
 
-              {/* FORMULARIO PSE */}
+              {/* INFORMACIÓN PAGO PSE VÍA BOLD */}
               {paymentSubtype === 'pse' && !showOtherMethods && (
                 <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.6rem' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <Building2 size={16} color="var(--accent)" /> Pago Seguro PSE
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Building2 size={16} color="var(--accent)" /> Pago Seguro por PSE (Cuentas de Ahorros / Corriente)
                     </span>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>
-                      Débito desde cuenta de ahorros o corriente
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                      Cualquier banco en Colombia
                     </span>
                   </div>
-
-                  <div className="checkout-input-group" style={{ marginBottom: 0 }}>
-                    <label className="checkout-label">Selecciona tu banco:</label>
-                    <select 
-                      className="checkout-input"
-                      value={pseBank}
-                      onChange={(e) => setPseBank(e.target.value)}
-                    >
-                      {COLOMBIAN_BANKS.map((banco, idx) => (
-                        <option key={idx} value={banco}>
-                          {banco}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                    Al pulsar en <strong>Pagar Inscripción</strong>, seleccionarás tu entidad bancaria dentro de la pasarela oficial de <strong>Bold</strong> para autorizar el débito en línea de forma inmediata.
+                  </p>
                 </div>
               )}
 
