@@ -78,7 +78,12 @@ export default function EstudiantesActivosPage() {
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
-        const isAllowed = data.cargo === 'direccion' || data.cargo === 'administracion';
+        const isAllowed = 
+          data.cargo === 'direccion' || 
+          data.cargo === 'administracion' || 
+          data.cargo === 'coordinacion_academica' ||
+          data.cargo === 'coordinacion' ||
+          data.username === 'Coordinación';
         if (!data.username || !isAllowed) {
           router.replace('/admin');
         }
