@@ -70,10 +70,10 @@ export async function GET(request) {
       range = "'Respuestas de formulario 1'!A1:EM600";
     } else if (type === 'profesores') {
       spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
-      range = "'RESUMEN PROFESORES'!A1:J150";
+      range = "'RESUMEN - PROFESORES'!A1:J150";
     } else {
       spreadsheetId = '1BrHEVJ3HHJysm1nPmbdsjVBwTmLce-m_pSRFNag2SAo';
-      range = "'Base de datos estudiantes 2026-2'!A1:K500"; 
+      range = "'Base de datos estudiantes 2026 - 2'!A1:K500"; 
     }
 
     let response;
@@ -83,8 +83,14 @@ export async function GET(request) {
         range,
       });
     } catch (getErr) {
-      if (type === 'activos' && range.includes('2026-2')) {
-        range = "'Base de datos estudiantes 2026 - 2'!A1:K500";
+      if (type === 'activos' && range.includes('2026 - 2')) {
+        range = "'Base de datos estudiantes 2026-2'!A1:K500";
+        response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range,
+        });
+      } else if (type === 'profesores' && range.includes('RESUMEN - PROFESORES')) {
+        range = "'RESUMEN PROFESORES'!A1:J150";
         response = await sheets.spreadsheets.values.get({
           spreadsheetId,
           range,

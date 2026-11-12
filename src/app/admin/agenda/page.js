@@ -74,19 +74,63 @@ export default function AgendaProDashboard() {
 
     // Fetch Teachers & Students
     const fetchUsers = async () => {
-      const q = query(collection(db, 'users'));
-      const snapshot = await getDocs(q);
-      const allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      let allUsers = [];
+      try {
+        const q = query(collection(db, 'users'));
+        const snapshot = await getDocs(q);
+        allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } catch (err) {
+        console.error("Error trayendo usuarios de Firebase:", err);
+      }
       
-      const teacherData = allUsers
+      // 1. Fetch Teachers from new Excel (RESUMEN - PROFESORES)
+      let excelTeachers = [];
+      try {
+        const resProf = await fetch('/api/sheets?type=profesores');
+        const jsonProf = await resProf.json();
+        if (jsonProf.data && jsonProf.data.length > 1) {
+          excelTeachers = jsonProf.data.slice(1)
+            .filter(row => row && row[0] && row[0].trim() && (!row[1] || row[1].toUpperCase().includes('ACTIVO')))
+            .map((row, i) => {
+              const name = row[0].trim();
+              return {
+                id: `prof_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}`,
+                name: name,
+                instrument: row[5] || '',
+                email: row[3] || '',
+                phone: row[2] || '',
+                schedule: { start: '08:00', end: '21:00', breakStart: '', breakEnd: '' }
+              };
+            });
+        }
+      } catch (e) {
+        console.error("Error trayendo profesores del Excel nuevo:", e);
+      }
+
+      // 2. Fetch Firebase Teachers as complement
+      const fbTeachers = allUsers
         .filter(u => u.role === 'teacher')
         .map(u => ({
-          id: u.id, name: u.name || u.email, schedule: u.schedule || { start: '08:00', end: '18:00', breakStart: '', breakEnd: '' }
-        })).sort((a, b) => a.name.localeCompare(b.name));
-      
-      setTeachers(teacherData);
+          id: u.id, 
+          name: u.name || u.email, 
+          schedule: u.schedule || { start: '08:00', end: '21:00', breakStart: '', breakEnd: '' }
+        }));
 
-      // 1. Fetch Firebase Students
+      // 3. Merge: Priorizar profesores del Excel nuevo
+      const teacherMap = new Map();
+      excelTeachers.forEach(t => teacherMap.set(t.name.toLowerCase().trim(), t));
+      fbTeachers.forEach(t => {
+        const key = t.name.toLowerCase().trim();
+        if (!teacherMap.has(key)) {
+          teacherMap.set(key, t);
+        }
+      });
+
+      const finalTeachers = Array.from(teacherMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+      setTeachers(finalTeachers);
+      if (finalTeachers.length > 0) setWeekTeacherId(finalTeachers[0].id);
+
+      // 4. Fetch Firebase Students
       const fbStudents = allUsers
         .filter(u => u.role === 'student' || u.role === 'estudiante' || !u.role)
         .map(u => ({ 
@@ -143,7 +187,6 @@ export default function AgendaProDashboard() {
       }
 
       setStudentsList(uniqueStudents.sort((a, b) => a.name.localeCompare(b.name)));
-      if(teacherData.length > 0) setWeekTeacherId(teacherData[0].id);
     };
     fetchUsers();
 
