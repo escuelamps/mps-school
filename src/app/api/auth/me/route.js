@@ -10,27 +10,15 @@ export async function GET(request) {
   try {
     const data = JSON.parse(authCookie.value);
     
-    // Fallback retrocompatible para sesiones previas sin campo cargo
-    let cargo = data.cargo;
-    let cargoTitle = data.cargoTitle;
-    if (!cargo && data.role === 'admin') {
-      if (data.username === 'lpineda' || data.email === 'lpineda@escuelamps.com') {
-        cargo = 'direccion';
-        cargoTitle = 'Dirección General';
-      } else if (data.username === 'juanse' || data.email === 'juanse@escuelamps.com') {
-        cargo = 'coordinacion_academica';
-        cargoTitle = 'Coordinación Académica';
-      } else {
-        cargo = 'direccion';
-        cargoTitle = 'Dirección General';
-      }
-    }
+    // Sesión institucional con cargos y roles normalizados
+    const cargo = data.cargo || 'direccion';
+    const cargoTitle = data.cargoTitle || 'Dirección General';
 
     return NextResponse.json({ 
       username: data.username, 
       role: data.role, 
-      cargo: cargo || 'usuario',
-      cargoTitle: cargoTitle || 'Usuario MPS',
+      cargo: cargo,
+      cargoTitle: cargoTitle,
       email: data.email 
     });
   } catch (e) {

@@ -29,14 +29,6 @@ export async function POST(request) {
     let cargo = null;
     let cargoTitle = null;
 
-    // Bloqueo de cuentas personales antiguas
-    if (email === 'william@escuelamps.com' || email === 'juanse@escuelamps.com' || email === 'lpineda@escuelamps.com') {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Usuario o contraseña incorrectos' 
-      }, { status: 401 });
-    }
-
     // Mapeo institucional por CARGOS acordado en reunión de TICs:
     if (email === 'direccion@escuelamps.com') {
       role = 'admin';

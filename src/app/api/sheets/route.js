@@ -102,17 +102,6 @@ export async function GET(request) {
 
     if (type === 'planillas' && rows.length > 1) {
       const headers = rows[0];
-      const TEACHER_INSTRUMENTS = {
-        'Jorge Garcia': 'Guitarra / Piano',
-        'Sebastian Vergara': 'Guitarra / Producción',
-        'Andres Bernal': 'Piano',
-        'Carlos Macia': 'Violín / Piano',
-        'Jenny Rojas': 'Iniciación Musical',
-        'William Buitrago': 'Canto',
-        'Laura Mendoza': 'Piano / Violín',
-        'Shalom Prieto': 'Canto'
-      };
-
       const parsedPlanillas = [];
       rows.slice(1).forEach((row, i) => {
         if (!row || row.length < 3 || !row[2]) return;
@@ -164,7 +153,7 @@ export async function GET(request) {
           fecha: classDate,
           hora: classTime,
           duracion: duration,
-          instrumento: TEACHER_INSTRUMENTS[teacher] || 'Música General',
+          instrumento: 'Clase Instrumental / Vocal',
           contenido: `Clase de ${student} con ${teacher} (${duration || '1 hr'})`,
           firma: firmaUrl,
           source: 'google_sheets'

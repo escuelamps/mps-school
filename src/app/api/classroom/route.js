@@ -31,7 +31,7 @@ const DEFAULT_MPS_COURSES = [
     room: 'Aula 101',
     alternateLink: 'https://classroom.google.com/h/tv',
     enrollmentCode: 'mps2026p',
-    teacher: 'Laura Pineda',
+    teacher: 'Cuerpo Docente MPS',
     courseState: 'ACTIVE',
     courseWork: [
       {
@@ -58,7 +58,7 @@ const DEFAULT_MPS_COURSES = [
     room: 'Aula 102',
     alternateLink: 'https://classroom.google.com/h/tv',
     enrollmentCode: 'mps2026c',
-    teacher: 'William Buitrago',
+    teacher: 'Cuerpo Docente MPS',
     courseState: 'ACTIVE',
     courseWork: [
       {
@@ -85,7 +85,7 @@ const DEFAULT_MPS_COURSES = [
     room: 'Aula 103',
     alternateLink: 'https://classroom.google.com/h/tv',
     enrollmentCode: 'mps2026g',
-    teacher: 'Juan Sebastián',
+    teacher: 'Cuerpo Docente MPS',
     courseState: 'ACTIVE',
     courseWork: [
       {

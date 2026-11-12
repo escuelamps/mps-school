@@ -22,7 +22,7 @@ export async function POST(request) {
     // Lógica de negocio
     const isAmountCorrect = validationResult.monto === expectedAmount || validationResult.monto >= expectedAmount;
     
-    // Guardar el comprobante en Firebase para auditoría manual por lpineda
+    // Guardar el comprobante en Firebase para auditoría administrativa manual
     const receiptRecord = await addDoc(collection(db, 'pagos_pendientes'), {
       ...validationResult,
       expectedAmount,

@@ -699,7 +699,7 @@ export default function AdminPage() {
         })()}
       </main>
 
-      {/* Modal de Herramientas de Profesores para Juanse */}
+      {/* Modal de Herramientas de Profesores */}
       {showTeacherTools && (
         <div style={{
           position: 'fixed',

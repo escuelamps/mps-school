@@ -40,17 +40,15 @@ export default function ProfesoresPage() {
 
   const getTeacherName = (t) => {
     if (t.name && t.name.trim()) return t.name.trim();
-    if (t.email === 'lpineda@escuelamps.com' || t.username === 'lpineda') return 'Laura Pineda';
-    if (t.email === 'william@escuelamps.com' || t.username === 'william') return 'William Buitrago';
+    if (t.displayName && t.displayName.trim()) return t.displayName.trim();
     if (t.username) return t.username;
-    return 'Profesor';
+    return 'Docente MPS';
   };
 
   const getTeacherSubjects = (t) => {
-    if (t.subjects && t.subjects.length > 0) return t.subjects;
-    const subs = [t.subject1, t.subject2].filter(Boolean);
+    if (Array.isArray(t.subjects) && t.subjects.length > 0) return t.subjects;
+    const subs = [t.subject1, t.subject2, t.especialidad].filter(Boolean);
     if (subs.length > 0) return subs;
-    if (t.username === 'william' || t.email === 'william@escuelamps.com') return ['Canto'];
     return [];
   };
 

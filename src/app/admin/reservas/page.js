@@ -242,7 +242,7 @@ export default function ReservasDashboard() {
           </button>
         </div>
 
-        {/* SECCIÓN GESTIÓN DE CÓDIGOS DE DESCUENTO PARA LPINEDA */}
+        {/* SECCIÓN GESTIÓN DE CÓDIGOS DE DESCUENTO INSTITUCIONALES */}
         <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', padding: '1.5rem', marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.2rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.8rem' }}>
             <Ticket size={22} color="#09624C" />

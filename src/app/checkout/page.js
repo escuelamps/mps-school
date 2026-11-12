@@ -197,7 +197,8 @@ function CheckoutContent() {
   const isMatricula = selectedProgramKey === 'matricula';
   const hasInstrumentChoice = selectedProgramKey === 'curso-libre' || selectedProgramKey === 'mps-stage';
 
-  const basePrice = customAmount !== null ? customAmount : 500000;
+  const defaultProgramPrice = modality === 'grupal' ? (activeProgram.linkPrice || activeProgram.price) : (activeProgram.onePrice || activeProgram.price);
+  const basePrice = customAmount !== null ? customAmount : (defaultProgramPrice || 0);
   const instrumentLabel = hasInstrumentChoice ? ` (${INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument})` : '';
   const modalityLabel = isMatricula ? '' : (modality === 'individual' ? ' - MPS One (Individual)' : ' - MPS Link (Grupal Trimestral)');
   const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel;
@@ -558,7 +559,7 @@ function CheckoutContent() {
                 <label className="checkout-label">Nombre completo del estudiante o titular</label>
                 <input 
                   type="text"
-                  placeholder="Ej: Laura Sofía Gómez"
+                  placeholder="Ej: Nombre completo del estudiante o acudiente"
                   className="checkout-input"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
@@ -1036,7 +1037,7 @@ function CheckoutContent() {
                   >
                     <span>👥 MPS Link (Grupal)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(500000)}
+                      {formatCOP(activeProgram.linkPrice || activeProgram.price)}
                     </span>
                   </button>
 
@@ -1061,7 +1062,7 @@ function CheckoutContent() {
                   >
                     <span>👤 MPS One (1 a 1)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(500000)}
+                      {formatCOP(activeProgram.onePrice || activeProgram.price)}
                     </span>
                   </button>
                 </div>
