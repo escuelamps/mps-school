@@ -38,236 +38,13 @@ import {
 } from 'firebase/firestore';
 import './checkout.css';
 
-// 5 PROGRAMAS ACADÉMICOS OFICIALES MPS (CON INFORMACIÓN COMPLETA DE INFOGRAFÍAS Y $500.000)
-const OFFICIAL_PROGRAMS = {
-  'mps-stage': {
-    id: 'mps-stage',
-    title: 'MPS STAGE (Instrumento + Ensamble)',
-    category: 'Programa de Formación Musical • Semestral',
-    badge: 'PROGRAMA DE FORMACIÓN MUSICAL',
-    tagline: 'Aprende tu instrumento. Toca con otros. Sube al Stage.',
-    description: 'Programa que combina el desarrollo personalizado del instrumento con la experiencia real de tocar en un ensamble. El estudiante no solo aprende a interpretar su instrumento de forma individual, sino también a escuchar, acompañar, comunicarse y construir música con otros dentro de una banda.',
-    duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas en total',
-    presentation: 'Presentación final y concierto en vivo al cierre de semestre según programación institucional.',
-    image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    components: [
-      { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual (1 estudiante) • Técnica, lenguaje musical y repertorio' },
-      { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo colectivo (3 a 8 estudiantes) • Pulso, escucha activa, roles y montaje en vivo' }
-    ],
-    develops: [
-      'Técnica instrumental: postura, digitación, coordinación, afinación y sonoridad',
-      'Lenguaje musical: lectura rítmico-melódica, escalas, acordes y estructura',
-      'Interpretación: dinámicas, fraseo, expresión, estilo e improvisación',
-      'Ensamble: pulso colectivo, escucha activa y respuesta musical en grupo',
-      'Roles en arreglo: comprensión de la función de cada instrumento en la banda',
-      'Experiencia escénica: montaje de repertorio y presentación oficial en vivo'
-    ]
-  },
-  'curso-libre': {
-    id: 'curso-libre',
-    title: 'Curso Libre de Instrumento',
-    category: 'Formación Instrumental Continua',
-    badge: 'CURSO LIBRE OFICIAL MPS',
-    tagline: 'Tu instrumento. Tu proceso. Tu música.',
-    description: 'Línea de formación musical orientada al desarrollo técnico, musical e interpretativo del estudiante a través del aprendizaje de un instrumento o de la técnica vocal. El proceso se organiza mediante una Ruta de Aprendizaje Personalizada (RAP) adaptada a tus metas, edad y ritmo.',
-    duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link), 1 a 1 (One) o Domicilio (Home)',
-    presentation: 'Recital semestral en auditorio oficial MPS con sonido e iluminación profesional.',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    homePrice: 500000,
-    components: [
-      { name: 'Modalidad MPS LINK (Semipersonalizado)', hours: '2 h/semana', format: '2 a 4 estudiantes del mismo instrumento • Horario trimestral fijo • Aprendizaje colectivo' },
-      { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual • Atención exclusiva y avance a tu propio ritmo' },
-      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu residencia con docente asignado MPS' }
-    ],
-    develops: [
-      'Postura, digitación, técnica y coordinación motriz en el instrumento',
-      'Lectura musical, ritmo y aplicación práctica de conceptos teóricos',
-      'Habilidades auditivas, afinación y escucha consciente',
-      'Selección y montaje progresivo de repertorio a tu gusto',
-      'Expresión musical, estilo e improvisación según tu nivel',
-      'Hábitos de estudio, práctica constante y autonomía progresiva'
-    ]
-  },
-  'mps-producer': {
-    id: 'mps-producer',
-    title: 'MPS PRODUCER (Producción de Audio)',
-    category: 'Programa Especializado • Tecnología Sonora',
-    badge: 'PROGRAMA ESPECIALIZADO DE AUDIO',
-    tagline: 'De tus ideas a canciones reales.',
-    description: 'Programa especializado para desarrollar las competencias necesarias para crear, grabar, editar, mezclar, masterizar y gestionar proyectos musicales desde una perspectiva técnica, creativa y profesional. Combina teoría grupal, práctica individual y sesiones en estudios de grabación comerciales aliados.',
-    duration: '1 Año académico (2 semestres de 16 semanas) • 2 h/semana • Máx 6 alumnos',
-    presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final terminado + muestra pública.',
-    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    components: [
-      { name: 'Módulo 1: Gestión de Proyectos', hours: 'Teoría/DAW', format: 'Objetivos creativos y comerciales, flujo de trabajo, propiedad intelectual y distribución' },
-      { name: 'Módulo 2: Fundamentos de Audio', hours: 'Teoría/DAW', format: 'DAW, señal, grabación, microfonía, latencia, acústica y procesadores' },
-      { name: 'Módulo 3: Procesos de Audio', hours: 'Práctica', format: 'Edición, MIDI, mezcla, máster y entregables para plataformas digitales' },
-      { name: 'Módulo 4: Audición Crítica', hours: 'Análisis', format: 'Análisis técnico y estético de referentes y lenguajes de producción' },
-      { name: 'Módulo 5: Dirección Musical', hours: 'Estudio Pro', format: 'Composición, arreglos, estructuras y dirección de sesiones con músicos' },
-      { name: 'Prácticas en Estudios Aliados', hours: 'Min 2-3 Ses.', format: 'Mínimo 2 sesiones (Sem 1) y 3 sesiones (Sem 2) en estudio comercial profesional' }
-    ],
-    develops: [
-      'Operar DAWs profesionales con autonomía total',
-      'Técnicas avanzadas de microfonía y captura sonora en estudio',
-      'Flujo completo de edición digital, afinación y cuantización MIDI',
-      'Mezcla profesional (ecualización, compresión, saturación y balance)',
-      'Masterización y estándares de sonoridad para Spotify y Apple Music',
-      'Construcción de un portafolio de producción con obras reales'
-    ]
-  },
-  'mps-prep': {
-    id: 'mps-prep',
-    title: 'MPS PREP (Preuniversitario Musical)',
-    category: 'Admisiones Universidad • Alto Rendimiento',
-    badge: 'PROGRAMA PREUNIVERSITARIO MUSICAL',
-    tagline: 'Prepara tu música. Profundiza tu lenguaje. Da el siguiente paso.',
-    description: 'Proceso intensivo de formación de alto rendimiento que integra instrumento principal, teclado complementario, ensamble colectivo, gramática musical y teoría armónica, para construir una base sólida y asegurar el ingreso a facultades de música a nivel superior.',
-    duration: '1 Semestre académico (16 semanas) • 15 h/semana • 240 Horas estimadas',
-    presentation: 'Audición de simulacro y preparación intensiva de pruebas de admisión universitaria.',
-    image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    components: [
-      { name: 'Instrumento Principal', hours: '1 h/semana', format: 'Desarrollo técnico, repertorio avanzado e interpretación' },
-      { name: 'Teclado Complementario', hours: '2 h/semana', format: 'Aplicación musical desde el teclado y armonía funcional' },
-      { name: 'Ensamble Colectivo', hours: '2 h/semana', format: 'Interpretación en grupo y desarrollo de la escucha activa' },
-      { name: 'Gramática y Audio', hours: '6 h/semana', format: 'Lectura rítmico-melódica, claves, intervalos y entrenamiento auditivo' },
-      { name: 'Teoría Musical y Armonía', hours: '4 h/semana', format: 'Fundamentos armónicos, enlaces de acordes y análisis formal' }
-    ],
-    develops: [
-      'Lectura a primera vista fluida en claves de Sol, Fa y Do',
-      'Entrenamiento auditivo: reconocimiento de intervalos, tríadas y tétradas',
-      'Dictado rítmico, melódico y armónico intensivo',
-      'Técnica avanzada y montaje de obras exigidas para audición',
-      'Simulacros reales de exámenes de admisión universitaria',
-      'Metodología de estudio intensivo avalada por docentes graduados'
-    ]
-  },
-  'mps-music-camp': {
-    id: 'mps-music-camp',
-    title: 'MPS MUSIC CAMP (Temporada Intensiva)',
-    category: 'Temporada Vacacional • Niños y Jóvenes',
-    badge: 'TEMPORADA VACACIONAL INTENSIVA',
-    tagline: 'Aprender, crear, ensayar, presentar.',
-    description: 'Dos semanas para aprender, crear, ensayar y vivir la música en un entorno dinámico, colectivo y profesional. Combina el aprendizaje instrumental, el ensamble de banda y el taller corporal y de performance escénico.',
-    duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas en total',
-    presentation: 'Muestra escénica final en auditorio ante familiares e invitados.',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    components: [
-      { name: 'Instrumento Semipersonalizado', hours: '8 Horas (Total)', format: 'Técnica, postura, ejercicios y montaje por instrumento' },
-      { name: 'Ensamble Musical en Vivo', hours: '8 Horas (Total)', format: 'Pulso, escucha, interacción y dinámica de banda' },
-      { name: 'Taller Corporal y Performance', hours: '4 Horas (Total)', format: 'Expresión corporal, soltura escénica y desinhibición' }
-    ],
-    develops: [
-      'Fortalecimiento rápido de habilidades técnicas en el instrumento',
-      'Experiencia real de tocar en una banda con otros músicos',
-      'Desarrollo de presencia escénica y manejo corporal en tarima',
-      'Mejora de la escucha, coordinación y ritmo grupal',
-      'Montaje acelerado de canciones para presentación final',
-      'Convivencia artística y trabajo cooperativo en equipo'
-    ]
-  },
-  matricula: {
-    id: 'matricula',
-    title: 'Matrícula Anual Institucional',
-    category: 'Registro Oficial MPS',
-    badge: 'REGISTRO INSTITUCIONAL',
-    tagline: 'Tu carné, reserva de salas y beneficios exclusivos de estudiante.',
-    description: 'Habilita tu condición de estudiante activo en la Escuela MPS, tu código de matrícula, reservas de salas de ensayo y convenios institucionales.',
-    duration: 'Vigencia Anual (12 Meses)',
-    presentation: 'Carné institucional oficial con beneficios Yamaha y aliados.',
-    image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    components: [
-      { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios comerciales' },
-      { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Acceso a salas insonorizadas y equipadas' }
-    ],
-    develops: [
-      'Acceso a la plataforma y reservas de espacios de ensayo',
-      'Descuentos en masterclasses y clínicas especiales',
-      'Participación en festivales y eventos institucionales'
-    ]
-  }
-};
-
-// LISTA DE INSTRUMENTOS FORMALES
-const INSTRUMENTS_LIST = [
-  { id: 'canto', name: 'Técnica Vocal y Canto' },
-  { id: 'piano', name: 'Piano y Teclados' },
-  { id: 'guitarra', name: 'Guitarra (Acústica y Eléctrica)' },
-  { id: 'violin', name: 'Violín y Cuerdas Clásicas' },
-  { id: 'bateria', name: 'Batería y Percusión' },
-  { id: 'bajo', name: 'Bajo Eléctrico' },
-  { id: 'actuacion', name: 'Actuación y Expresión Escénica' }
-];
-
-// HORARIOS GRUPALES TRIMESTRALES (DE LA LIBRETA MANUSCRITA)
-const GROUP_SCHEDULES = {
-  canto: [
-    { id: 'canto-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Técnica Vocal)' },
-    { id: 'canto-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Técnica Vocal)' },
-    { id: 'canto-mie-7-9', label: 'Miércoles 7:00 pm - 9:00 pm (Canto Nocturno)' },
-    { id: 'canto-jue-7-9', label: 'Jueves 7:00 pm - 9:00 pm (Canto Nocturno)' },
-    { id: 'canto-sab-11-1', label: 'Sábado 11:00 am - 1:00 pm (Canto Grupal)' },
-  ],
-  guitarra: [
-    { id: 'guit-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Guitarra Grupal)' },
-    { id: 'guit-vie-4-6', label: 'Viernes 4:00 pm - 6:00 pm (Guitarra Grupal)' },
-    { id: 'guit-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Guitarra Grupal)' },
-  ],
-  piano: [
-    { id: 'piano-vie-4-6', label: 'Viernes 4:00 pm - 6:00 pm (Piano y Teclados)' },
-    { id: 'piano-vie-6-8', label: 'Viernes 6:00 pm - 8:00 pm (Piano y Teclados)' },
-    { id: 'piano-sab-8-10', label: 'Sábado 8:00 am - 10:00 am (Piano Matutino)' },
-    { id: 'piano-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Piano Medio Día)' },
-  ],
-  violin: [
-    { id: 'viol-jue-4-6', label: 'Jueves 4:00 pm - 6:00 pm (Violín y Cuerdas)' },
-    { id: 'viol-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Violín y Cuerdas)' },
-    { id: 'viol-vie-6-8', label: 'Viernes 6:00 pm - 8:00 pm (Violín y Cuerdas)' },
-  ],
-  actuacion: [
-    { id: 'act-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Teatro Jóvenes y Adultos)' },
-    { id: 'act-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Teatro Niños y Expresión)' },
-  ],
-  bateria: [
-    { id: 'bat-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Percusión y Ritmo)' },
-    { id: 'bat-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Percusión y Ritmo)' },
-  ],
-  bajo: [
-    { id: 'bajo-jue-6-8', label: 'Jueves 6:00 pm - 8:00 pm (Bajo y Ensamble)' },
-    { id: 'bajo-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Bajo y Ensamble)' },
-  ],
-  'mps-stage': [
-    { id: 'stage-mie-4-7', label: 'Miércoles 4:00 pm - 7:00 pm (Instrumento + Ensamble)' },
-    { id: 'stage-jue-4-7', label: 'Jueves 4:00 pm - 7:00 pm (Instrumento + Ensamble)' },
-    { id: 'stage-sab-9-12', label: 'Sábado 9:00 am - 12:00 m (Instrumento + Ensamble)' },
-    { id: 'stage-sab-2-5', label: 'Sábado 2:00 pm - 5:00 pm (Instrumento + Ensamble)' },
-  ],
-  'mps-producer': [
-    { id: 'prod-mie-6-8', label: 'Miércoles 6:00 pm - 8:00 pm (Teoría + Práctica DAW)' },
-    { id: 'prod-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Producción y Grabación)' },
-    { id: 'prod-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Mezcla y Máster)' },
-  ],
-  'mps-prep': [
-    { id: 'prep-mat-8-11', label: 'Lunes a Viernes 8:00 am - 11:00 am (15h/sem Matutino)' },
-    { id: 'prep-ves-2-5', label: 'Lunes a Viernes 2:00 pm - 5:00 pm (15h/sem Vespertino)' },
-  ],
-  'mps-music-camp': [
-    { id: 'camp-mat-9-11', label: 'Lunes a Viernes 9:00 am - 11:00 am (Temporada Vacacional)' },
-    { id: 'camp-tar-2-4', label: 'Lunes a Viernes 2:00 pm - 4:00 pm (Temporada Vacacional)' },
-    { id: 'camp-tar-4-6', label: 'Lunes a Viernes 4:00 pm - 6:00 pm (Temporada Vacacional)' },
-  ]
-};
+import { 
+  OFFICIAL_PROGRAMS, 
+  INSTRUMENTS_LIST, 
+  GROUP_SCHEDULES, 
+  KIT_PRICE, 
+  formatCOP 
+} from '@/data/programs';
 
 // BANCOS PARA PSE EN COLOMBIA
 const COLOMBIAN_BANKS = [
@@ -315,7 +92,6 @@ function CheckoutContent() {
 
   // Order Bump (Kit de Bienvenida)
   const [includeKit, setIncludeKit] = useState(false);
-  const KIT_PRICE = 35000;
 
   // Método de pago: 'tarjeta' | 'pse' | 'nequi'
   const [paymentSubtype, setPaymentSubtype] = useState('tarjeta'); // 'tarjeta' | 'pse'
@@ -432,11 +208,6 @@ function CheckoutContent() {
   // Horarios disponibles para el programa/instrumento activo
   const activeSchedulesKey = hasInstrumentChoice ? selectedInstrument : selectedProgramKey;
   const activeSchedules = GROUP_SCHEDULES[activeSchedulesKey] || GROUP_SCHEDULES[selectedProgramKey] || [];
-
-  // Formato de moneda COP
-  const formatCOP = (val) => {
-    return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val);
-  };
 
   // Copiar al portapapeles
   const handleCopy = (text, type) => {
