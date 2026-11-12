@@ -115,8 +115,9 @@ function CheckoutContent() {
     }
   }, []);
 
-  // Order Bump (Kit de Bienvenida)
+  // Order Bump (Kit de Bienvenida) & Matrícula Anual
   const [includeKit, setIncludeKit] = useState(false);
+  const [includeMatricula, setIncludeMatricula] = useState(true);
 
   // Método de pago: 'tarjeta' | 'pse' | 'nequi'
   const [paymentSubtype, setPaymentSubtype] = useState('tarjeta'); // 'tarjeta' | 'pse'
@@ -183,8 +184,11 @@ function CheckoutContent() {
       setSelectedProgramKey('mps-prep');
     } else if (key === 'music-camp' || key === 'camp' || key === 'mps-music-camp') {
       setSelectedProgramKey('mps-music-camp');
+    } else if (key === 'actuacion' || key === 'taller-actuacion') {
+      setSelectedProgramKey('taller-actuacion');
     } else if (key === 'matricula') {
-      setSelectedProgramKey('matricula');
+      setSelectedProgramKey('curso-libre');
+      setIncludeMatricula(true);
     } else if (key && INSTRUMENTS_LIST.some(i => i.id === key)) {
       setSelectedProgramKey('curso-libre');
       setSelectedInstrument(key);
@@ -219,35 +223,37 @@ function CheckoutContent() {
   }, [selectedProgramKey, selectedInstrument, modality]);
 
   const activeProgram = OFFICIAL_PROGRAMS[selectedProgramKey] || OFFICIAL_PROGRAMS['mps-stage'];
-  const isMatricula = selectedProgramKey === 'matricula';
   const hasInstrumentChoice = selectedProgramKey === 'curso-libre' || selectedProgramKey === 'mps-stage';
 
   // Cálculo dinámico de tarifa oficial en tiempo real
   let dynamicCalculatedPrice = 0;
   let dynamicModalityLabel = '';
 
-  if (isMatricula) {
-    dynamicCalculatedPrice = activeProgram.price || 50000;
-    dynamicModalityLabel = '';
+  if (selectedProgramKey === 'taller-actuacion') {
+    dynamicCalculatedPrice = liveTarifas['taller_actuacion_trimestre']?.precio || activeProgram.linkPrice || 600000;
+    dynamicModalityLabel = ' - Trimestre Completo (3 Meses)';
   } else if (modality === 'grupal') {
     dynamicCalculatedPrice = liveTarifas['grupal_semipersonalizado_mes']?.precio || activeProgram.linkPrice || 180000;
     dynamicModalityLabel = ' - MPS Link (Grupal Semipersonalizado)';
   } else {
-    // Individual
+    // Individual (MPS One)
     const tarifaKey = `individual_${locationType}_${classPackage}`;
     const matched = liveTarifas[tarifaKey];
     dynamicCalculatedPrice = matched?.precio || (locationType === 'domicilio' ? (classPackage === 4 ? 305000 : classPackage === 8 ? 590000 : 830000) : (classPackage === 4 ? 280000 : classPackage === 8 ? 520000 : 720000));
     const locName = locationType === 'domicilio' ? 'A Domicilio' : 'En Sede';
-    dynamicModalityLabel = ` - Individual ${locName} (${classPackage} Clases)`;
+    dynamicModalityLabel = ` - MPS One ${locName} (${classPackage} Clases)`;
   }
 
   const basePrice = customAmount !== null ? customAmount : dynamicCalculatedPrice;
+  const matriculaPrice = liveTarifas['matricula_institucional']?.precio || 50000;
+  const matriculaFee = includeMatricula ? matriculaPrice : 0;
   const instrumentLabel = hasInstrumentChoice ? ` (${INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument})` : '';
-  const modalityLabel = isMatricula ? '' : dynamicModalityLabel;
-  const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel;
+  const modalityLabel = dynamicModalityLabel;
+  const matriculaTag = includeMatricula ? ' + Matrícula' : '';
+  const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel + matriculaTag;
 
   const couponDiscount = appliedCoupon ? (Number(appliedCoupon.valor) || 0) : 0;
-  const totalPrice = Math.max(0, basePrice + (includeKit ? KIT_PRICE : 0) - couponDiscount);
+  const totalPrice = Math.max(0, basePrice + (includeKit ? KIT_PRICE : 0) + matriculaFee - couponDiscount);
 
   // Horarios disponibles para el programa/instrumento activo
   const activeSchedulesKey = hasInstrumentChoice ? selectedInstrument : selectedProgramKey;
@@ -336,9 +342,11 @@ function CheckoutContent() {
           instrumento: hasInstrumentChoice ? selectedInstrument : null,
           titulo: productTitle,
           categoria: activeProgram.category,
-          modalidad: isMatricula ? 'institucional' : (modality === 'grupal' ? 'MPS Link (Grupal Trimestral)' : 'MPS One (Individual)'),
-          horarioSeleccionado: !isMatricula && modality === 'grupal' ? (selectedSchedule || 'Grupal Trimestral - Por coordinar') : (isMatricula ? 'N/A' : 'Personalizado 1 a 1'),
+          modalidad: selectedProgramKey === 'taller-actuacion' ? 'Taller Especial (3 Meses)' : (modality === 'grupal' ? 'MPS Link (Grupal)' : `MPS One (${locationType === 'domicilio' ? 'A Domicilio' : 'En Sede'})`),
+          horarioSeleccionado: modality === 'grupal' ? (selectedSchedule || 'Grupal Trimestral - Por coordinar') : 'Personalizado con docente',
           precioBase: basePrice,
+          matriculaIncluida: includeMatricula,
+          precioMatricula: matriculaFee,
           kitIncluido: includeKit,
           precioKit: includeKit ? KIT_PRICE : 0,
           cuponAplicado: appliedCoupon ? appliedCoupon.codigo : null,
@@ -790,6 +798,40 @@ function CheckoutContent() {
                 </span>
               </div>
 
+              {/* SELECTOR MATRÍCULA INSTITUCIONAL ANUAL */}
+              <div 
+                className="checkout-order-bump"
+                style={{
+                  borderColor: includeMatricula ? '#38bdf8' : 'var(--glass-border)',
+                  background: includeMatricula ? 'rgba(56, 189, 248, 0.08)' : 'var(--bg-secondary)',
+                  marginBottom: '1rem'
+                }}
+                onClick={() => setIncludeMatricula(!includeMatricula)}
+              >
+                <input 
+                  type="checkbox"
+                  className="order-bump-checkbox"
+                  style={{ accentColor: '#38bdf8' }}
+                  checked={includeMatricula}
+                  onChange={(e) => setIncludeMatricula(e.target.checked)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+                <div className="order-bump-content">
+                  <span className="order-bump-tag" style={{ background: '#38bdf8', color: '#000f11' }}>
+                    Registro Estudiantil Oficial
+                  </span>
+                  <div className="order-bump-title" style={{ color: includeMatricula ? '#38bdf8' : 'var(--text-primary)' }}>
+                    Matrícula Anual Institucional (+{formatCOP(matriculaPrice)})
+                  </div>
+                  <div className="order-bump-desc">
+                    Habilita tu condición de estudiante activo en Escuela MPS, carné estudiantil oficial, reservas ilimitadas de salas de ensayo y convenios Yamaha.
+                  </div>
+                </div>
+                <div className="order-bump-price" style={{ color: '#38bdf8' }}>
+                  +{formatCOP(matriculaPrice)}
+                </div>
+              </div>
+
               {/* ORDER BUMP (KIT DE BIENVENIDA) */}
               <div 
                 className="checkout-order-bump"
@@ -1023,11 +1065,11 @@ function CheckoutContent() {
                   onChange={(e) => setSelectedProgramKey(e.target.value)}
                 >
                   <option value="mps-stage">⭐ MPS STAGE (Instrumento + Ensamble)</option>
-                  <option value="curso-libre">🎵 Curso Libre de Instrumento (Link / One / Home)</option>
+                  <option value="curso-libre">🎵 Curso Libre de Instrumento (MPS Link / MPS One)</option>
+                  <option value="taller-actuacion">🎭 Taller de Actuación MPS (Trimestre)</option>
                   <option value="mps-producer">🎧 MPS PRODUCER (Producción de Audio)</option>
-                  <option value="mps-prep">🎓 MPS PREP (Preuniversitario Musical)</option>
+                  <option value="mps-pre-universitario">🎓 Preuniversitario Musical</option>
                   <option value="mps-music-camp">🎪 MPS MUSIC CAMP (Temporada Intensiva)</option>
-                  <option value="matricula">📋 Matrícula Anual Institucional</option>
                 </select>
               </div>
             )}
@@ -1052,8 +1094,8 @@ function CheckoutContent() {
               </div>
             )}
 
-            {/* SELECTOR MODALIDAD CLASES: LINK VS INDIVIDUAL */}
-            {!isMatricula && customAmount === null && (
+            {/* SELECTOR MODALIDAD CLASES: MPS LINK VS MPS ONE */}
+            {selectedProgramKey !== 'taller-actuacion' && customAmount === null && (
               <div style={{ marginBottom: '1.2rem' }}>
                 <label className="checkout-label" style={{ fontSize: '0.8rem', marginBottom: '0.4rem' }}>
                   Modalidad de Formación:
@@ -1103,7 +1145,7 @@ function CheckoutContent() {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    <span>👤 Clases Individuales</span>
+                    <span>👤 MPS One (Individual)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
                       Desde {formatCOP(liveTarifas['individual_sede_4']?.precio || 280000)}
                     </span>
@@ -1114,11 +1156,51 @@ function CheckoutContent() {
                 {modality === 'individual' && (
                   <div style={{ marginTop: '0.9rem', padding: '0.9rem', background: 'rgba(0, 222, 133, 0.04)', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
                     
-                    {/* Ubicación: Sede o Domicilio */}
+                    {/* Ubicación: Sede o Domicilio con Indicador Claro de Tarifa */}
                     <div style={{ marginBottom: '0.75rem' }}>
-                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.3rem', textTransform: 'uppercase' }}>
-                        Ubicación:
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>
+                          Ubicación:
+                        </span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: locationType === 'domicilio' ? '#38bdf8' : 'var(--accent)', background: locationType === 'domicilio' ? 'rgba(56, 189, 248, 0.12)' : 'rgba(0, 222, 133, 0.12)', padding: '0.2rem 0.6rem', borderRadius: '4px', letterSpacing: '0.3px' }}>
+                          {locationType === 'domicilio' ? '🚗 Tarifa MPS One Domicilio Activa' : '📍 Tarifa MPS One en Sede Activa'}
+                        </span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                        <button
+                          type="button"
+                          onClick={() => setLocationType('sede')}
+                          style={{
+                            padding: '0.5rem 0.3rem',
+                            borderRadius: '8px',
+                            border: locationType === 'sede' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                            background: locationType === 'sede' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
+                            color: locationType === 'sede' ? 'var(--accent)' : 'var(--text-primary)',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          🏢 En Sede MPS
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setLocationType('domicilio')}
+                          style={{
+                            padding: '0.5rem 0.3rem',
+                            borderRadius: '8px',
+                            border: locationType === 'domicilio' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                            background: locationType === 'domicilio' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
+                            color: locationType === 'domicilio' ? 'var(--accent)' : 'var(--text-primary)',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          🏠 A Domicilio
+                        </button>
+                      </div>
+                    </div>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                         <button
                           type="button"
@@ -1195,7 +1277,7 @@ function CheckoutContent() {
             )}
 
             {/* CUADRO COMPLETO CON TODA LA INFORMACIÓN DEL PROGRAMA */}
-            {!isMatricula && (
+            {activeProgram && (
               <div className="program-detail-card" style={{ background: 'var(--bg-primary)', border: '1.5px solid var(--accent)', borderRadius: '14px', padding: '1.3rem', margin: '1.2rem 0', boxShadow: '0 8px 25px rgba(0, 222, 133, 0.08)' }}>
                 
                 {/* ENCABEZADO Y BADGE */}
@@ -1453,6 +1535,13 @@ function CheckoutContent() {
                 <div className="price-row discount" style={{ color: 'var(--accent)', fontWeight: 700 }}>
                   <span>Descuento Cupón ({appliedCoupon.codigo}):</span>
                   <span>-{formatCOP(appliedCoupon.valor)}</span>
+                </div>
+              )}
+
+              {includeMatricula && (
+                <div className="price-row" style={{ color: '#38bdf8' }}>
+                  <span>Matrícula Anual Institucional:</span>
+                  <span>+{formatCOP(matriculaPrice)}</span>
                 </div>
               )}
 

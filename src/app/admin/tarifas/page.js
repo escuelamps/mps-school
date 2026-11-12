@@ -119,19 +119,29 @@ export default function TarifasAdminPage() {
 
   const categorias = [
     {
-      titulo: '🏢 Clases Individuales Presenciales en Sede',
-      desc: 'Clases 100% personalizadas según tu nivel y objetivo.',
+      titulo: '🏢 Clases Individuales en Sede (MPS One)',
+      desc: 'Clases 100% personalizadas según tu nivel y objetivo en instalaciones MPS.',
       ids: ['individual_sede_4', 'individual_sede_8', 'individual_sede_12']
     },
     {
-      titulo: '🏠 Clases Individuales a Domicilio',
-      desc: 'Clases personalizadas en la residencia del estudiante.',
+      titulo: '🏠 Clases Individuales a Domicilio (MPS One)',
+      desc: 'Clases personalizadas en la residencia del estudiante con docente MPS.',
       ids: ['individual_domicilio_4', 'individual_domicilio_8', 'individual_domicilio_12']
     },
     {
-      titulo: '👥 Clases Semipersonalizadas Grupales (MPS Link)',
-      desc: '1.5 hrs/semana en grupos reducidos, 6 cátedras de instrumentos.',
+      titulo: '👥 Clases Grupales Semipersonalizadas (MPS Link)',
+      desc: '1.5 hrs/semana en grupos reducidos, 6 cátedras de instrumentos y concierto de cierre.',
       ids: ['grupal_semipersonalizado_mes', 'grupal_semipersonalizado_trimestre']
+    },
+    {
+      titulo: '🎭 Talleres de Temporada y Cursos Especiales',
+      desc: 'Programas especializados y talleres trimestrales de artes escénicas.',
+      ids: ['taller_actuacion_trimestre']
+    },
+    {
+      titulo: '📋 Matrícula Anual Institucional',
+      desc: 'Valor de matrícula aplicable a cada compra (estudiantes nuevos o renovación anual).',
+      ids: ['matricula_institucional']
     }
   ];
 

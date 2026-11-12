@@ -88,6 +88,24 @@ export const OFFICIAL_TARIFAS_DEFAULT = {
     duracionHoras: 1.5,
     precio: 540000,
     descripcion: 'Ciclo trimestral completo con acompañamiento en Google Classroom y concierto de cierre.'
+  },
+  // Taller de Actuación
+  'taller_actuacion_trimestre': {
+    id: 'taller_actuacion_trimestre',
+    name: 'Taller de Actuación (3 Meses)',
+    tipo: 'taller',
+    modalidad: 'sede',
+    duracionMeses: 3,
+    precio: 600000,
+    descripcion: '3 meses para transformar tu talento: arte dramático, expresión corporal, voz, improvisación y escena.'
+  },
+  // Matrícula Institucional Anual (Aplicable a cada compra)
+  'matricula_institucional': {
+    id: 'matricula_institucional',
+    name: 'Matrícula Institucional Anual',
+    tipo: 'matricula',
+    precio: 50000,
+    descripcion: 'Carné institucional oficial, código de estudiante, reservas de salas de ensayo y convenios Yamaha.'
   }
 };
 
@@ -229,27 +247,32 @@ export const OFFICIAL_PROGRAMS = {
       'Convivencia artística y trabajo cooperativo en equipo'
     ]
   },
-  matricula: {
-    id: 'matricula',
-    title: 'Matrícula Anual Institucional',
-    category: 'Registro Oficial MPS',
-    badge: 'REGISTRO INSTITUCIONAL',
-    tagline: 'Tu carné, reserva de salas y beneficios exclusivos de estudiante.',
-    description: 'Habilita tu condición de estudiante activo en la Escuela MPS, tu código de matrícula, reservas de salas de ensayo y convenios institucionales.',
-    duration: 'Vigencia Anual (12 Meses)',
-    presentation: 'Carné institucional oficial con beneficios Yamaha y aliados.',
-    image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
-    linkPrice: 50000,
-    onePrice: 50000,
-    homePrice: 50000,
+  'taller-actuacion': {
+    id: 'taller-actuacion',
+    title: 'Taller de Actuación MPS',
+    category: 'Formación Escénica e Interpretación • Trimestral',
+    badge: 'TALLER OFICIAL DE ACTUACIÓN',
+    tagline: 'Descubre tu talento, vive la escena. Aprende. Exprésate. Transforma.',
+    description: '3 meses para transformar tu talento en tu mejor actuación. Formación integral en artes escénicas enfocada en el desarrollo interpretativo, control corporal, proyección vocal y creación de personajes tanto para teatro como para medios audiovisuales.',
+    duration: '3 Meses (Trimestral) • 1 clase semanal de 2 horas',
+    presentation: 'Muestra escénica final y montaje en vivo en auditorio oficial ante público.',
+    image: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80',
+    linkPrice: 600000,
+    onePrice: 600000,
+    homePrice: 600000,
     components: [
-      { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios comerciales' },
-      { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Acceso a salas insonorizadas y equipadas' }
+      { name: 'Arte Dramático & Interpretación', hours: 'Semanal', format: 'Análisis de texto, construcción de escenas y objetivos del personaje' },
+      { name: 'Expresión Corporal & Presencia', hours: 'Semanal', format: 'Desinhibición, postura escénica, movimiento y conciencia física' },
+      { name: 'Manejo de Voz & Dicción', hours: 'Semanal', format: 'Respiración, modulación, proyección, volumen y claridad vocal' },
+      { name: 'Improvisación & Manejo Creativo', hours: 'Semanal', format: 'Agilidad mental, escucha activa y espontaneidad en escena' }
     ],
     develops: [
-      'Acceso a la plataforma y reservas de espacios de ensayo',
-      'Descuentos en masterclasses y clínicas especiales',
-      'Participación en festivales y eventos institucionales'
+      'Seguridad, presencia escénica y manejo del miedo escénico',
+      'Técnicas de respiración diafragmática y dicción profesional',
+      'Creación y caracterización profunda de personajes',
+      'Capacidad de improvisación y respuesta creativa en vivo',
+      'Expresión no verbal, corporalidad y dominio del espacio escénico',
+      'Experiencia real en montaje teatral y actuación ante público'
     ]
   }
 };
