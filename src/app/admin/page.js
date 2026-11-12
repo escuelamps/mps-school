@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff, FileSpreadsheet, Users, ClipboardCheck, BookOpen, ExternalLink, X } from 'lucide-react';
+import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, Eye, EyeOff, FileSpreadsheet, Users, ClipboardCheck, BookOpen, ExternalLink, X, DollarSign } from 'lucide-react';
 import './admin.css';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -691,6 +691,41 @@ export default function AdminPage() {
                   </div>
                   <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Contabilidad</h2>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Control financiero, liquidación de profesores, gestión de estudiantes y cuentas de cobro.</p>
+                </div>
+              )}
+
+              {/* Card Tarifas y Costos (Dirección, Administración y Coordinación) */}
+              {(isDireccion || isAdministracion || isCoordinacion) && (
+                <div 
+                  onClick={() => router.push('/admin/tarifas')}
+                  style={{
+                    background: 'var(--panel-bg)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '16px',
+                    padding: '2rem 1.5rem',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.06)',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    height: '100%'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.06)';
+                  }}
+                >
+                  <div style={{ width: '60px', height: '60px', borderRadius: '16px', background: '#ecfdf5', color: '#09624C', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <DollarSign size={30} />
+                  </div>
+                  <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Tarifas y Costos</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.45 }}>Configuración dinámica de precios oficiales, paquetes de clases individuales, grupales y a domicilio.</p>
                 </div>
               )}
 

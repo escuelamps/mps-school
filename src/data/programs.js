@@ -10,6 +10,87 @@ export const formatCOP = (val) => {
   }).format(val || 0);
 };
 
+// Tarifas Oficiales Base de Escuela MPS (extraídas de la documentación y flyers institucionales)
+export const OFFICIAL_TARIFAS_DEFAULT = {
+  // Clases Individuales Presenciales en Sede
+  'individual_sede_4': {
+    id: 'individual_sede_4',
+    name: '4 Clases Presenciales en Sede',
+    tipo: 'individual',
+    modalidad: 'sede',
+    clases: 4,
+    precio: 280000,
+    descripcion: 'Clases personalizadas según tu nivel y objetivo en instalaciones MPS.'
+  },
+  'individual_sede_8': {
+    id: 'individual_sede_8',
+    name: '8 Clases Presenciales en Sede',
+    tipo: 'individual',
+    modalidad: 'sede',
+    clases: 8,
+    precio: 520000,
+    descripcion: 'Paquete de 8 clases individuales presenciales con horario flexible.'
+  },
+  'individual_sede_12': {
+    id: 'individual_sede_12',
+    name: '12 Clases Presenciales en Sede',
+    tipo: 'individual',
+    modalidad: 'sede',
+    clases: 12,
+    precio: 720000,
+    descripcion: 'Paquete trimestral de 12 clases individuales presenciales.'
+  },
+  // Clases Individuales a Domicilio
+  'individual_domicilio_4': {
+    id: 'individual_domicilio_4',
+    name: '4 Clases Individuales a Domicilio',
+    tipo: 'individual',
+    modalidad: 'domicilio',
+    clases: 4,
+    precio: 305000,
+    descripcion: 'Clases personalizadas en tu residencia con docente asignado MPS.'
+  },
+  'individual_domicilio_8': {
+    id: 'individual_domicilio_8',
+    name: '8 Clases Individuales a Domicilio',
+    tipo: 'individual',
+    modalidad: 'domicilio',
+    clases: 8,
+    precio: 590000,
+    descripcion: 'Paquete de 8 clases individuales a domicilio con docente asignado MPS.'
+  },
+  'individual_domicilio_12': {
+    id: 'individual_domicilio_12',
+    name: '12 Clases Individuales a Domicilio',
+    tipo: 'individual',
+    modalidad: 'domicilio',
+    clases: 12,
+    precio: 830000,
+    descripcion: 'Paquete trimestral de 12 clases individuales a domicilio.'
+  },
+  // Clases Semipersonalizadas Grupales
+  'grupal_semipersonalizado_mes': {
+    id: 'grupal_semipersonalizado_mes',
+    name: 'Clases Semipersonalizadas Grupales (Mensual)',
+    tipo: 'grupal',
+    modalidad: 'sede',
+    clases: 4,
+    duracionHoras: 1.5,
+    precio: 180000,
+    descripcion: '1 hora y media a la semana en grupo reducido, Google Classroom y proceso trimestral con concierto de cierre.'
+  },
+  'grupal_semipersonalizado_trimestre': {
+    id: 'grupal_semipersonalizado_trimestre',
+    name: 'Clases Semipersonalizadas Grupales (Trimestre Completo)',
+    tipo: 'grupal',
+    modalidad: 'sede',
+    clases: 12,
+    duracionHoras: 1.5,
+    precio: 540000,
+    descripcion: 'Ciclo trimestral completo con acompañamiento en Google Classroom y concierto de cierre.'
+  }
+};
+
 export const OFFICIAL_PROGRAMS = {
   'mps-stage': {
     id: 'mps-stage',
@@ -21,8 +102,9 @@ export const OFFICIAL_PROGRAMS = {
     duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas en total',
     presentation: 'Presentación final y concierto en vivo al cierre de semestre según programación institucional.',
     image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
+    linkPrice: 180000,
+    onePrice: 280000,
+    homePrice: 305000,
     components: [
       { name: 'Instrumento Personalizado', hours: '1 h/semana', format: 'Clase individual (1 estudiante) • Técnica, lenguaje musical y repertorio' },
       { name: 'Ensamble Musical Grupal', hours: '2 h/semana', format: 'Trabajo colectivo (3 a 8 estudiantes) • Pulso, escucha activa, roles y montaje en vivo' }
@@ -46,13 +128,13 @@ export const OFFICIAL_PROGRAMS = {
     duration: 'Ciclo Trimestral Renovable • 2 a 4 alumnos (Link), 1 a 1 (One) o Domicilio (Home)',
     presentation: 'Recital semestral en auditorio oficial MPS con sonido e iluminación profesional.',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
-    homePrice: 500000,
+    linkPrice: 180000,
+    onePrice: 280000,
+    homePrice: 305000,
     components: [
-      { name: 'Modalidad MPS LINK (Semipersonalizado)', hours: '2 h/semana', format: '2 a 4 estudiantes del mismo instrumento • Horario trimestral fijo • Aprendizaje colectivo' },
-      { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual • Atención exclusiva y avance a tu propio ritmo' },
-      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu residencia con docente asignado MPS' }
+      { name: 'Modalidad MPS LINK (Semipersonalizado)', hours: '1.5 h/semana', format: 'Grupo reducido en sede • Proceso trimestral • Concierto de cierre' },
+      { name: 'Modalidad MPS ONE (Personalizado 1 a 1)', hours: '1 h/semana', format: '1 estudiante individual en sede • Paquetes de 4, 8 o 12 clases' },
+      { name: 'Modalidad MPS HOME (A Domicilio)', hours: '1 h/semana', format: 'Clase en tu residencia con docente asignado MPS • Paquetes de 4, 8 o 12 clases' }
     ],
     develops: [
       'Postura, digitación, técnica y coordinación motriz en el instrumento',
@@ -73,8 +155,9 @@ export const OFFICIAL_PROGRAMS = {
     duration: '1 Año académico (2 semestres de 16 semanas) • 2 h/semana • Máx 6 alumnos',
     presentation: 'Semestre 1: Demo básico | Semestre 2: Proyecto final terminado + muestra pública.',
     image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
+    linkPrice: 180000,
+    onePrice: 280000,
+    homePrice: 305000,
     components: [
       { name: 'Módulo 1: Gestión de Proyectos', hours: 'Teoría/DAW', format: 'Objetivos creativos y comerciales, flujo de trabajo, propiedad intelectual y distribución' },
       { name: 'Módulo 2: Fundamentos de Audio', hours: 'Teoría/DAW', format: 'DAW, señal, grabación, microfonía, latencia, acústica y procesadores' },
@@ -100,8 +183,9 @@ export const OFFICIAL_PROGRAMS = {
     duration: '1 Semestre académico (16 semanas) • 15 h/semana • 240 Horas estimadas',
     presentation: 'Audición de simulacro y preparación intensiva de pruebas de admisión universitaria.',
     image: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
+    linkPrice: 180000,
+    onePrice: 280000,
+    homePrice: 305000,
     components: [
       { name: 'Instrumento Principal', hours: '1 h/semana', format: 'Desarrollo técnico, repertorio avanzado e interpretación' },
       { name: 'Teclado Complementario', hours: '2 h/semana', format: 'Aplicación musical desde el teclado y armonía funcional' },
@@ -128,8 +212,9 @@ export const OFFICIAL_PROGRAMS = {
     duration: '2 Semanas (10 días Lunes a Viernes) • 2 h/día • 20 Horas en total',
     presentation: 'Muestra escénica final en auditorio ante familiares e invitados.',
     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
+    linkPrice: 180000,
+    onePrice: 280000,
+    homePrice: 305000,
     components: [
       { name: 'Instrumento Semipersonalizado', hours: '8 Horas (Total)', format: 'Técnica, postura, ejercicios y montaje por instrumento' },
       { name: 'Ensamble Musical en Vivo', hours: '8 Horas (Total)', format: 'Pulso, escucha, interacción y dinámica de banda' },
@@ -154,8 +239,9 @@ export const OFFICIAL_PROGRAMS = {
     duration: 'Vigencia Anual (12 Meses)',
     presentation: 'Carné institucional oficial con beneficios Yamaha y aliados.',
     image: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=80',
-    linkPrice: 500000,
-    onePrice: 500000,
+    linkPrice: 50000,
+    onePrice: 50000,
+    homePrice: 50000,
     components: [
       { name: 'Carné Institucional', hours: 'Oficial', format: 'Código de estudiante y convenios comerciales' },
       { name: 'Reserva de Salas de Ensayo', hours: 'Ilimitada', format: 'Acceso a salas insonorizadas y equipadas' }
@@ -204,6 +290,8 @@ export const GROUP_SCHEDULES = {
     { id: 'guitarra-sab-2-4', label: 'Sábado 2:00 pm - 4:00 pm (Guitarra Avanzada)' }
   ],
   violin: [
+    { id: 'violin-vie-4-530', label: 'Viernes 4:00 pm - 5:30 pm (Cuerdas Frotadas Semipersonalizado)' },
+    { id: 'violin-sab-10-1130', label: 'Sábado 10:00 am - 11:30 am (Cuerdas Frotadas Semipersonalizado)' },
     { id: 'violin-lun-4-6', label: 'Lunes 4:00 pm - 6:00 pm (Violín Método Suzuki / Tradicional)' },
     { id: 'violin-mie-4-6', label: 'Miércoles 4:00 pm - 6:00 pm (Cuerdas Frotadas)' },
     { id: 'violin-sab-10-12', label: 'Sábado 10:00 am - 12:00 m (Violín Ensamble)' }

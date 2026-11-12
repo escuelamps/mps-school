@@ -34,7 +34,8 @@ import {
   where, 
   getDocs, 
   updateDoc, 
-  doc 
+  doc,
+  onSnapshot
 } from 'firebase/firestore';
 import './checkout.css';
 
@@ -43,6 +44,7 @@ import {
   INSTRUMENTS_LIST, 
   GROUP_SCHEDULES, 
   KIT_PRICE, 
+  OFFICIAL_TARIFAS_DEFAULT,
   formatCOP 
 } from '@/data/programs';
 
@@ -86,9 +88,32 @@ function CheckoutContent() {
   const [selectedProgramKey, setSelectedProgramKey] = useState('mps-stage');
   const [selectedInstrument, setSelectedInstrument] = useState('canto');
   const [modality, setModality] = useState('grupal'); // 'grupal' (MPS Link) | 'individual' (MPS One)
+  const [classPackage, setClassPackage] = useState(4); // 4, 8, 12 clases
+  const [locationType, setLocationType] = useState('sede'); // 'sede' | 'domicilio'
+  const [liveTarifas, setLiveTarifas] = useState(OFFICIAL_TARIFAS_DEFAULT);
   const [selectedSchedule, setSelectedSchedule] = useState('');
   const [customAmount, setCustomAmount] = useState(null);
   const [customTitle, setCustomTitle] = useState(null);
+
+  // Escuchar tarifas oficiales dinámicas de Firestore
+  useEffect(() => {
+    try {
+      const unsub = onSnapshot(collection(db, 'tarifas'), (snapshot) => {
+        if (!snapshot.empty) {
+          const loaded = {};
+          snapshot.forEach(docSnap => {
+            loaded[docSnap.id] = { id: docSnap.id, ...docSnap.data() };
+          });
+          setLiveTarifas(prev => ({ ...prev, ...loaded }));
+        }
+      }, (err) => {
+        console.warn('Usando catálogo local de tarifas oficiales:', err);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn('Error inicializando listener de tarifas:', e);
+    }
+  }, []);
 
   // Order Bump (Kit de Bienvenida)
   const [includeKit, setIncludeKit] = useState(false);
@@ -197,10 +222,28 @@ function CheckoutContent() {
   const isMatricula = selectedProgramKey === 'matricula';
   const hasInstrumentChoice = selectedProgramKey === 'curso-libre' || selectedProgramKey === 'mps-stage';
 
-  const defaultProgramPrice = modality === 'grupal' ? (activeProgram.linkPrice || activeProgram.price) : (activeProgram.onePrice || activeProgram.price);
-  const basePrice = customAmount !== null ? customAmount : (defaultProgramPrice || 0);
+  // Cálculo dinámico de tarifa oficial en tiempo real
+  let dynamicCalculatedPrice = 0;
+  let dynamicModalityLabel = '';
+
+  if (isMatricula) {
+    dynamicCalculatedPrice = activeProgram.price || 50000;
+    dynamicModalityLabel = '';
+  } else if (modality === 'grupal') {
+    dynamicCalculatedPrice = liveTarifas['grupal_semipersonalizado_mes']?.precio || activeProgram.linkPrice || 180000;
+    dynamicModalityLabel = ' - MPS Link (Grupal Semipersonalizado)';
+  } else {
+    // Individual
+    const tarifaKey = `individual_${locationType}_${classPackage}`;
+    const matched = liveTarifas[tarifaKey];
+    dynamicCalculatedPrice = matched?.precio || (locationType === 'domicilio' ? (classPackage === 4 ? 305000 : classPackage === 8 ? 590000 : 830000) : (classPackage === 4 ? 280000 : classPackage === 8 ? 520000 : 720000));
+    const locName = locationType === 'domicilio' ? 'A Domicilio' : 'En Sede';
+    dynamicModalityLabel = ` - Individual ${locName} (${classPackage} Clases)`;
+  }
+
+  const basePrice = customAmount !== null ? customAmount : dynamicCalculatedPrice;
   const instrumentLabel = hasInstrumentChoice ? ` (${INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument})` : '';
-  const modalityLabel = isMatricula ? '' : (modality === 'individual' ? ' - MPS One (Individual)' : ' - MPS Link (Grupal Trimestral)');
+  const modalityLabel = isMatricula ? '' : dynamicModalityLabel;
   const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel;
 
   const couponDiscount = appliedCoupon ? (Number(appliedCoupon.valor) || 0) : 0;
@@ -1009,11 +1052,11 @@ function CheckoutContent() {
               </div>
             )}
 
-            {/* SELECTOR MODALIDAD CLASES: LINK VS ONE */}
+            {/* SELECTOR MODALIDAD CLASES: LINK VS INDIVIDUAL */}
             {!isMatricula && customAmount === null && (
               <div style={{ marginBottom: '1.2rem' }}>
                 <label className="checkout-label" style={{ fontSize: '0.8rem', marginBottom: '0.4rem' }}>
-                  Tipo de Formación:
+                  Modalidad de Formación:
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
                   <button
@@ -1037,7 +1080,7 @@ function CheckoutContent() {
                   >
                     <span>👥 MPS Link (Grupal)</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(activeProgram.linkPrice || activeProgram.price)}
+                      {formatCOP(liveTarifas['grupal_semipersonalizado_mes']?.precio || 180000)}/mes
                     </span>
                   </button>
 
@@ -1060,12 +1103,94 @@ function CheckoutContent() {
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    <span>👤 MPS One (1 a 1)</span>
+                    <span>👤 Clases Individuales</span>
                     <span style={{ fontSize: '0.72rem', opacity: 0.85, fontWeight: 600 }}>
-                      {formatCOP(activeProgram.onePrice || activeProgram.price)}
+                      Desde {formatCOP(liveTarifas['individual_sede_4']?.precio || 280000)}
                     </span>
                   </button>
                 </div>
+
+                {/* SUB-SELECTOR CLASES INDIVIDUALES: UBICACIÓN Y PAQUETE */}
+                {modality === 'individual' && (
+                  <div style={{ marginTop: '0.9rem', padding: '0.9rem', background: 'rgba(0, 222, 133, 0.04)', borderRadius: '10px', border: '1px solid var(--glass-border)' }}>
+                    
+                    {/* Ubicación: Sede o Domicilio */}
+                    <div style={{ marginBottom: '0.75rem' }}>
+                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.3rem', textTransform: 'uppercase' }}>
+                        Ubicación:
+                      </span>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                        <button
+                          type="button"
+                          onClick={() => setLocationType('sede')}
+                          style={{
+                            padding: '0.5rem 0.3rem',
+                            borderRadius: '8px',
+                            border: locationType === 'sede' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                            background: locationType === 'sede' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
+                            color: locationType === 'sede' ? 'var(--accent)' : 'var(--text-primary)',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          🏢 En Sede MPS
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setLocationType('domicilio')}
+                          style={{
+                            padding: '0.5rem 0.3rem',
+                            borderRadius: '8px',
+                            border: locationType === 'domicilio' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                            background: locationType === 'domicilio' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
+                            color: locationType === 'domicilio' ? 'var(--accent)' : 'var(--text-primary)',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          🏠 A Domicilio
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Paquete de Clases: 4, 8 o 12 */}
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.3rem', textTransform: 'uppercase' }}>
+                        Paquete de Clases:
+                      </span>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.4rem' }}>
+                        {[4, 8, 12].map((num) => {
+                          const pKey = `individual_${locationType}_${num}`;
+                          const pTarifa = liveTarifas[pKey];
+                          const priceVal = pTarifa?.precio || (locationType === 'domicilio' ? (num === 4 ? 305000 : num === 8 ? 590000 : 830000) : (num === 4 ? 280000 : num === 8 ? 520000 : 720000));
+                          const isSel = classPackage === num;
+
+                          return (
+                            <button
+                              key={num}
+                              type="button"
+                              onClick={() => setClassPackage(num)}
+                              style={{
+                                padding: '0.6rem 0.2rem',
+                                borderRadius: '8px',
+                                border: isSel ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                                background: isSel ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
+                                color: isSel ? 'var(--accent)' : 'var(--text-primary)',
+                                cursor: 'pointer',
+                                textAlign: 'center'
+                              }}
+                            >
+                              <div style={{ fontWeight: 800, fontSize: '0.82rem' }}>{num} Clases</div>
+                              <div style={{ fontSize: '0.72rem', opacity: 0.85, marginTop: '2px', fontWeight: 600 }}>{formatCOP(priceVal)}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
