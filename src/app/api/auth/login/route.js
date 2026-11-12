@@ -38,42 +38,32 @@ export async function POST(request) {
     }
 
     // Mapeo institucional por CARGOS acordado en reunión de TICs:
-    if (email === 'direccion@escuelamps.com' || email === 'director@escuelamps.com' || email === 'directora@escuelamps.com') {
+    if (email === 'direccion@escuelamps.com') {
       role = 'admin';
       cargo = 'direccion';
       cargoTitle = 'Dirección General';
       username = 'Dirección';
-    } else if (email === 'coordinacion@escuelamps.com' || email === 'coordinador@escuelamps.com' || email === 'coord@escuelamps.com') {
+    } else if (email === 'coordinacion@escuelamps.com') {
       role = 'admin';
       cargo = 'coordinacion_academica';
       cargoTitle = 'Coordinación Académica';
       username = 'Coordinación';
-    } else if (email === 'administracion@escuelamps.com' || email === 'admin@escuelamps.com' || email === 'contabilidad@escuelamps.com' || email === 'pagos@escuelamps.com') {
+    } else if (email === 'administracion@escuelamps.com' || email === 'contabilidad@escuelamps.com') {
       role = 'admin';
       cargo = 'administracion';
       cargoTitle = 'Administración y Contabilidad';
       username = 'Administración';
-    } else if (email === 'recepcion@escuelamps.com' || email === 'secretaria@escuelamps.com' || email === 'recepcionista@escuelamps.com') {
+    } else if (email === 'recepcion@escuelamps.com' || email === 'secretaria@escuelamps.com') {
       role = 'admin';
       cargo = 'recepcion';
       cargoTitle = 'Recepción y Reservas';
       username = 'Recepción';
-    } else if (email.startsWith('profe-')) {
-      role = 'teacher';
-      cargo = 'docente';
-      cargoTitle = 'Docente MPS';
-      username = username.replace('profe-', '');
-    } else if (email.startsWith('estudiante-')) {
-      role = 'student';
-      cargo = 'estudiante';
-      cargoTitle = 'Estudiante MPS';
-      username = username.replace('estudiante-', '');
     } else {
-      // Si intentó ingresar desde /admin con un usuario no administrativo
+      // Si ponen "admin" o cualquier otro usuario no autorizado, no entra a nada
       return NextResponse.json({ 
         success: false, 
-        message: 'Esta cuenta no tiene permisos administrativos. Ingresa con: direccion, coordinacion, administracion o recepcion.' 
-      }, { status: 403 });
+        message: 'Usuario o contraseña incorrectos.' 
+      }, { status: 401 });
     }
 
     // 4. Set the secure session cookie (almacena cargo, username, role y email)

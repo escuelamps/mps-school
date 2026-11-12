@@ -44,14 +44,19 @@ export default function AdminPage() {
       fetch('/api/auth/me')
         .then(res => res.json())
         .then(data => {
-          if (data.username) {
+          const validCargos = ['direccion', 'coordinacion_academica', 'administracion', 'recepcion'];
+          if (data.username && validCargos.includes(data.cargo)) {
             setUsername(data.username);
-            setCargo(data.cargo || (data.username === 'juanse' ? 'coordinacion_academica' : 'direccion'));
-            setCargoTitle(data.cargoTitle || (data.username === 'juanse' ? 'Coordinación Académica' : 'Dirección General'));
+            setCargo(data.cargo);
+            setCargoTitle(data.cargoTitle || 'Dirección General');
           } else {
             setUsername(null);
             setCargo(null);
             setCargoTitle(null);
+            if (data.username) {
+              fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+              try { auth.signOut(); } catch(e) {}
+            }
           }
           setLoadingSession(false);
         })
@@ -86,13 +91,20 @@ export default function AdminPage() {
     setIsLoggingIn(true);
 
     try {
-      // 1. Bloqueo de nombres personales antiguos
+      // 1. Bloquear cualquier usuario que no sea uno de los cargos institucionales autorizados
       const rawInput = loginUsername.trim().toLowerCase();
-      if (
-        rawInput === 'william' || rawInput === 'juanse' || rawInput === 'lpineda' ||
-        rawInput.startsWith('william@') || rawInput.startsWith('juanse@') || rawInput.startsWith('lpineda@')
-      ) {
-        setError('Correo o contraseña incorrectos.');
+      const rawUser = rawInput.replace('@escuelamps.com', '').trim();
+      const ALLOWED_ADMIN_USERS = [
+        'direccion',
+        'coordinacion',
+        'administracion',
+        'contabilidad',
+        'recepcion',
+        'secretaria'
+      ];
+
+      if (!ALLOWED_ADMIN_USERS.includes(rawUser)) {
+        setError('Usuario o contraseña incorrectos.');
         setIsLoggingIn(false);
         return;
       }
