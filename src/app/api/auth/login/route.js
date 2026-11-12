@@ -38,22 +38,22 @@ export async function POST(request) {
     }
 
     // Mapeo institucional por CARGOS acordado en reunión de TICs:
-    if (email === 'direccion@escuelamps.com') {
+    if (email === 'direccion@escuelamps.com' || email === 'director@escuelamps.com' || email === 'directora@escuelamps.com') {
       role = 'admin';
       cargo = 'direccion';
       cargoTitle = 'Dirección General';
       username = 'Dirección';
-    } else if (email === 'coordinacion@escuelamps.com') {
+    } else if (email === 'coordinacion@escuelamps.com' || email === 'coordinador@escuelamps.com' || email === 'coord@escuelamps.com') {
       role = 'admin';
       cargo = 'coordinacion_academica';
       cargoTitle = 'Coordinación Académica';
       username = 'Coordinación';
-    } else if (email === 'administracion@escuelamps.com' || email === 'contabilidad@escuelamps.com') {
+    } else if (email === 'administracion@escuelamps.com' || email === 'admin@escuelamps.com' || email === 'contabilidad@escuelamps.com' || email === 'pagos@escuelamps.com') {
       role = 'admin';
       cargo = 'administracion';
       cargoTitle = 'Administración y Contabilidad';
       username = 'Administración';
-    } else if (email === 'recepcion@escuelamps.com' || email === 'secretaria@escuelamps.com') {
+    } else if (email === 'recepcion@escuelamps.com' || email === 'secretaria@escuelamps.com' || email === 'recepcionista@escuelamps.com') {
       role = 'admin';
       cargo = 'recepcion';
       cargoTitle = 'Recepción y Reservas';
@@ -69,9 +69,11 @@ export async function POST(request) {
       cargoTitle = 'Estudiante MPS';
       username = username.replace('estudiante-', '');
     } else {
-      role = 'student';
-      cargo = 'estudiante';
-      cargoTitle = 'Estudiante MPS';
+      // Si intentó ingresar desde /admin con un usuario no administrativo
+      return NextResponse.json({ 
+        success: false, 
+        message: 'Esta cuenta no tiene permisos administrativos. Ingresa con: direccion, coordinacion, administracion o recepcion.' 
+      }, { status: 403 });
     }
 
     // 4. Set the secure session cookie (almacena cargo, username, role y email)
