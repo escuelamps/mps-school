@@ -40,6 +40,7 @@ export default function ReservasDashboard() {
   const [nuevoValor, setNuevoValor] = useState('30000');
   const [creandoCupon, setCreandoCupon] = useState(false);
   const [mensajeCupon, setMensajeCupon] = useState('');
+  const [sessionUser, setSessionUser] = useState(null);
 
   useEffect(() => {
     const checkAuth = () => {
@@ -48,6 +49,8 @@ export default function ReservasDashboard() {
         .then(data => {
           if (!data.username || (data.role !== 'admin' && data.cargo !== 'direccion' && data.cargo !== 'administracion' && data.cargo !== 'recepcion')) {
             router.replace('/admin');
+          } else {
+            setSessionUser(data);
           }
         })
         .catch(() => router.replace('/admin'));
@@ -140,7 +143,7 @@ export default function ReservasDashboard() {
         tipo: 'monto',
         valor: Number(nuevoValor) || 30000,
         origen: 'admin_reservas',
-        creadoPor: 'lpineda',
+        creadoPor: sessionUser?.username || sessionUser?.cargo || 'administracion',
         estado: 'ACTIVO',
         createdAt: serverTimestamp(),
         expiresAt: Timestamp.fromDate(expira),

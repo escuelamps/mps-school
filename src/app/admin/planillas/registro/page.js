@@ -62,12 +62,7 @@ export default function RegistroPlanillaPage() {
     // Helper to resolve teacher name from session
     const getTeacherNameFromSession = (u) => {
       if (!u || !u.username) return '';
-      const uLower = u.username.toLowerCase();
-      const eLower = (u.email || '').toLowerCase();
-      if (uLower === 'lpineda' || eLower === 'lpineda@escuelamps.com') return 'Laura Pineda';
-      if (uLower === 'william' || eLower === 'william@escuelamps.com') return 'William Buitrago';
-      if (uLower === 'juanse' || eLower === 'juanse@escuelamps.com') return 'Juan Sebastián';
-      return u.name || u.username;
+      return u.cargoTitle || u.name || u.username;
     };
 
     // 1. Check user auth & pre-select
@@ -83,40 +78,33 @@ export default function RegistroPlanillaPage() {
       })
       .catch(() => {});
 
-    // 2. Load teachers from Firestore + Base Docente
+    // 2. Load teachers dynamically from Google Sheets (RESUMEN - PROFESORES) + Firestore
     const fetchTeachers = async () => {
       try {
         const teachersMap = new Map();
         
-        // Profesores base del cuerpo docente de MPS
-        const DEFAULT_TEACHERS = [
-          'Laura Pineda',
-          'William Buitrago',
-          'Jorge Garcia',
-          'Sebastian Vergara',
-          'Andres Bernal',
-          'Carlos Macia',
-          'Jenny Rojas',
-          'Laura Mendoza',
-          'Luisa Medellin',
-          'Sahar Abwmar',
-          'Shalom Prieto'
-        ];
-        DEFAULT_TEACHERS.forEach(tName => {
-          teachersMap.set(tName.toLowerCase(), { id: tName, name: tName });
-        });
+        // Consultar hoja oficial de Google Sheets
+        try {
+          const resProf = await fetch('/api/sheets?type=profesores');
+          const jsonProf = await resProf.json();
+          if (jsonProf.data && jsonProf.data.length > 1) {
+            jsonProf.data.slice(1)
+              .filter(row => row && row[0] && row[0].trim() && (!row[1] || !row[1].toUpperCase().includes('INACTIVO')))
+              .forEach(row => {
+                const name = row[0].trim();
+                teachersMap.set(name.toLowerCase(), { id: name, name });
+              });
+          }
+        } catch (sheetErr) {
+          console.error("Error al cargar profesores de Google Sheets:", sheetErr);
+        }
 
         // Complementar con usuarios de Firestore
         const q = query(collection(db, 'users'), where('role', 'in', ['teacher', 'admin']));
         const snap = await getDocs(q);
         snap.docs.forEach(doc => {
           const d = doc.data();
-          let name = d.name;
-          if (!name || !name.trim()) {
-            if (d.email === 'lpineda@escuelamps.com' || d.username === 'lpineda') name = 'Laura Pineda';
-            else if (d.email === 'william@escuelamps.com' || d.username === 'william') name = 'William Buitrago';
-            else name = d.username || 'Profesor';
-          }
+          const name = d.name || d.username;
           if (name && name.trim()) {
             teachersMap.set(name.trim().toLowerCase(), { id: doc.id, name: name.trim() });
           }

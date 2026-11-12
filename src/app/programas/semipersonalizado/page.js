@@ -1,10 +1,11 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function SemipersonalizadoPage() {
   return (
     <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', color: 'var(--text-primary)' }}>
       <h1 style={{ color: 'var(--accent-primary)', fontSize: '2.5rem', marginBottom: '20px' }}>
-        Curso Libre Semipersonalizado
+        Curso Libre Semipersonalizado (MPS Link)
       </h1>
       <p style={{ fontSize: '1.2rem', lineHeight: '1.6', marginBottom: '30px' }}>
         Desarrolla tus habilidades musicales en un entorno colaborativo. Nuestro programa semipersonalizado 
@@ -14,10 +15,26 @@ export default function SemipersonalizadoPage() {
       <div style={{ background: 'var(--bg-secondary)', padding: '20px', borderRadius: '12px', marginBottom: '30px' }}>
         <h2 style={{ color: 'var(--text-primary)', marginBottom: '15px' }}>Detalles del Programa</h2>
         <ul style={{ listStyleType: 'none', padding: 0 }}>
-          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>⏳ <strong>Duración:</strong> 16 semanas (32 horas totales)</li>
-          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>👥 <strong>Capacidad:</strong> Máximo 5 estudiantes por grupo</li>
-          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>💰 <strong>Inversión:</strong> $230,000 COP mensuales</li>
+          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>⏳ <strong>Duración:</strong> Ciclo trimestral renovable • 2 horas semanales</li>
+          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>👥 <strong>Capacidad:</strong> 2 a 4 estudiantes por grupo</li>
+          <li style={{ padding: '10px 0', borderBottom: '1px solid var(--glass-border)' }}>💰 <strong>Inversión:</strong> Consulta tarifas vigentes y descuentos en el checkout oficial</li>
         </ul>
+        <div style={{ marginTop: '20px' }}>
+          <Link 
+            href="/checkout?curso=curso-libre"
+            style={{ 
+              display: 'inline-block', 
+              background: 'var(--accent, #00DE85)', 
+              color: '#000F11', 
+              padding: '12px 24px', 
+              borderRadius: '10px', 
+              fontWeight: 'bold', 
+              textDecoration: 'none' 
+            }}
+          >
+            Inscribirme o consultar tarifas vigentes →
+          </Link>
+        </div>
       </div>
 
       <div style={{ marginBottom: '30px' }}>
