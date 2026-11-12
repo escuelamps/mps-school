@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Oficial de Tarifas y Cursos - Escuela MPS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #09624C;
+      --accent: #00DE85;
+      --dark: #000F11;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #1E293B;
+      --text-muted: #64748B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 3rem 2.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    .header {
+      border-bottom: 2px solid #F1F5F9;
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #ECFDF5;
+      color: var(--primary);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-top: 0.5rem;
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 2.2rem 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 4px solid var(--accent);
+      padding-left: 0.75rem;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1.2rem 0 0.5rem 0;
+    }
+
+    p { margin-bottom: 1rem; color: #334155; font-size: 0.98rem; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .card.highlight {
+      border-color: #86EFAC;
+      background: #F0FDF4;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: #F1F5F9;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .price-tag {
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+
+    .steps-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .step-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: #FFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      margin: 0 auto 0.75rem auto;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--dark);
+      margin-bottom: 0.35rem;
+    }
+
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .alert-box {
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+      color: #1E40AF;
+    }
+
+    .alert-box.green {
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+      color: #065F46;
+    }
+
+    @media print {
+      body { background: #FFF; padding: 0; }
+      .container { border: none; box-shadow: none; padding: 1.5rem; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="logo-badge">Escuela MPS • Music & Production School</div>
+        <h1>Manual de Tarifas y Cursos</h1>
+        <p style="color: var(--text-muted); margin-top: 0.3rem;">Guía oficial de gestión para Dirección, Coordinación y Administración</p>
+      </div>
+      <div style="text-align: right;">
+        <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Versión 2.0 (Actualizada)</span>
+      </div>
+    </div>
+
+    <h2>1. Oferta Académica y Nomenclatura Oficial</h2>
+    <p>A partir de esta actualización, la plataforma web y la app móvil de la escuela operan bajo dos marcas formativas claras:</p>
+
+    <div class="grid-2">
+      <div class="card highlight">
+        <h3>👥 MPS Link (Cursos Grupales)</h3>
+        <p><strong>Inversión:</strong> <span class="price-tag">$180.000 / mes</span> (o $540.000 el trimestre).</p>
+        <p><strong>Formato:</strong> Grupos reducidos de 2 a 4 alumnos, 1.5 horas semanales en sede, acompañamiento en Google Classroom y concierto de cierre de ciclo.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;"><strong>Horarios oficiales:</strong> Viernes 4:00 - 5:30 p.m. y Sábados 10:00 - 11:30 a.m.</p>
+      </div>
+
+      <div class="card">
+        <h3>👤 MPS One (Clases Individuales)</h3>
+        <p><strong>Formato:</strong> Clases 1 a 1 totalmente personalizadas según el ritmo y objetivo del alumno con horarios flexibles.</p>
+        <p><strong>Opciones de Ubicación:</strong></p>
+        <ul style="padding-left: 1.2rem; font-size: 0.88rem; color: #334155;">
+          <li><strong>En Sede MPS:</strong> 4 clases ($280k) | 8 clases ($520k) | 12 clases ($720k)</li>
+          <li><strong>A Domicilio:</strong> 4 clases ($305k) | 8 clases ($590k) | 12 clases ($830k)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>🎭 Taller de Actuación MPS (Nuevo)</h3>
+        <p><strong>Inversión:</strong> <span class="price-tag">$600.000</span> el trimestre completo (3 meses).</p>
+        <p style="font-size: 0.88rem;">Formación integral: Arte dramático, expresión corporal, manejo de voz, improvisación y creación de personaje. Cierre con muestra escénica en auditorio oficial ante público.</p>
+      </div>
+
+      <div class="card" style="border-color: #BAE6FD; background: #F0F9FF;">
+        <h3 style="color: #0369A1;">📋 Matrícula Anual Institucional</h3>
+        <p><strong>Inversión:</strong> <span class="price-tag" style="color: #0369A1;">$50.000 anuales</span>.</p>
+        <p style="font-size: 0.88rem; color: #0C4A6E;"><strong>Cambio en el sistema:</strong> La matrícula ya no es un curso independiente. Se adiciona a la compra de cualquier curso como registro oficial estudiantil, habilitando el carné y reservas ilimitadas de salas de ensayo.</p>
+      </div>
+    </div>
+
+    <h2>2. ¿Cómo Modificar Precios Ustedes Mismos?</h2>
+    <p>Ustedes tienen control total para cambiar cualquier valor en 10 segundos sin requerir asistencia técnica:</p>
+
+    <div class="steps-container">
+      <div class="step-box">
+        <div class="step-num">1</div>
+        <div class="step-title">Ingreso</div>
+        <div class="step-desc">Entrar a <strong>escuelamps.com/admin</strong> con sus credenciales institucionales.</div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">2</div>
+        <div class="step-title">Módulo</div>
+        <div class="step-desc">Hacer clic en el botón verde superior <strong>"Tarifas y Precios"</strong>.</div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">3</div>
+        <div class="step-title">Edición</div>
+        <div class="step-desc">Escribir el nuevo precio en el campo numérico del paquete a modificar.</div>
+      </div>
+      <div class="step-box">
+        <div class="step-num">4</div>
+        <div class="step-title">Guardar</div>
+        <div class="step-desc">Presionar el botón verde <strong>"Guardar"</strong>. ¡El cambio se ve en vivo al instante!</div>
+      </div>
+    </div>
+
+    <div class="alert-box green">
+      <strong>✓ Seguridad de datos:</strong> Si alguna vez alguien se equivoca digitando un valor, al final de la pantalla de tarifas encontrarán el botón <em>"Restaurar todos los precios a valores oficiales de volante"</em> para regresar a los precios de catálogo con un solo clic.
+    </div>
+
+    <h2>3. Tabla Maestra de Tarifas Configuradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Programa o Paquete</th>
+          <th>Modalidad</th>
+          <th>Tarifa Oficial Configurada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>4 Clases Individuales</strong></td>
+          <td>Presencial en Sede MPS</td>
+          <td class="price-tag">$280.000</td>
+        </tr>
+        <tr>
+          <td><strong>8 Clases Individuales</strong></td>
+          <td>Presencial en Sede MPS</td>
+          <td class="price-tag">$520.000</td>
+        </tr>
+        <tr>
+          <td><strong>12 Clases Individuales</strong></td>
+          <td>Presencial en Sede MPS</td>
+          <td class="price-tag">$720.000</td>
+        </tr>
+        <tr>
+          <td><strong>4 Clases Individuales</strong></td>
+          <td>A Domicilio</td>
+          <td class="price-tag">$305.000</td>
+        </tr>
+        <tr>
+          <td><strong>8 Clases Individuales</strong></td>
+          <td>A Domicilio</td>
+          <td class="price-tag">$590.000</td>
+        </tr>
+        <tr>
+          <td><strong>12 Clases Individuales</strong></td>
+          <td>A Domicilio</td>
+          <td class="price-tag">$830.000</td>
+        </tr>
+        <tr>
+          <td><strong>MPS Link (Semipersonalizado Grupal)</strong></td>
+          <td>En Sede (1.5 h/semana)</td>
+          <td class="price-tag">$180.000 / mes</td>
+        </tr>
+        <tr>
+          <td><strong>Taller de Actuación MPS</strong></td>
+          <td>Ciclo Trimestral (3 Meses)</td>
+          <td class="price-tag">$600.000 / trimestre</td>
+        </tr>
+        <tr>
+          <td><strong>Matrícula Anual Institucional</strong></td>
+          <td>Registro Transversal Anual</td>
+          <td class="price-tag">$50.000 / año</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box">
+      <strong>💳 Pasarela de Pago Oficial:</strong> Todos los pagos realizados por los estudiantes a través de la web se procesan directamente mediante <strong>Bold</strong> (Tarjetas de Crédito, Débito y PSE) o Nequi/Bre-B, ingresando directamente a las cuentas bancarias de Escuela MPS.
+    </div>
+  </div>
+</body>
+</html>
