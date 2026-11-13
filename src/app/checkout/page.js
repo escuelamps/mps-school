@@ -186,6 +186,10 @@ function CheckoutContent() {
       setSelectedProgramKey('mps-music-camp');
     } else if (key === 'actuacion' || key === 'taller-actuacion') {
       setSelectedProgramKey('taller-actuacion');
+    } else if (key === 'prueba-interna' || key === 'prueba' || key === 'test') {
+      setSelectedProgramKey('prueba-interna');
+      setIncludeMatricula(false);
+      setIncludeKit(false);
     } else if (key === 'matricula') {
       setSelectedProgramKey('curso-libre');
       setIncludeMatricula(true);
@@ -229,7 +233,10 @@ function CheckoutContent() {
   let dynamicCalculatedPrice = 0;
   let dynamicModalityLabel = '';
 
-  if (selectedProgramKey === 'taller-actuacion') {
+  if (selectedProgramKey === 'prueba-interna') {
+    dynamicCalculatedPrice = 2000;
+    dynamicModalityLabel = ' - Validación Pasarela Bold';
+  } else if (selectedProgramKey === 'taller-actuacion') {
     dynamicCalculatedPrice = liveTarifas['taller_actuacion_trimestre']?.precio || activeProgram.linkPrice || 600000;
     dynamicModalityLabel = ' - Trimestre Completo (3 Meses)';
   } else if (modality === 'grupal') {
@@ -799,64 +806,68 @@ function CheckoutContent() {
               </div>
 
               {/* SELECTOR MATRÍCULA INSTITUCIONAL ANUAL */}
-              <div 
-                className="checkout-order-bump"
-                style={{
-                  borderColor: includeMatricula ? '#38bdf8' : 'var(--glass-border)',
-                  background: includeMatricula ? 'rgba(56, 189, 248, 0.08)' : 'var(--bg-secondary)',
-                  marginBottom: '1rem'
-                }}
-                onClick={() => setIncludeMatricula(!includeMatricula)}
-              >
-                <input 
-                  type="checkbox"
-                  className="order-bump-checkbox"
-                  style={{ accentColor: '#38bdf8' }}
-                  checked={includeMatricula}
-                  onChange={(e) => setIncludeMatricula(e.target.checked)}
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <div className="order-bump-content">
-                  <span className="order-bump-tag" style={{ background: '#38bdf8', color: '#000f11' }}>
-                    Registro Estudiantil Oficial
-                  </span>
-                  <div className="order-bump-title" style={{ color: includeMatricula ? '#38bdf8' : 'var(--text-primary)' }}>
-                    Matrícula Anual Institucional (+{formatCOP(matriculaPrice)})
+              {selectedProgramKey !== 'prueba-interna' && (
+                <div 
+                  className="checkout-order-bump"
+                  style={{
+                    borderColor: includeMatricula ? '#38bdf8' : 'var(--glass-border)',
+                    background: includeMatricula ? 'rgba(56, 189, 248, 0.08)' : 'var(--bg-secondary)',
+                    marginBottom: '1rem'
+                  }}
+                  onClick={() => setIncludeMatricula(!includeMatricula)}
+                >
+                  <input 
+                    type="checkbox"
+                    className="order-bump-checkbox"
+                    style={{ accentColor: '#38bdf8' }}
+                    checked={includeMatricula}
+                    onChange={(e) => setIncludeMatricula(e.target.checked)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <div className="order-bump-content">
+                    <span className="order-bump-tag" style={{ background: '#38bdf8', color: '#000f11' }}>
+                      Registro Estudiantil Oficial
+                    </span>
+                    <div className="order-bump-title" style={{ color: includeMatricula ? '#38bdf8' : 'var(--text-primary)' }}>
+                      Matrícula Anual Institucional (+{formatCOP(matriculaPrice)})
+                    </div>
+                    <div className="order-bump-desc">
+                      Habilita tu condición de estudiante activo en Escuela MPS, carné estudiantil oficial, reservas ilimitadas de salas de ensayo y convenios Yamaha.
+                    </div>
                   </div>
-                  <div className="order-bump-desc">
-                    Habilita tu condición de estudiante activo en Escuela MPS, carné estudiantil oficial, reservas ilimitadas de salas de ensayo y convenios Yamaha.
+                  <div className="order-bump-price" style={{ color: '#38bdf8' }}>
+                    +{formatCOP(matriculaPrice)}
                   </div>
                 </div>
-                <div className="order-bump-price" style={{ color: '#38bdf8' }}>
-                  +{formatCOP(matriculaPrice)}
-                </div>
-              </div>
+              )}
 
               {/* ORDER BUMP (KIT DE BIENVENIDA) */}
-              <div 
-                className="checkout-order-bump"
-                onClick={() => setIncludeKit(!includeKit)}
-              >
-                <input 
-                  type="checkbox"
-                  className="order-bump-checkbox"
-                  checked={includeKit}
-                  onChange={(e) => setIncludeKit(e.target.checked)}
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <div className="order-bump-content">
-                  <span className="order-bump-tag">Oferta Especial de Bienvenida</span>
-                  <div className="order-bump-title">
-                    Kit de Iniciación y Material MPS (+{formatCOP(KIT_PRICE)})
+              {selectedProgramKey !== 'prueba-interna' && (
+                <div 
+                  className="checkout-order-bump"
+                  onClick={() => setIncludeKit(!includeKit)}
+                >
+                  <input 
+                    type="checkbox"
+                    className="order-bump-checkbox"
+                    checked={includeKit}
+                    onChange={(e) => setIncludeKit(e.target.checked)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <div className="order-bump-content">
+                    <span className="order-bump-tag">Oferta Especial de Bienvenida</span>
+                    <div className="order-bump-title">
+                      Kit de Iniciación y Material MPS (+{formatCOP(KIT_PRICE)})
+                    </div>
+                    <div className="order-bump-desc">
+                      Incluye cuadernos de pauta musical oficial, convenios externos y beneficios con Yamaha, más stickers y carné institucional.
+                    </div>
                   </div>
-                  <div className="order-bump-desc">
-                    Incluye cuadernos de pauta musical oficial, convenios externos y beneficios con Yamaha, más stickers y carné institucional.
+                  <div className="order-bump-price">
+                    +{formatCOP(KIT_PRICE)}
                   </div>
                 </div>
-                <div className="order-bump-price">
-                  +{formatCOP(KIT_PRICE)}
-                </div>
-              </div>
+              )}
 
               {/* BOTÓN CTA PRINCIPAL */}
               {!showOtherMethods && (
@@ -1064,6 +1075,9 @@ function CheckoutContent() {
                   value={selectedProgramKey}
                   onChange={(e) => setSelectedProgramKey(e.target.value)}
                 >
+                  {selectedProgramKey === 'prueba-interna' && (
+                    <option value="prueba-interna">🧪 Prueba Interna Pasarela Bold ($2.000)</option>
+                  )}
                   <option value="mps-stage">⭐ MPS STAGE (Instrumento + Ensamble)</option>
                   <option value="curso-libre">🎵 Curso Libre de Instrumento (MPS Link / MPS One)</option>
                   <option value="taller-actuacion">🎭 Taller de Actuación MPS (Trimestre)</option>
@@ -1095,7 +1109,7 @@ function CheckoutContent() {
             )}
 
             {/* SELECTOR MODALIDAD CLASES: MPS LINK VS MPS ONE */}
-            {selectedProgramKey !== 'taller-actuacion' && customAmount === null && (
+            {selectedProgramKey !== 'taller-actuacion' && selectedProgramKey !== 'prueba-interna' && customAmount === null && (
               <div style={{ marginBottom: '1.2rem' }}>
                 <label className="checkout-label" style={{ fontSize: '0.8rem', marginBottom: '0.4rem' }}>
                   Modalidad de Formación:

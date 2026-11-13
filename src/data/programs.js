@@ -274,6 +274,29 @@ export const OFFICIAL_PROGRAMS = {
       'Expresión no verbal, corporalidad y dominio del espacio escénico',
       'Experiencia real en montaje teatral y actuación ante público'
     ]
+  },
+  'prueba-interna': {
+    id: 'prueba-interna',
+    title: 'Prueba Interna Pasarela Bold',
+    category: 'Validación Técnica Bold • Producción',
+    badge: 'PRUEBA INTERNA',
+    tagline: 'Ítem de validación de pasarela Bold en producción.',
+    description: 'Transacción de verificación de pasarela de pagos Bold ($2.000 COP). Permite verificar la conexión en vivo con Bold, la recepción del pago y la emisión de comprobante.',
+    duration: 'Sesión única de prueba',
+    presentation: 'Comprobante digital inmediato y registro de orden de prueba.',
+    image: '/images/logo.png',
+    linkPrice: 2000,
+    onePrice: 2000,
+    homePrice: 2000,
+    hidden: true,
+    components: [
+      { name: 'Transacción de Prueba', hours: 'N/A', format: 'Cobro real de $2.000 COP para verificar Bold' }
+    ],
+    develops: [
+      'Verificación de conexión con pasarela Bold',
+      'Confirmación de flujo de pago con tarjeta o PSE',
+      'Validación de registro de orden en tiempo real'
+    ]
   }
 };
 
