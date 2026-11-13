@@ -119,7 +119,7 @@ export const OFFICIAL_PROGRAMS = {
     description: 'Programa que combina el desarrollo personalizado del instrumento con la experiencia real de tocar en un ensamble. El estudiante no solo aprende a interpretar su instrumento de forma individual, sino también a escuchar, acompañar, comunicarse y construir música con otros dentro de una banda.',
     duration: '16 Semanas por semestre • 3 horas semanales • 48 Horas en total',
     presentation: 'Presentación final y concierto en vivo al cierre de semestre según programación institucional.',
-    image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600&q=80',
+    image: '/images/mps-stage.jpg',
     linkPrice: 180000,
     onePrice: 280000,
     homePrice: 305000,
