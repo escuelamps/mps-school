@@ -1201,41 +1201,6 @@ function CheckoutContent() {
                         </button>
                       </div>
                     </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                        <button
-                          type="button"
-                          onClick={() => setLocationType('sede')}
-                          style={{
-                            padding: '0.5rem 0.3rem',
-                            borderRadius: '8px',
-                            border: locationType === 'sede' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
-                            background: locationType === 'sede' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
-                            color: locationType === 'sede' ? 'var(--accent)' : 'var(--text-primary)',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          🏢 En Sede MPS
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setLocationType('domicilio')}
-                          style={{
-                            padding: '0.5rem 0.3rem',
-                            borderRadius: '8px',
-                            border: locationType === 'domicilio' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
-                            background: locationType === 'domicilio' ? 'rgba(0, 222, 133, 0.15)' : 'var(--bg-primary)',
-                            color: locationType === 'domicilio' ? 'var(--accent)' : 'var(--text-primary)',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          🏠 A Domicilio
-                        </button>
-                      </div>
-                    </div>
 
                     {/* Paquete de Clases: 4, 8 o 12 */}
                     <div>
