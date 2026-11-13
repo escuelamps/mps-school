@@ -261,7 +261,7 @@ export const OFFICIAL_PROGRAMS = {
     onePrice: 600000,
     homePrice: 600000,
     components: [
-      { name: 'Arte Dramático & Interpretación', hours: 'Semanal', format: 'Análisis de texto, construcción de escenas y objetivos del personaje' },
+      { name: 'Arte Dramático e Interpretación', hours: 'Semanal', format: 'Análisis de texto, construcción de escenas y objetivos del personaje' },
       { name: 'Expresión Corporal & Presencia', hours: 'Semanal', format: 'Desinhibición, postura escénica, movimiento y conciencia física' },
       { name: 'Manejo de Voz & Dicción', hours: 'Semanal', format: 'Respiración, modulación, proyección, volumen y claridad vocal' },
       { name: 'Improvisación & Manejo Creativo', hours: 'Semanal', format: 'Agilidad mental, escucha activa y espontaneidad en escena' }
