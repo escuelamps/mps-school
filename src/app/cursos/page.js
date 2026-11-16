@@ -387,8 +387,15 @@ export default function CursosPage() {
           </p>
 
           <div className="cj-hero-actions">
-            <a href="#catalogo" className="cj-btn-primary">
-              Explorar Cursos <ArrowRight size={18} />
+            <Link 
+              href="/evaluacion" 
+              className="cj-btn-primary" 
+              style={{ background: 'var(--accent, #00DE85)', color: '#000', fontWeight: 700 }}
+            >
+              Test de Nivelación y Diagnóstico (RAP) <ArrowRight size={18} />
+            </Link>
+            <a href="#catalogo" className="cj-btn-secondary">
+              Explorar Catálogo
             </a>
             <a 
               href={getWhatsAppLink("Hola MPS! Deseo asesoría personalizada sobre los programas académicos.")} 
@@ -621,11 +628,11 @@ export default function CursosPage() {
 
                 <div className="cj-course-footer" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                   <Link
-                    href={`/checkout?course=${course.id}`}
+                    href={`/evaluacion?course=${course.id}`}
                     className="cj-course-link-btn"
                     style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}
                   >
-                    Inscribirme <ArrowRight size={15} />
+                    Iniciar Evaluación y Matrícula <ArrowRight size={15} />
                   </Link>
                   <a
                     href={getWhatsAppLink(`Hola MPS! Deseo consultar horarios y cupos para el curso de: ${course.title}`)}

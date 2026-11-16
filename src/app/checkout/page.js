@@ -173,6 +173,12 @@ function CheckoutContent() {
     const amountParam = searchParams.get('amount');
     const titleParam = searchParams.get('title');
     const modalityParam = searchParams.get('modality') || searchParams.get('m');
+    const instParam = searchParams.get('instrument') || searchParams.get('instrumento') || searchParams.get('i');
+    const nameParam = searchParams.get('name') || searchParams.get('nombre');
+    const emailParam = searchParams.get('email') || searchParams.get('correo');
+    const phoneParam = searchParams.get('phone') || searchParams.get('telefono');
+    const docParam = searchParams.get('doc') || searchParams.get('documento') || searchParams.get('cedula');
+    const locationParam = searchParams.get('location') || searchParams.get('sede') || searchParams.get('l');
 
     const key = (programParam || courseParam || '').toLowerCase();
     
@@ -200,8 +206,34 @@ function CheckoutContent() {
       setSelectedProgramKey(key);
     }
 
+    // Si viene instrumento explícito
+    if (instParam && INSTRUMENTS_LIST.some(i => i.id === instParam.toLowerCase())) {
+      setSelectedInstrument(instParam.toLowerCase());
+    }
+
     if (modalityParam === 'individual' || modalityParam === '1a1' || modalityParam === 'personalizado') {
       setModality('individual');
+    } else if (modalityParam === 'grupal' || modalityParam === 'link') {
+      setModality('grupal');
+    }
+
+    if (locationParam === 'domicilio' || locationParam === 'sede') {
+      setLocationType(locationParam);
+    }
+
+    if (nameParam) {
+      setNombre(decodeURIComponent(nameParam));
+    }
+    if (emailParam) {
+      const decodedEmail = decodeURIComponent(emailParam);
+      setEmail(decodedEmail);
+      setEmailConfirm(decodedEmail);
+    }
+    if (phoneParam) {
+      setTelefono(decodeURIComponent(phoneParam));
+    }
+    if (docParam) {
+      setDocId(decodeURIComponent(docParam));
     }
 
     if (amountParam && !isNaN(Number(amountParam))) {
