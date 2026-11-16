@@ -50,12 +50,17 @@ export async function POST(request) {
       cargo = 'recepcion';
       cargoTitle = 'Recepción y Reservas';
       username = 'Recepción';
+    } else if (email && email.toLowerCase().includes('profe-')) {
+      role = 'teacher';
+      cargo = 'docente';
+      cargoTitle = 'Docente MPS';
+      username = verifyData.users[0].displayName || email.split('@')[0];
     } else {
-      // Si ponen "admin" o cualquier otro usuario no autorizado, no entra a nada
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Usuario o contraseña incorrectos.' 
-      }, { status: 401 });
+      // Estudiante autenticado en Firebase Auth
+      role = 'student';
+      cargo = 'estudiante';
+      cargoTitle = 'Estudiante MPS';
+      username = verifyData.users[0].displayName || email.split('@')[0];
     }
 
     // 4. Set the secure session cookie (almacena cargo, username, role y email)
