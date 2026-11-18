@@ -58,139 +58,6 @@ const GENRES_OPTIONS = [
   'Música Colombiana & Folk'
 ];
 
-// Componente de Sellos de Confianza y Garantía
-function TrustBadges({ compact = false }) {
-  return (
-    <div 
-      className="trust-badges-card"
-      style={{
-        background: 'var(--panel-bg, rgba(255, 255, 255, 0.02))',
-        border: '1px solid var(--glass-border)',
-        borderRadius: '16px',
-        padding: compact ? '1.25rem 0.75rem' : '1.6rem 1rem',
-        marginTop: compact ? '2rem' : '1.75rem',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-      }}
-    >
-      <style dangerouslySetInnerHTML={{ __html: `
-        .trust-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 0.5rem;
-          align-items: stretch;
-        }
-        .trust-col {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          padding: 0.5rem 0.8rem;
-        }
-        .trust-col:not(:last-child) {
-          border-right: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-        }
-        @media (max-width: 768px) {
-          .trust-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem 0.5rem;
-          }
-          .trust-col:nth-child(2) {
-            border-right: none;
-          }
-        }
-        @media (max-width: 480px) {
-          .trust-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-      `}} />
-
-      <div className="trust-grid">
-        {/* Sello 1: Privacidad */}
-        <div className="trust-col">
-          <div style={{ position: 'relative', width: '56px', height: '56px', marginBottom: '0.65rem' }}>
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="28" r="23" fill="#FFE2E8" />
-              <line x1="47" y1="12" x2="52" y2="9" stroke="#FF758F" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="48" y1="20" x2="53" y2="20" stroke="#FF758F" strokeWidth="2.2" strokeLinecap="round" />
-              <rect x="18" y="24" width="20" height="17" rx="3.5" fill="#FFFFFF" stroke="#1F2937" strokeWidth="2.2" />
-              <path d="M22 24V19C22 15.6863 24.6863 13 28 13C31.3137 13 34 15.6863 34 19V24" stroke="#1F2937" strokeWidth="2.2" strokeLinecap="round" />
-              <path d="M28 35.2C28 35.2 24.5 33 24.5 30.8C24.5 29.5 25.5 28.5 26.8 28.5C27.5 28.5 28 28.9 28 28.9C28 28.9 28.5 28.5 29.2 28.5C30.5 28.5 31.5 29.5 31.5 30.8C31.5 33 28 35.2 28 35.2Z" fill="#FF4D6D" />
-            </svg>
-          </div>
-          <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-            Privacidad
-          </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
-            Tus datos están protegidos
-          </div>
-        </div>
-
-        {/* Sello 2: Compra segura */}
-        <div className="trust-col">
-          <div style={{ position: 'relative', width: '56px', height: '56px', marginBottom: '0.65rem' }}>
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="28" r="23" fill="#FFF0D4" />
-              <line x1="47" y1="12" x2="52" y2="9" stroke="#F59E0B" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="48" y1="20" x2="53" y2="20" stroke="#F59E0B" strokeWidth="2.2" strokeLinecap="round" />
-              <path d="M28 14L37 18V27.5C37 33.5 33.2 38.8 28 41C22.8 38.8 19 33.5 19 27.5V18L28 14Z" fill="#FFFFFF" stroke="#1F2937" strokeWidth="2.2" strokeLinejoin="round" />
-              <path d="M24 27.5L26.8 30.5L32.5 24.5" stroke="#1F2937" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-            Compra segura
-          </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
-            Pago seguro y protegido
-          </div>
-        </div>
-
-        {/* Sello 3: Entrega por email */}
-        <div className="trust-col">
-          <div style={{ position: 'relative', width: '56px', height: '56px', marginBottom: '0.65rem' }}>
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="28" r="23" fill="#FFE2E8" />
-              <line x1="47" y1="12" x2="52" y2="9" stroke="#FF758F" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="48" y1="20" x2="53" y2="20" stroke="#FF758F" strokeWidth="2.2" strokeLinecap="round" />
-              <rect x="18" y="20" width="20" height="16" rx="2.5" fill="#FFFFFF" stroke="#1F2937" strokeWidth="2.2" />
-              <path d="M19 21.5L28 28.5L37 21.5" stroke="#1F2937" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-            Entrega por email
-          </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
-            Recíbelo directamente en tu correo
-          </div>
-        </div>
-
-        {/* Sello 4: 7 días de garantía */}
-        <div className="trust-col">
-          <div style={{ position: 'relative', width: '56px', height: '56px', marginBottom: '0.65rem' }}>
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="28" r="23" fill="#FFE8D6" />
-              <line x1="47" y1="12" x2="52" y2="9" stroke="#FB923C" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="48" y1="20" x2="53" y2="20" stroke="#FB923C" strokeWidth="2.2" strokeLinecap="round" />
-              <rect x="18" y="19" width="20" height="19" rx="3" fill="#FFFFFF" stroke="#1F2937" strokeWidth="2.2" />
-              <line x1="18" y1="25" x2="38" y2="25" stroke="#1F2937" strokeWidth="1.8" />
-              <line x1="22.5" y1="16.5" x2="22.5" y2="20" stroke="#1F2937" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="28" y1="16.5" x2="28" y2="20" stroke="#1F2937" strokeWidth="2.2" strokeLinecap="round" />
-              <line x1="33.5" y1="16.5" x2="33.5" y2="20" stroke="#1F2937" strokeWidth="2.2" strokeLinecap="round" />
-              <text x="28" y="34.5" textAnchor="middle" fontSize="10.5" fontWeight="900" fontFamily="sans-serif" fill="#1F2937">7</text>
-            </svg>
-          </div>
-          <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-            7 días de garantía
-          </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
-            Compra con tranquilidad
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function EvaluacionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1084,77 +951,69 @@ function EvaluacionContent() {
               </a>
             </div>
 
-            {/* Sellos de Confianza y Garantía en Pantalla de Resultados */}
-            <TrustBadges />
-
           </div>
         )}
 
         {/* BOTONES DE NAVEGACIÓN (PASOS 1 AL 5) */}
         {step <= 5 && (
-          <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2.5rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1.5rem' }}>
-              {step > 1 ? (
-                <button
-                  type="button"
-                  onClick={handlePrevStep}
-                  style={{
-                    background: 'transparent',
-                    border: '1px solid var(--glass-border)',
-                    color: 'var(--text-secondary)',
-                    padding: '0.75rem 1.4rem',
-                    borderRadius: '10px',
-                    fontWeight: 700,
-                    fontSize: '0.88rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem'
-                  }}
-                >
-                  <ArrowLeft size={16} /> Anterior
-                </button>
-              ) : (
-                <Link
-                  href="/cursos"
-                  style={{
-                    color: 'var(--text-secondary)',
-                    textDecoration: 'none',
-                    fontSize: '0.85rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.3rem'
-                  }}
-                >
-                  <ArrowLeft size={14} /> Volver a Cursos
-                </Link>
-              )}
-
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2.5rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1.5rem' }}>
+            {step > 1 ? (
               <button
                 type="button"
-                onClick={handleNextStep}
+                onClick={handlePrevStep}
                 style={{
-                  background: 'var(--accent)',
-                  color: '#000f11',
-                  border: 'none',
-                  padding: '0.75rem 1.8rem',
+                  background: 'transparent',
+                  border: '1px solid var(--glass-border)',
+                  color: 'var(--text-secondary)',
+                  padding: '0.75rem 1.4rem',
                   borderRadius: '10px',
-                  fontWeight: 800,
-                  fontSize: '0.92rem',
+                  fontWeight: 700,
+                  fontSize: '0.88rem',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  boxShadow: '0 4px 15px rgba(0, 222, 133, 0.25)'
+                  gap: '0.4rem'
                 }}
               >
-                {step === 5 ? 'Generar Mi Ruta RAP 🚀' : 'Siguiente Paso →'}
+                <ArrowLeft size={16} /> Anterior
               </button>
-            </div>
+            ) : (
+              <Link
+                href="/cursos"
+                style={{
+                  color: 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.3rem'
+                }}
+              >
+                <ArrowLeft size={14} /> Volver a Cursos
+              </Link>
+            )}
 
-            {/* Sellos de Confianza sutiles en la parte inferior de los pasos 1 al 5 */}
-            <TrustBadges compact={true} />
-          </>
+            <button
+              type="button"
+              onClick={handleNextStep}
+              style={{
+                background: 'var(--accent)',
+                color: '#000f11',
+                border: 'none',
+                padding: '0.75rem 1.8rem',
+                borderRadius: '10px',
+                fontWeight: 800,
+                fontSize: '0.92rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                boxShadow: '0 4px 15px rgba(0, 222, 133, 0.25)'
+              }}
+            >
+              {step === 5 ? 'Generar Mi Ruta RAP 🚀' : 'Siguiente Paso →'}
+            </button>
+          </div>
         )}
 
       </main>
