@@ -46,7 +46,7 @@ export default function FooterV3() {
             <a href="/programas" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Programas</a>
             <a href="/quienes-somos" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Quiénes Somos</a>
             <a href="/evento" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Eventos</a>
-            <a href="/cena" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Cena Especial</a>
+            <a href="/evaluacion" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Evaluación</a>
             <a href="/login" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.95rem' }} onMouseOver={(e)=>e.currentTarget.style.color='var(--text-primary)'} onMouseOut={(e)=>e.currentTarget.style.color='var(--text-secondary)'}>Portal Estudiantil</a>
           </div>
         </div>
