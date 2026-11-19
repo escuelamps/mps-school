@@ -340,7 +340,7 @@ export default function StudentPage() {
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <a
-            href="https://wa.me/573008934407"
+            href="https://wa.me/573023557760"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -837,7 +837,7 @@ export default function StudentPage() {
                       Las franjas de esta semana están ocupadas o faltan menos de 48 horas. Contáctanos por WhatsApp para solicitar que Coordinación te abra un cupo especial.
                     </p>
                     <a
-                      href="https://wa.me/573008934407?text=Hola%20Coordinaci%C3%B3n%20MPS,%20quisiera%20agendar%20una%20clase%20y%20consultar%20disponibilidad"
+                      href="https://wa.me/573023557760?text=Hola%20Coordinaci%C3%B3n%20MPS,%20quisiera%20agendar%20una%20clase%20y%20consultar%20disponibilidad"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{

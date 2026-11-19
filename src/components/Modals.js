@@ -187,7 +187,7 @@ export function ContactModal({ isOpen, onClose }) {
     e.preventDefault();
     if (validate()) {
       const text = `Hola, mi nombre es ${formData.name.trim()}.\nMi correo es ${formData.email.trim()}.\n\nMensaje:\n${formData.message.trim()}`;
-      const whatsappUrl = `https://wa.me/573008934407?text=${encodeURIComponent(text)}`;
+      const whatsappUrl = `https://wa.me/573023557760?text=${encodeURIComponent(text)}`;
       
       // Abre WhatsApp en una nueva pestaña
       window.open(whatsappUrl, '_blank');

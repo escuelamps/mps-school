@@ -57,7 +57,7 @@ export default function FooterV3() {
       </footer>
 
       {/* BOTÓN WHATSAPP FLOTANTE */}
-      <a id="whatsapp-float" href="https://wa.me/573008934407?text=Hola,%20vengo%20de%20la%20página%20web%20y%20quiero%20información%20sobre%20las%20clases" target="_blank" rel="noopener noreferrer" style={{ 
+      <a id="whatsapp-float" href="https://wa.me/573023557760?text=Hola,%20vengo%20de%20la%20página%20web%20y%20quiero%20información%20sobre%20las%20clases" target="_blank" rel="noopener noreferrer" style={{ 
         position: 'fixed', bottom: '30px', right: '30px', zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'center', 
         width: '60px', height: '60px', background: '#25D366', color: 'white', 

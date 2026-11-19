@@ -732,7 +732,7 @@ function CheckoutContent() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
               <a 
-                href={`https://wa.me/573008934407?text=${encodeURIComponent(`¡Hola MPS! Acabo de registrar mi inscripción al curso ${successOrder.producto.titulo} (Ref: ${successOrder.id}). Mi nombre es ${successOrder.cliente.nombre}.${successOrder.producto.horarioSeleccionado ? ` Mi horario seleccionado es: ${successOrder.producto.horarioSeleccionado}.` : ''}`)}`}
+                href={`https://wa.me/573023557760?text=${encodeURIComponent(`¡Hola MPS! Acabo de registrar mi inscripción al curso ${successOrder.producto.titulo} (Ref: ${successOrder.id}). Mi nombre es ${successOrder.cliente.nombre}.${successOrder.producto.horarioSeleccionado ? ` Mi horario seleccionado es: ${successOrder.producto.horarioSeleccionado}.` : ''}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -1705,7 +1705,7 @@ function CheckoutContent() {
 
             {/* BOTÓN ASISTENCIA WHATSAPP */}
             <a 
-              href={`https://wa.me/573008934407?text=${encodeURIComponent(`Hola MPS! Estoy en el checkout de ${productTitle} y tengo una consulta antes de realizar mi pago.`)}`}
+              href={`https://wa.me/573023557760?text=${encodeURIComponent(`Hola MPS! Estoy en el checkout de ${productTitle} y tengo una consulta antes de realizar mi pago.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="summary-support-link"

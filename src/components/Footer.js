@@ -23,10 +23,10 @@ export default function Footer() {
         <div>
           <h4 style={{ marginBottom: '1rem' }}>Contacto</h4>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem', opacity: 0.7 }}>
-            <li>contacto@mps.edu</li>
-            <li>+1 234 567 8900</li>
+            <li>cursos@escuelamps.com</li>
+            <li>+57 302 355 7760</li>
           </ul>
-          <a href="https://wa.me/12345678900" target="_blank" rel="noopener noreferrer" style={{ 
+          <a href="https://wa.me/573023557760" target="_blank" rel="noopener noreferrer" style={{ 
             position: 'fixed', bottom: '30px', right: '30px', zIndex: 100,
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', 
             padding: '1rem', background: '#25D366', color: 'white', fontWeight: 600,

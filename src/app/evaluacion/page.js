@@ -929,7 +929,7 @@ function EvaluacionContent() {
               </Link>
 
               <a
-                href={`https://wa.me/573008934407?text=${encodeURIComponent(`¡Hola Escuela MPS! Acabo de completar mi Evaluación Inicial en la web.\n\n*Nombre:* ${formData.nombre}\n*Instrumento:* ${diagnosis.instName}\n*Perfil:* ${diagnosis.profileTag}\n*Programa Sugerido:* ${diagnosis.programTitle}\n\nQuisiera resolver dudas antes de matricularme.`)}`}
+                href={`https://wa.me/573023557760?text=${encodeURIComponent(`¡Hola Escuela MPS! Acabo de completar mi Evaluación Inicial en la web.\n\n*Nombre:* ${formData.nombre}\n*Instrumento:* ${diagnosis.instName}\n*Perfil:* ${diagnosis.profileTag}\n*Programa Sugerido:* ${diagnosis.programTitle}\n\nQuisiera resolver dudas antes de matricularme.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

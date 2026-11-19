@@ -24,7 +24,7 @@ import {
 import './cursos.css';
 
 // WhatsApp base URL para inscripciones
-const WHATSAPP_URL = "https://wa.me/573008934407";
+const WHATSAPP_URL = "https://wa.me/573023557760";
 
 // 4 Grandes Áreas para el Spotlight (Carrusel interactivo)
 const SPOTLIGHT_AREAS = [
