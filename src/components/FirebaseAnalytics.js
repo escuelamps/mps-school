@@ -7,7 +7,7 @@ export default function FirebaseAnalytics() {
     // This empty effect ensures that the firebase module is imported 
     // and executed on the client side, which triggers the Analytics initialization.
     if (analytics) {
-      console.log("Firebase Analytics initialized");
+      console.log("MPS Analytics initialized");
     }
   }, []);
 

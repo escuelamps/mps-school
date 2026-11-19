@@ -302,26 +302,6 @@ export default function AdminPage() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button 
-            onClick={() => router.push('/admin/tarifas')}
-            style={{ 
-              background: 'rgba(0, 222, 133, 0.12)', 
-              border: '1px solid var(--accent, #00DE85)', 
-              color: 'var(--accent, #00DE85)', 
-              cursor: 'pointer', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.4rem', 
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              padding: '0.45rem 0.9rem',
-              borderRadius: '8px',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <DollarSign size={16} /> Tarifas y Precios
-          </button>
-
-          <button 
             onClick={handleLogout}
             style={{ 
               background: 'rgba(239, 68, 68, 0.08)', 
