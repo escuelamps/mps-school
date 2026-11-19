@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -134,18 +135,18 @@ fun TeacherWorksheetScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("Registro de Planilla", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Text("Docente y Firma Digital", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.worksheet_header_title), fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text(stringResource(R.string.worksheet_header_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.cancel))
                     }
                 },
                 actions = {
                     IconButton(onClick = onViewList) {
-                        Icon(Icons.Filled.History, contentDescription = "Ver Historial", tint = Color(0xFF00DE85))
+                        Icon(Icons.Filled.History, contentDescription = stringResource(R.string.worksheet_dialog_btn_history), tint = Color(0xFF00DE85))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -180,8 +181,8 @@ fun TeacherWorksheetScreen(
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
-                        Text("Planilla de Seguimiento MPS", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
-                        Text("Diligencia los datos de la clase y solicita la firma", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.worksheet_card_title), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.worksheet_card_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -189,7 +190,7 @@ fun TeacherWorksheetScreen(
             Spacer(modifier = Modifier.height(18.dp))
 
             // 1. Profesor (Desplegable)
-            Text("Profesor *", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.worksheet_label_teacher), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(6.dp))
             ExposedDropdownMenuBox(
                 expanded = expandedProfesor,
@@ -224,7 +225,7 @@ fun TeacherWorksheetScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 2. Estudiante (Campo con autocompletado)
-            Text("Estudiante *", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.worksheet_label_student), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(6.dp))
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
@@ -236,7 +237,7 @@ fun TeacherWorksheetScreen(
                         } else emptyList()
                         showEstudianteDropdown = estudiantesFiltrados.isNotEmpty()
                     },
-                    placeholder = { Text("Escribe o busca el nombre...") },
+                    placeholder = { Text(stringResource(R.string.worksheet_student_placeholder)) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     leadingIcon = { Icon(Icons.Filled.School, contentDescription = null, tint = Color(0xFF3B82F6)) }
@@ -266,7 +267,7 @@ fun TeacherWorksheetScreen(
             // 3. Fecha y Hora en una Fila
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Fecha *", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.worksheet_label_date), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     Spacer(modifier = Modifier.height(6.dp))
                     OutlinedTextField(
                         value = fecha,
@@ -278,7 +279,7 @@ fun TeacherWorksheetScreen(
                 }
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Hora *", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.worksheet_label_time), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                     Spacer(modifier = Modifier.height(6.dp))
                     OutlinedTextField(
                         value = hora,
@@ -293,7 +294,7 @@ fun TeacherWorksheetScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 4. Asignatura / Instrumento
-            Text("Asignatura / Instrumento *", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.worksheet_label_subject), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(6.dp))
             ExposedDropdownMenuBox(
                 expanded = expandedInstrumento,
@@ -328,12 +329,12 @@ fun TeacherWorksheetScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 5. Contenido Pedagógico / Observaciones (Opcional)
-            Text("Contenido Pedagógico / Observaciones (Opcional)", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.worksheet_label_content), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(6.dp))
             OutlinedTextField(
                 value = contenido,
                 onValueChange = { contenido = it },
-                placeholder = { Text("Obras, escalas, técnicas o notas de la sesión...") },
+                placeholder = { Text(stringResource(R.string.worksheet_content_placeholder)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
                 shape = RoundedCornerShape(12.dp)
@@ -348,7 +349,7 @@ fun TeacherWorksheetScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Firma Digital del Estudiante *",
+                    text = stringResource(R.string.worksheet_label_signature),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF00DE85)
@@ -362,12 +363,12 @@ fun TeacherWorksheetScreen(
                 ) {
                     Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Limpiar", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.worksheet_signature_clear), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.SemiBold)
                 }
             }
 
             Text(
-                text = "Firma con el dedo en el recuadro negro:",
+                text = stringResource(R.string.worksheet_signature_subtitle),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -448,15 +449,15 @@ fun TeacherWorksheetScreen(
             Button(
                 onClick = {
                     if (profesor.isBlank()) {
-                        Toast.makeText(context, "Por favor selecciona el profesor", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.worksheet_toast_select_teacher), Toast.LENGTH_SHORT).show()
                         return@Button
                     }
                     if (estudiante.isBlank()) {
-                        Toast.makeText(context, "Por favor indica el nombre del estudiante", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.worksheet_toast_input_student), Toast.LENGTH_SHORT).show()
                         return@Button
                     }
                     if (strokes.isEmpty()) {
-                        Toast.makeText(context, "La firma digital del estudiante es obligatoria", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.worksheet_toast_signature_required), Toast.LENGTH_SHORT).show()
                         return@Button
                     }
 
@@ -512,7 +513,7 @@ fun TeacherWorksheetScreen(
                         }
                         .addOnFailureListener { e ->
                             isSubmitting = false
-                            Toast.makeText(context, "Error guardando planilla: ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, context.getString(R.string.worksheet_toast_save_error, e.message ?: ""), Toast.LENGTH_LONG).show()
                         }
                 },
                 enabled = !isSubmitting,
@@ -525,11 +526,11 @@ fun TeacherWorksheetScreen(
                 if (isSubmitting) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color(0xFF111111), strokeWidth = 2.dp)
                     Spacer(modifier = Modifier.width(10.dp))
-                    Text("Guardando Planilla...", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.worksheet_btn_saving), fontWeight = FontWeight.Bold)
                 } else {
                     Icon(Icons.Filled.Check, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Registrar Planilla de Clase", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(stringResource(R.string.worksheet_btn_submit), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             }
 
@@ -541,10 +542,10 @@ fun TeacherWorksheetScreen(
         AlertDialog(
             onDismissRequest = { showSuccessDialog = false },
             icon = { Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Color(0xFF00DE85), modifier = Modifier.size(48.dp)) },
-            title = { Text("¡Planilla Registrada!", fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center) },
+            title = { Text(stringResource(R.string.worksheet_dialog_success_title), fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center) },
             text = {
                 Text(
-                    text = "La clase con $estudiante dictada por $profesor ($instrumento) fue registrada con éxito en el sistema.",
+                    text = stringResource(R.string.worksheet_dialog_success_msg, estudiante, profesor, instrumento),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
             },
@@ -559,7 +560,7 @@ fun TeacherWorksheetScreen(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00DE85), contentColor = Color(0xFF111111))
                 ) {
-                    Text("Registrar Otra", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.worksheet_dialog_btn_another), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -569,7 +570,7 @@ fun TeacherWorksheetScreen(
                         onViewList()
                     }
                 ) {
-                    Text("Ver Historial")
+                    Text(stringResource(R.string.worksheet_dialog_btn_history))
                 }
             }
         )

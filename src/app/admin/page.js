@@ -6,6 +6,7 @@ import { MessageSquare, Calendar, LogOut, Wallet, Lock, User, Key, ArrowRight, E
 import './admin.css';
 import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { STRINGS } from '@/constants/strings';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -155,11 +156,11 @@ export default function AdminPage() {
     } catch (err) {
       console.error(err);
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError('Correo o contraseña incorrectos.');
+        setError(STRINGS.AUTH.INVALID_CREDENTIALS);
       } else if (err.code === 'auth/invalid-email') {
         setError('El formato del correo es inválido.');
       } else {
-        setError('Error de conexión. Intenta de nuevo.');
+        setError(STRINGS.STATUS.NETWORK_ERROR);
       }
     } finally {
       setIsLoggingIn(false);
@@ -198,8 +199,8 @@ export default function AdminPage() {
             <Lock size={32} color="#00DE85" />
           </div>
           
-          <h2 className="login-title">Acceso Restringido</h2>
-          <p className="login-subtitle">Escuela MPS - Dashboard de Administración</p>
+          <h2 className="login-title">{STRINGS.AUTH.TITLE}</h2>
+          <p className="login-subtitle">{STRINGS.AUTH.SUBTITLE}</p>
           
           <div className="login-card">
             <form onSubmit={handleLoginSubmit}>
@@ -210,7 +211,7 @@ export default function AdminPage() {
               )}
               
               <div className="form-group">
-                <label className="form-label">Usuario</label>
+                <label className="form-label">{STRINGS.AUTH.USERNAME_LABEL}</label>
                 <div className="input-wrapper">
                   <div className="input-icon">
                     <User size={20} />
@@ -227,7 +228,7 @@ export default function AdminPage() {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Contraseña</label>
+                <label className="form-label">{STRINGS.AUTH.PASSWORD_LABEL}</label>
                 <div className="input-wrapper">
                   <div className="input-icon">
                     <Key size={20} />
@@ -264,9 +265,9 @@ export default function AdminPage() {
 
               <button type="submit" disabled={isLoggingIn} className="login-button">
                 {isLoggingIn ? (
-                  <span>Autenticando...</span>
+                  <span>{STRINGS.AUTH.LOADING}</span>
                 ) : (
-                  <>Entrar al Dashboard <ArrowRight size={18} /></>
+                  <>{STRINGS.AUTH.SUBMIT_BUTTON} <ArrowRight size={18} /></>
                 )}
               </button>
             </form>
@@ -320,7 +321,7 @@ export default function AdminPage() {
             onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.16)'}
             onMouseOut={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)'}
           >
-            <LogOut size={16} /> Cerrar sesión
+            <LogOut size={16} /> {STRINGS.AUTH.LOGOUT_BUTTON}
           </button>
         </div>
       </header>

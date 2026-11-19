@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
+import { STRINGS } from '@/constants/strings';
 import { ArrowLeft, BarChart2, PieChart, Users, BookOpen, Calendar, Eye, Trash2, X, Plus, Clock, FileText, CheckCircle2, ExternalLink, RefreshCw, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import '../../admin.css';
@@ -79,7 +80,7 @@ export default function RespuestasPlanillasPage() {
           await deleteDoc(doc(db, 'planillas', item.id));
         } catch (err) {
           console.error('Error eliminando planilla:', err);
-          alert('No se pudo eliminar el registro en el sistema.');
+          alert(STRINGS.PLANILLAS.DELETE_ERROR);
         }
       } else {
         // En registros de Google Sheets, se ocultan de la vista actual

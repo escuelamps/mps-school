@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Escuela MPS</string>
+
+    <!-- Autenticación / Login -->
+    <string name="login_title">MPS - Iniciar Sesión</string>
+    <string name="login_user_label">Usuario o correo electrónico</string>
+    <string name="login_user_placeholder">ej. direccion, coordinacion o correo</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_hide_password">Ocultar contraseña</string>
+    <string name="login_show_password">Mostrar contraseña</string>
+    <string name="login_empty_fields_error">Por favor ingresa usuario y contraseña.</string>
+    <string name="login_invalid_credentials_error">Usuario o contraseña incorrectos.</string>
+    <string name="login_network_error">Error de conexión. Verifica tu internet.</string>
+    <string name="login_generic_error">Error al iniciar sesión. Intenta nuevamente.</string>
+    <string name="login_button">Entrar</string>
+
+    <!-- Planilla Docente (TeacherWorksheet) -->
+    <string name="worksheet_header_title">Registro de Planilla</string>
+    <string name="worksheet_header_subtitle">Docente y Firma Digital</string>
+    <string name="worksheet_card_title">Planilla de Seguimiento MPS</string>
+    <string name="worksheet_card_subtitle">Diligencia los datos de la clase y solicita la firma</string>
+    <string name="worksheet_label_teacher">Profesor *</string>
+    <string name="worksheet_label_student">Estudiante *</string>
+    <string name="worksheet_student_placeholder">Escribe o busca el nombre...</string>
+    <string name="worksheet_label_date">Fecha *</string>
+    <string name="worksheet_label_time">Hora *</string>
+    <string name="worksheet_label_subject">Asignatura / Instrumento *</string>
+    <string name="worksheet_label_content">Contenido Pedagógico / Observaciones (Opcional)</string>
+    <string name="worksheet_content_placeholder">Obras, escalas, técnicas o notas de la sesión...</string>
+    <string name="worksheet_label_signature">Firma del Estudiante *</string>
+    <string name="worksheet_signature_subtitle">Firma aquí usando tu dedo o lápiz táctil</string>
+    <string name="worksheet_signature_clear">Limpiar</string>
+    <string name="worksheet_signature_signed">Firma capturada correctamente</string>
+    <string name="worksheet_signature_pending">Firma digital obligatoria</string>
+    <string name="worksheet_toast_select_teacher">Por favor selecciona el profesor</string>
+    <string name="worksheet_toast_input_student">Por favor indica el nombre del estudiante</string>
+    <string name="worksheet_toast_signature_required">La firma digital del estudiante es obligatoria</string>
+    <string name="worksheet_toast_save_error">Error guardando planilla: %1$s</string>
+    <string name="worksheet_btn_saving">Guardando Planilla...</string>
+    <string name="worksheet_btn_submit">Registrar Planilla de Clase</string>
+    <string name="worksheet_dialog_success_title">¡Planilla Registrada!</string>
+    <string name="worksheet_dialog_success_msg">La clase con %1$s dictada por %2$s (%3$s) fue registrada con éxito en el sistema.</string>
+    <string name="worksheet_dialog_btn_another">Registrar Otra</string>
+    <string name="worksheet_dialog_btn_history">Ver Historial</string>
+
+    <!-- General / Estados -->
+    <string name="loading">Cargando...</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="system_error">Error en el sistema. Intente nuevamente.</string>
+</resources>

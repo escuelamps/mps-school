@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, doc, setDoc } from 'firebase/firestore';
+import { STRINGS } from '@/constants/strings';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, DollarSign, Save, RotateCcw, CheckCircle, ShieldCheck } from 'lucide-react';
 import { OFFICIAL_TARIFAS_DEFAULT, formatCOP } from '@/data/programs';
@@ -187,7 +188,7 @@ export default function TarifasAdminPage() {
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem 1rem', color: '#64748b' }}>
-          <p>Cargando tarifas oficiales...</p>
+          <p>{STRINGS.TARIFAS.LOADING}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
