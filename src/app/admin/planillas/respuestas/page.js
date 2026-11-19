@@ -79,7 +79,7 @@ export default function RespuestasPlanillasPage() {
           await deleteDoc(doc(db, 'planillas', item.id));
         } catch (err) {
           console.error('Error eliminando planilla:', err);
-          alert('No se pudo eliminar el registro en Firestore.');
+          alert('No se pudo eliminar el registro en el sistema.');
         }
       } else {
         // En registros de Google Sheets, se ocultan de la vista actual

@@ -187,7 +187,7 @@ export default function TarifasAdminPage() {
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem 1rem', color: '#64748b' }}>
-          <p>Cargando tarifas oficiales desde Firestore...</p>
+          <p>Cargando tarifas oficiales...</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>

@@ -46,8 +46,12 @@ fun TeacherWorksheetScreen(
     val db = FirebaseFirestore.getInstance()
     val currentUser = auth.currentUser
 
+    val currentEmail = currentUser?.email.orEmpty()
+    val initialTeacher = currentUser?.displayName?.takeIf { it.isNotBlank() }
+        ?: currentEmail.substringBefore("@").replaceFirstChar { it.uppercase() }.ifBlank { "Docente MPS" }
+
     // Form states
-    var profesor by remember { mutableStateOf("Laura Pineda") }
+    var profesor by remember { mutableStateOf(initialTeacher) }
     var estudiante by remember { mutableStateOf("") }
     var fecha by remember { 
         mutableStateOf(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())) 
@@ -65,7 +69,7 @@ fun TeacherWorksheetScreen(
         "Producción Musical", "Técnica Vocal"
     )
     var profesoresList by remember { 
-        mutableStateOf(listOf("Laura Pineda", "William Buitrago", "Juanse", "Jorge Garcia", "Carlos Macia", "Jenny Rojas", "Sebastian Vergara")) 
+        mutableStateOf<List<String>>(emptyList()) 
     }
     var estudiantesList by remember { mutableStateOf<List<String>>(emptyList()) }
     var estudiantesFiltrados by remember { mutableStateOf<List<String>>(emptyList()) }
@@ -89,16 +93,27 @@ fun TeacherWorksheetScreen(
                     val email = doc.getString("email") ?: currentUser.email ?: ""
                     val resolvedName = when {
                         !name.isNullOrBlank() -> name
-                        email.startsWith("lpineda") -> "Laura Pineda"
-                        email.startsWith("william") -> "William Buitrago"
-                        email.startsWith("juanse") -> "Juanse"
-                        else -> "Profesor"
+                        currentUser.displayName?.isNotBlank() == true -> currentUser.displayName!!
+                        email.isNotBlank() -> email.substringBefore("@").replaceFirstChar { it.uppercase() }
+                        else -> "Docente MPS"
                     }
                     profesor = resolvedName
                     if (!profesoresList.contains(resolvedName)) {
                         profesoresList = listOf(resolvedName) + profesoresList
                     }
                 }
+            }
+        }
+
+        // Cargar profesores de Firestore
+        db.collection("users").whereIn("role", listOf("teacher", "admin")).get().addOnSuccessListener { snap ->
+            val teachers = snap.documents.mapNotNull { doc ->
+                val name = doc.getString("name") ?: doc.getString("username")
+                if (!name.isNullOrBlank()) name.trim() else null
+            }.distinct().sorted()
+
+            if (teachers.isNotEmpty()) {
+                profesoresList = teachers
             }
         }
 
@@ -110,11 +125,7 @@ fun TeacherWorksheetScreen(
                 if (role == "student" && !name.isNullOrBlank()) name.trim() else null
             }.distinct().sorted()
 
-            if (students.isNotEmpty()) {
-                estudiantesList = students
-            } else {
-                estudiantesList = listOf("Sofía Gómez", "Mateo Silva", "Valentina Ríos", "Daniel Castro", "Camila Restrepo")
-            }
+            estudiantesList = students
         }
     }
 
@@ -533,7 +544,7 @@ fun TeacherWorksheetScreen(
             title = { Text("¡Planilla Registrada!", fontWeight = FontWeight.Bold, textAlign = androidx.compose.ui.text.style.TextAlign.Center) },
             text = {
                 Text(
-                    text = "La clase con $estudiante dictada por $profesor ($instrumento) fue registrada con éxito en Firestore.",
+                    text = "La clase con $estudiante dictada por $profesor ($instrumento) fue registrada con éxito en el sistema.",
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
             },
