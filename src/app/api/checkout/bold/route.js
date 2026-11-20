@@ -27,7 +27,11 @@ export async function POST(request) {
       );
     }
 
-    const cleanOrderId = orderId || `MPS-${Date.now()}`;
+    // Identificador de orden alfanumérico limpio (Bold exige entre 2 y 60 caracteres alfanuméricos con guiones)
+    const cleanOrderId = String(orderId || `MPS-${Date.now()}`)
+      .replace(/[^a-zA-Z0-9_-]/g, '')
+      .slice(0, 50);
+
     const amountStr = String(Math.round(Number(price) || 0));
     const currency = 'COP';
 
@@ -40,21 +44,27 @@ export async function POST(request) {
 
     const host = process.env.NEXT_PUBLIC_BASE_URL || 'https://escuelamps.com';
     const redirectionUrl = `${host}/checkout?status=approved&order=${cleanOrderId}`;
-    const description = `${title || 'Matrícula Escuela MPS'} - ${studentName || 'Estudiante'}`;
+
+    // Limpieza estricta de descripción: Bold exige máximo 100 caracteres y sin caracteres especiales
+    const safeTitle = String(title || 'Matrícula Escuela MPS')
+      .replace(/[^\w\sÁÉÍÓÚáéíóúñÑ.,+-]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const safeStudent = String(studentName || '')
+      .replace(/[^\w\sÁÉÍÓÚáéíóúñÑ]/g, '')
+      .trim();
+    const rawDesc = safeStudent ? `${safeTitle} - ${safeStudent}` : safeTitle;
+    const description = rawDesc.slice(0, 80);
 
     return NextResponse.json({
       success: true,
       apiKey,
-      api_key: apiKey,
       orderId: cleanOrderId,
-      order_id: cleanOrderId,
       amount: amountStr,
       currency,
       integritySignature,
-      integrity_signature: integritySignature,
       description,
-      redirectionUrl,
-      redirection_url: redirectionUrl
+      redirectionUrl
     });
 
   } catch (error) {

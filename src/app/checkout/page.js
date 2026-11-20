@@ -603,17 +603,13 @@ function CheckoutContent() {
               try {
                 if (typeof window !== 'undefined' && window.BoldCheckout) {
                   const checkout = new window.BoldCheckout({
-                    orderId: boldData.orderId,
-                    order_id: boldData.orderId,
-                    currency: boldData.currency,
+                    orderId: String(boldData.orderId),
+                    currency: String(boldData.currency),
                     amount: String(boldData.amount),
-                    apiKey: boldData.apiKey,
-                    api_key: boldData.apiKey,
-                    integritySignature: boldData.integritySignature,
-                    integrity_signature: boldData.integritySignature,
-                    description: boldData.description,
-                    redirectionUrl: boldData.redirectionUrl,
-                    redirection_url: boldData.redirectionUrl
+                    apiKey: String(boldData.apiKey),
+                    integritySignature: String(boldData.integritySignature),
+                    description: String(boldData.description),
+                    redirectionUrl: String(boldData.redirectionUrl)
                   });
                   checkout.open();
                   setSubmitting(false);
