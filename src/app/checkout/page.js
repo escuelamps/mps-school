@@ -222,6 +222,7 @@ function CheckoutContent() {
   // Selección de programa e instrumento
   const [selectedProgramKey, setSelectedProgramKey] = useState('mps-stage');
   const [selectedInstrument, setSelectedInstrument] = useState('canto');
+  const [selectedInstrument2, setSelectedInstrument2] = useState('');
   const [modality, setModality] = useState('grupal'); // 'grupal' (MPS Link) | 'individual' (MPS One)
   const [classPackage, setClassPackage] = useState(4); // 4, 8, 12 clases
   const [locationType, setLocationType] = useState('sede'); // 'sede' | 'domicilio'
@@ -421,7 +422,11 @@ function CheckoutContent() {
   const basePrice = customAmount !== null ? customAmount : dynamicCalculatedPrice;
   const matriculaPrice = liveTarifas['matricula_institucional']?.precio || 50000;
   const matriculaFee = includeMatricula ? matriculaPrice : 0;
-  const instrumentLabel = hasInstrumentChoice ? ` (${INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument})` : '';
+  const inst1Name = INSTRUMENTS_LIST.find(i => i.id === selectedInstrument)?.name || selectedInstrument;
+  const inst2Name = selectedInstrument2 ? (INSTRUMENTS_LIST.find(i => i.id === selectedInstrument2)?.name || selectedInstrument2) : null;
+  const instrumentLabel = hasInstrumentChoice 
+    ? (inst2Name ? ` (${inst1Name} + ${inst2Name})` : ` (${inst1Name})`) 
+    : '';
   const modalityLabel = dynamicModalityLabel;
   const matriculaTag = includeMatricula ? ' + Matrícula' : '';
   const productTitle = (customTitle || activeProgram.title) + instrumentLabel + modalityLabel + matriculaTag;
@@ -513,7 +518,9 @@ function CheckoutContent() {
         producto: {
           id: activeProgram.id,
           programa: activeProgram.title,
-          instrumento: hasInstrumentChoice ? selectedInstrument : null,
+          instrumento: hasInstrumentChoice ? (inst2Name ? `${inst1Name} + ${inst2Name}` : inst1Name) : null,
+          instrumentoPrincipal: hasInstrumentChoice ? inst1Name : null,
+          segundoInstrumento: hasInstrumentChoice ? inst2Name : null,
           titulo: productTitle,
           categoria: activeProgram.category,
           modalidad: selectedProgramKey === 'taller-actuacion' ? 'Taller Especial (3 Meses)' : (modality === 'grupal' ? 'MPS Link (Grupal)' : `MPS One (${locationType === 'domicilio' ? 'A Domicilio' : 'En Sede'})`),
@@ -598,19 +605,68 @@ function CheckoutContent() {
           });
           const boldData = await resBold.json();
 
-          if (boldData.success && typeof window !== 'undefined' && window.BoldCheckout) {
-            const checkout = new window.BoldCheckout({
-              orderId: boldData.orderId,
-              currency: boldData.currency,
-              amount: String(boldData.amount),
-              apiKey: boldData.apiKey,
-              integritySignature: boldData.integritySignature,
-              description: boldData.description,
-              redirectionUrl: boldData.redirectionUrl
-            });
-            checkout.open();
-            setSubmitting(false);
-            return;
+          if (boldData.success) {
+            const launchBoldModal = () => {
+              try {
+                if (typeof window !== 'undefined' && window.BoldCheckout) {
+                  const checkout = new window.BoldCheckout({
+                    orderId: boldData.orderId,
+                    order_id: boldData.orderId,
+                    currency: boldData.currency,
+                    amount: String(boldData.amount),
+                    apiKey: boldData.apiKey,
+                    api_key: boldData.apiKey,
+                    integritySignature: boldData.integritySignature,
+                    integrity_signature: boldData.integritySignature,
+                    description: boldData.description,
+                    redirectionUrl: boldData.redirectionUrl,
+                    redirection_url: boldData.redirectionUrl
+                  });
+                  checkout.open();
+                  setSubmitting(false);
+                  return true;
+                }
+              } catch (openErr) {
+                console.error('Error al instanciar BoldCheckout:', openErr);
+              }
+              return false;
+            };
+
+            if (launchBoldModal()) {
+              return;
+            }
+
+            // Si el script de Bold no estaba listo aún, inyectarlo dinámicamente y abrir
+            if (typeof window !== 'undefined') {
+              const script = document.createElement('script');
+              script.src = 'https://checkout.bold.co/library/boldPaymentButton.js';
+              script.onload = () => {
+                if (!launchBoldModal()) {
+                  setSubmitting(false);
+                  setSuccessOrder({
+                    id: docRef.id,
+                    cliente: orderData.cliente,
+                    producto: orderData.producto,
+                    total: totalPrice,
+                    metodoPago: activeMethod,
+                    fecha: orderData.fecha
+                  });
+                }
+              };
+              script.onerror = () => {
+                setSubmitting(false);
+                setSuccessOrder({
+                  id: docRef.id,
+                  cliente: orderData.cliente,
+                  producto: orderData.producto,
+                  total: totalPrice,
+                  metodoPago: activeMethod,
+                  fecha: orderData.fecha
+                });
+              };
+              document.head.appendChild(script);
+              return;
+            }
           }
         } catch (boldErr) {
           console.error('Error invocando pasarela Bold:', boldErr);
@@ -1262,6 +1318,26 @@ function CheckoutContent() {
                     </option>
                   ))}
                 </select>
+
+                {/* SEGUNDO INSTRUMENTO (OPCIONAL) */}
+                <div style={{ marginTop: '0.75rem' }}>
+                  <label className="checkout-label" style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span>Segundo Instrumento (Opcional):</span>
+                    <span style={{ fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 600 }}>2 Instrumentos</span>
+                  </label>
+                  <select 
+                    className="summary-course-select"
+                    value={selectedInstrument2}
+                    onChange={(e) => setSelectedInstrument2(e.target.value)}
+                  >
+                    <option value="">— Ninguno (Solo 1 instrumento) —</option>
+                    {INSTRUMENTS_LIST.filter(inst => inst.id !== selectedInstrument).map((inst) => (
+                      <option key={inst.id} value={inst.id}>
+                        {inst.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
 

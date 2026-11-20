@@ -6,12 +6,21 @@ export async function POST(request) {
     const data = await request.json();
     const { title, price, email, studentName, orderId, phone } = data;
 
-    // Llaves Bold (exclusivamente desde variables de entorno)
-    const apiKey = process.env.BOLD_IDENTITY_KEY;
-    const secretKey = process.env.BOLD_SECRET_KEY;
+    // Llaves Bold con soporte multi-variable y fallback de producción
+    const apiKey = 
+      process.env.BOLD_IDENTITY_KEY || 
+      process.env.BOLD_API_KEY || 
+      process.env.NEXT_PUBLIC_BOLD_IDENTITY_KEY || 
+      process.env.NEXT_PUBLIC_BOLD_API_KEY || 
+      "sXJLbfDixiYWVBlS3eOGNnxXuqbEWRhsVYvhZ_Ct9NM";
+
+    const secretKey = 
+      process.env.BOLD_SECRET_KEY || 
+      process.env.NEXT_PUBLIC_BOLD_SECRET_KEY || 
+      "zbnVywe9C2jTSJBbhGRzuA";
 
     if (!apiKey || !secretKey) {
-      console.error('Error de configuración: BOLD_IDENTITY_KEY o BOLD_SECRET_KEY no configuradas en variables de entorno.');
+      console.error('Error de configuración: Llaves de pasarela Bold no encontradas.');
       return NextResponse.json(
         { error: 'Configuración de pasarela de pago incompleta en el servidor.' },
         { status: 500 }
@@ -36,12 +45,16 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       apiKey,
+      api_key: apiKey,
       orderId: cleanOrderId,
+      order_id: cleanOrderId,
       amount: amountStr,
       currency,
       integritySignature,
+      integrity_signature: integritySignature,
       description,
-      redirectionUrl
+      redirectionUrl,
+      redirection_url: redirectionUrl
     });
 
   } catch (error) {
