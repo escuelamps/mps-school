@@ -188,26 +188,6 @@ function EvaluacionContent() {
     }, 120);
   };
 
-  // Guardar evaluación en Firestore y mostrar resultados (Paso 7)
-  const saveEvaluationToFirestore = async () => {
-    setSaving(true);
-    try {
-      const docRef = await addDoc(collection(db, 'evaluaciones'), {
-        ...formData,
-        fecha: new Date().toISOString(),
-        createdAt: serverTimestamp(),
-        origen: 'web_onboarding'
-      });
-      setEvaluationId(docRef.id);
-    } catch (e) {
-      console.warn('Evaluación guardada localmente:', e);
-    } finally {
-      setSaving(false);
-      setStep(7);
-      window.scrollTo({ top: 80, behavior: 'smooth' });
-    }
-  };
-
   // Diagnóstico pedagógico generado según respuestas
   const getProfileDiagnosis = () => {
     const instName = INSTRUMENTS_OPTIONS.find(i => i.id === formData.instrumento)?.name || 'Música';
@@ -244,6 +224,97 @@ function EvaluacionContent() {
   };
 
   const diagnosis = getProfileDiagnosis();
+
+  // Guardar evaluación en Firestore y en el Google Sheet oficial vía Google Forms (Paso 7)
+  const saveEvaluationToFirestore = async () => {
+    setSaving(true);
+    try {
+      // 1. Guardar en Base de Datos de la plataforma
+      const docRef = await addDoc(collection(db, 'evaluaciones'), {
+        ...formData,
+        fecha: new Date().toISOString(),
+        createdAt: serverTimestamp(),
+        origen: 'web_onboarding'
+      });
+      setEvaluationId(docRef.id);
+
+      // 2. Enviar en paralelo a Google Forms (alimenta automáticamente la hoja de cálculo / Excel)
+      const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe6DjVbR5vuy79ChSA6zow_VARW8fLK_rrN4651EHRKY2f3Yg/formResponse';
+      const formParams = new URLSearchParams();
+      formParams.append('fvv', '1');
+      formParams.append('pageHistory', '0');
+      formParams.append('fbzx', '4128667339124175962');
+
+      const instName = INSTRUMENTS_OPTIONS.find(i => i.id === formData.instrumento)?.name || formData.instrumento;
+      const modalidadMap = {
+        sede: 'Presencial sede  Bogota',
+        virtual: 'Virtual sincronica',
+        domicilio: 'A domicilio'
+      };
+
+      const ritmoMap = {
+        avanzado: 'logra repetir y aprender con facilidad un patron',
+        intermedio: 'lleva el ritmo con palmas y voz',
+        basico: 'Reconoce las figuras rítmicas',
+        cero: 'Reconoce las figuras rítmicas'
+      };
+
+      const melodiaMap = {
+        avanzado: 'lectura de  pentagrama',
+        intermedio: 'entonación  ( melodias sencillas )',
+        basico: 'conoce  las notas musicales ( escala de do )',
+        cero: 'conoce  las notas musicales ( escala de do )'
+      };
+
+      const memoriaVisualMap = { excelente: 'Excelente', buena: 'Buena', basica: 'Básica' };
+      const expMap = {
+        avanzada: { tono: 'Tono claro y definido', pos: 'Dominio de posiciones', acordes: 'Avanzado', sujecion: 'Avanzada' },
+        algo: { tono: 'Tono en desarrollo', pos: 'Conoce posiciones básicas', acordes: 'Básico', sujecion: 'Intermedia' },
+        ninguna: { tono: 'Por explorar', pos: 'Inicial', acordes: 'Ninguno', sujecion: 'Inicial' }
+      };
+      const exp = expMap[formData.experienciaPrevia] || expMap.algo;
+
+      formParams.append('entry.1449005772', formData.nombre);
+      formParams.append('entry.1432928852', formData.edad);
+      formParams.append('entry.1979939414', formData.acudiente || 'N/A');
+      formParams.append('entry.766949385', formData.telefono);
+      formParams.append('entry.1685270148', formData.email || '');
+      formParams.append('entry.1842912509', instName);
+      formParams.append('entry.1693510977', modalidadMap[formData.modalidad] || 'Presencial sede  Bogota');
+      formParams.append('entry.262002855', 'Evaluación Web Automática (Escuela MPS)');
+      formParams.append('entry.978796520', (formData.gustosGeneros || []).join(', ') + (formData.artistasFavoritos ? ' | Artistas: ' + formData.artistasFavoritos : ''));
+      formParams.append('entry.1895960589', ritmoMap[formData.nivelRitmo] || 'lleva el ritmo con palmas y voz');
+      formParams.append('entry.75022702', melodiaMap[formData.nivelMelodia] || 'entonación  ( melodias sencillas )');
+      formParams.append('entry.1417510538', memoriaVisualMap[formData.memoriaVisual] || 'Buena');
+      formParams.append('entry.1046162655', memoriaVisualMap[formData.memoriaMotora] || 'Buena');
+      formParams.append('entry.532865805', memoriaVisualMap[formData.memoriaAuditiva] || 'Buena');
+      formParams.append('entry.1047704957', exp.sujecion);
+      formParams.append('entry.1164333232', exp.tono);
+      formParams.append('entry.1662328317', exp.pos);
+      formParams.append('entry.437726881', exp.acordes);
+      formParams.append('entry.1432138823', formData.nivelRitmo === 'avanzado' || formData.nivelMelodia === 'avanzado' ? 'Conoce escalas y ejercicios' : 'Patrones iniciales');
+      formParams.append('entry.1678672675', formData.artistasFavoritos || 'Repertorio por definir en primera sesión');
+      formParams.append('entry.1753785173', formData.nivelMelodia === 'avanzado' ? 'Lectura fluida' : formData.nivelMelodia === 'intermedio' ? 'Lectura básica' : 'Sin lectura previa');
+      formParams.append('entry.2082785492', `${diagnosis.profileTag} - Programa sugerido: ${diagnosis.programTitle}`);
+      formParams.append('entry.1207950717', `Estudiante proactivo con alta disposición hacia la práctica (${formData.horasPracticaSemana} hrs/semana)`);
+      formParams.append('entry.227217071', `Objetivo: ${formData.objetivoPrincipal} | Tiempo semanal: ${formData.horasPracticaSemana} horas`);
+      formParams.append('entry.581543841', `Modalidad sugerida: ${diagnosis.modalityRecommended} | Enfoque: ${diagnosis.programTitle}`);
+      formParams.append('entry.545887906', 'Evaluación interactiva completada desde escuelamps.com/evaluacion');
+
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formParams.toString(),
+      });
+    } catch (e) {
+      console.warn('Evaluación guardada localmente:', e);
+    } finally {
+      setSaving(false);
+      setStep(7);
+      window.scrollTo({ top: 80, behavior: 'smooth' });
+    }
+  };
 
   // Construir link hacia /checkout con datos precargados
   const getCheckoutLink = () => {
