@@ -7,17 +7,20 @@ export async function POST(request) {
     const { title, price, email, studentName, orderId, phone } = data;
 
     // Llaves Bold con soporte multi-variable y fallback de producción
-    const apiKey = 
+    const rawApiKey = 
       process.env.BOLD_IDENTITY_KEY || 
       process.env.BOLD_API_KEY || 
       process.env.NEXT_PUBLIC_BOLD_IDENTITY_KEY || 
       process.env.NEXT_PUBLIC_BOLD_API_KEY || 
-      "sXJLbfDixiYWVBlS3eOGNnxXuqbEWRhsVYvhZ_Ct9NM";
+      "sXJLbFDixiYWVBlS3eOGNnxXuqbEWRhsVYvhZ_Ct9NM";
 
-    const secretKey = 
+    const rawSecretKey = 
       process.env.BOLD_SECRET_KEY || 
       process.env.NEXT_PUBLIC_BOLD_SECRET_KEY || 
       "zbnVywe9C2jTSJBbhGRzuA";
+
+    const apiKey = String(rawApiKey).trim();
+    const secretKey = String(rawSecretKey).trim();
 
     if (!apiKey || !secretKey) {
       console.error('Error de configuración: Llaves de pasarela Bold no encontradas.');
