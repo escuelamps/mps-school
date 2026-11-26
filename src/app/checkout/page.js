@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Script from 'next/script';
+import HabeasDataConsent from '@/components/HabeasDataConsent';
 import { 
   ShieldCheck, 
   Lock, 
@@ -277,6 +278,7 @@ function CheckoutContent() {
   const [submitting, setSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [successOrder, setSuccessOrder] = useState(null);
+  const [habeasAccepted, setHabeasAccepted] = useState(false);
 
   // Cupón de descuento
   const [couponCode, setCouponCode] = useState('');
@@ -490,6 +492,7 @@ function CheckoutContent() {
       errors.emailConfirm = 'Los correos no coinciden';
     }
     if (!telefono.trim() || telefono.length < 7) errors.telefono = 'Ingresa un número de celular de contacto válido';
+    if (!habeasAccepted) errors.habeas = 'Debes aceptar los términos y condiciones de Habeas Data para continuar';
 
     // Validación de datos personales obligatorios
     if (Object.keys(errors).length > 0) {
@@ -506,6 +509,10 @@ function CheckoutContent() {
           email: email.trim().toLowerCase(),
           telefono: telefono.trim(),
           docId: docId.trim() || null
+        },
+        habeasData: {
+          aceptado: true,
+          fechaAceptacion: new Date().toISOString()
         },
         producto: {
           id: activeProgram.id,
@@ -1206,6 +1213,18 @@ function CheckoutContent() {
                 <div className="order-bump-price">
                   +{formatCOP(KIT_PRICE)}
                 </div>
+              </div>
+
+              {/* CONSENTIMIENTO DE HABEAS DATA Y TÉRMINOS */}
+              <div style={{ marginTop: '1.2rem', marginBottom: '0.8rem' }}>
+                <HabeasDataConsent 
+                  checked={habeasAccepted}
+                  onChange={(e) => {
+                    setHabeasAccepted(e.target.checked);
+                    if (formErrors.habeas) setFormErrors(prev => ({ ...prev, habeas: null }));
+                  }}
+                  hasError={!!formErrors.habeas}
+                />
               </div>
 
               {/* BOTÓN CTA PRINCIPAL - UBICADO ABAJO */}
