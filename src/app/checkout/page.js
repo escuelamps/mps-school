@@ -255,9 +255,8 @@ function CheckoutContent() {
   const [includeKit, setIncludeKit] = useState(false);
   const [includeMatricula, setIncludeMatricula] = useState(true);
 
-  // Método de pago: 'tarjeta' | 'pse' | 'nequi'
-  const [paymentSubtype, setPaymentSubtype] = useState('tarjeta'); // 'tarjeta' | 'pse'
-  const [showOtherMethods, setShowOtherMethods] = useState(false); // Desplegable Nequi / Bre-B
+  // Método de pago: 'nequi' (Bre-B) | 'pse' | 'tarjeta' (Bre-B prioritario arriba)
+  const [paymentSubtype, setPaymentSubtype] = useState('nequi');
 
   // Campos de Tarjeta de Crédito / Débito
   const [cardNumber, setCardNumber] = useState('');
@@ -482,7 +481,7 @@ function CheckoutContent() {
   const handleSubmit = async (e, forceMethod = null) => {
     if (e) e.preventDefault();
 
-    const activeMethod = forceMethod || (showOtherMethods ? 'nequi' : paymentSubtype);
+    const activeMethod = forceMethod || paymentSubtype;
 
     const errors = {};
     if (!nombre.trim()) errors.nombre = 'Ingresa tu nombre completo';
@@ -921,74 +920,184 @@ function CheckoutContent() {
                 strategy="afterInteractive" 
               />
 
-              {/* SUBOPCIONES: TARJETA VS PSE */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1.2rem' }}>
+              {/* SELECTOR DE MÉTODOS DE PAGO: BRE-B ARRIBA, PSE Y TARJETA ABAJO */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.2rem' }}>
+                
+                {/* 1. OPCIÓN BRE-B / NEQUI (ARRIBA - DESTACADA) */}
                 <button
                   type="button"
-                  onClick={() => { setPaymentSubtype('tarjeta'); setShowOtherMethods(false); }}
+                  onClick={() => setPaymentSubtype('nequi')}
                   style={{
-                    padding: '0.85rem 1rem',
-                    borderRadius: '10px',
-                    border: paymentSubtype === 'tarjeta' && !showOtherMethods ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
-                    background: paymentSubtype === 'tarjeta' && !showOtherMethods ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
-                    color: paymentSubtype === 'tarjeta' && !showOtherMethods ? 'var(--accent)' : 'var(--text-primary)',
+                    padding: '0.9rem 1.1rem',
+                    borderRadius: '12px',
+                    border: paymentSubtype === 'nequi' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                    background: paymentSubtype === 'nequi' ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                    color: paymentSubtype === 'nequi' ? 'var(--accent)' : 'var(--text-primary)',
                     fontWeight: 700,
-                    fontSize: '0.9rem',
+                    fontSize: '0.95rem',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'all 0.2s ease'
+                    justifyContent: 'space-between',
+                    transition: 'all 0.2s ease',
+                    boxShadow: paymentSubtype === 'nequi' ? '0 0 15px rgba(0, 222, 133, 0.15)' : 'none'
                   }}
                 >
-                  <CreditCard size={18} />
-                  <span>Tarjeta de Crédito / Débito</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <Smartphone size={20} color={paymentSubtype === 'nequi' ? 'var(--accent)' : 'var(--text-secondary)'} />
+                    <span>Transferencia Bre-B / Nequi (QR)</span>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', background: 'rgba(0, 222, 133, 0.18)', color: 'var(--accent)', padding: '0.2rem 0.55rem', borderRadius: '20px', fontWeight: 800 }}>
+                    ⚡ Sin Comisión • Inmediato
+                  </span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => { setPaymentSubtype('pse'); setShowOtherMethods(false); }}
-                  style={{
-                    padding: '0.85rem 1rem',
-                    borderRadius: '10px',
-                    border: paymentSubtype === 'pse' && !showOtherMethods ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
-                    background: paymentSubtype === 'pse' && !showOtherMethods ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
-                    color: paymentSubtype === 'pse' && !showOtherMethods ? 'var(--accent)' : 'var(--text-primary)',
-                    fontWeight: 700,
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <Building2 size={18} />
-                  <span>PSE (Débito Bancario)</span>
-                </button>
+                {/* 2. OPCIONES PSE Y TARJETA (ABAJO) */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentSubtype('pse')}
+                    style={{
+                      padding: '0.85rem 1rem',
+                      borderRadius: '12px',
+                      border: paymentSubtype === 'pse' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                      background: paymentSubtype === 'pse' ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                      color: paymentSubtype === 'pse' ? 'var(--accent)' : 'var(--text-primary)',
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <Building2 size={18} />
+                    <span>PSE (Débito Bancario)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentSubtype('tarjeta')}
+                    style={{
+                      padding: '0.85rem 1rem',
+                      borderRadius: '12px',
+                      border: paymentSubtype === 'tarjeta' ? '2px solid var(--accent)' : '1px solid var(--glass-border)',
+                      background: paymentSubtype === 'tarjeta' ? 'rgba(0, 222, 133, 0.12)' : 'var(--bg-primary)',
+                      color: paymentSubtype === 'tarjeta' ? 'var(--accent)' : 'var(--text-primary)',
+                      fontWeight: 700,
+                      fontSize: '0.9rem',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <CreditCard size={18} />
+                    <span>Tarjeta Crédito / Débito</span>
+                  </button>
+                </div>
               </div>
 
-              {/* INFORMACIÓN PAGO CON TARJETA VÍA BOLD */}
-              {paymentSubtype === 'tarjeta' && !showOtherMethods && (
-                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
-                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <Lock size={16} color="var(--accent)" /> Pago Seguro con Tarjeta Crédito o Débito
-                    </span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      Visa • Mastercard • Amex
-                    </span>
+              {/* CONTENIDO: TRANSFERENCIA BRE-B / NEQUI */}
+              {paymentSubtype === 'nequi' && (
+                <div className="nequi-payment-box" style={{ marginBottom: '1.2rem' }}>
+                  <div style={{ textAlign: 'center', marginBottom: '1.2rem' }}>
+                    <div style={{
+                      width: '180px',
+                      height: '180px',
+                      background: '#ffffff',
+                      padding: '10px',
+                      borderRadius: '14px',
+                      margin: '0 auto 0.8rem auto',
+                      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1.5px solid var(--accent)'
+                    }}>
+                      <img 
+                        src="/images/qr.png" 
+                        alt="Código QR Nequi y Bre-B MPS" 
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
+                      />
+                    </div>
+                    <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0 }}>
+                      Escanea desde tu app de <strong>Nequi</strong>, <strong>Bancolombia</strong> o cualquier entidad con Bre-B
+                    </p>
                   </div>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                    Al pulsar en <strong>Pagar Inscripción</strong>, se abrirá la pasarela oficial protegida de <strong>Bold</strong> para ingresar tu tarjeta de forma 100% segura con cifrado bancario de extremo a extremo y diferir tus cuotas.
-                  </p>
+
+                  <div className="nequi-key-row">
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Llave Oficial Bre-B
+                      </div>
+                      <div className="nequi-key-value">@MIPRIMERSOL</div>
+                    </div>
+                    <button 
+                      type="button" 
+                      className={`copy-pill-btn ${copiedKey ? 'copied' : ''}`}
+                      onClick={() => handleCopy('@MIPRIMERSOL', 'key')}
+                    >
+                      {copiedKey ? <Check size={14} /> : <Copy size={14} />}
+                      {copiedKey ? '¡Copiado!' : 'Copiar Llave'}
+                    </button>
+                  </div>
+
+                  <div className="nequi-key-row">
+                    <div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Línea Nequi Directa
+                      </div>
+                      <div className="nequi-key-value">302 355 77 60</div>
+                    </div>
+                    <button 
+                      type="button" 
+                      className={`copy-pill-btn ${copiedPhone ? 'copied' : ''}`}
+                      onClick={() => handleCopy('3023557760', 'phone')}
+                    >
+                      {copiedPhone ? <Check size={14} /> : <Copy size={14} />}
+                      {copiedPhone ? '¡Copiado!' : 'Copiar Celular'}
+                    </button>
+                  </div>
+
+                  {/* ADJUNTAR COMPROBANTE OPCIONAL */}
+                  <div style={{ marginTop: '1.2rem' }}>
+                    <label className="checkout-label">Adjuntar comprobante de pago (Opcional)</label>
+                    <div style={{
+                      border: '1.5px dashed var(--glass-border)',
+                      borderRadius: '10px',
+                      padding: '1rem',
+                      textAlign: 'center',
+                      background: 'var(--bg-primary)',
+                      cursor: 'pointer'
+                    }}>
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        id="comprobante-input"
+                        style={{ display: 'none' }}
+                        onChange={(e) => setComprobanteFile(e.target.files?.[0] || null)}
+                      />
+                      <label htmlFor="comprobante-input" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}>
+                        <FileCheck2 size={24} color="var(--accent)" />
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+                          {comprobanteFile ? comprobanteFile.name : 'Haz clic para subir tu foto o captura del comprobante'}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                          Formatos JPG, PNG o PDF
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {/* INFORMACIÓN PAGO PSE VÍA BOLD */}
-              {paymentSubtype === 'pse' && !showOtherMethods && (
+              {/* CONTENIDO: PSE VÍA BOLD */}
+              {paymentSubtype === 'pse' && (
                 <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
                     <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -999,26 +1108,45 @@ function CheckoutContent() {
                     </span>
                   </div>
                   <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-                    Al pulsar en <strong>Pagar Inscripción</strong>, seleccionarás tu entidad bancaria dentro de la pasarela oficial de <strong>Bold</strong> para autorizar el débito en línea de forma inmediata.
+                    Al pulsar en <strong>Pagar con PSE</strong> abajo, seleccionarás tu entidad bancaria dentro de la pasarela oficial protegida de <strong>Bold</strong> para autorizar el débito en línea de forma inmediata.
                   </p>
                 </div>
               )}
 
-              {/* SELLO DE SEGURIDAD BOLD */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.6rem', padding: '0.6rem 0.8rem', background: 'rgba(0, 222, 133, 0.05)', borderRadius: '8px', border: '1px solid rgba(0, 222, 133, 0.2)', marginBottom: '1.2rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                  <ShieldCheck size={16} color="var(--accent)" />
-                  <span>Tus pagos son procesados de forma segura con</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.1rem 0.45rem', borderRadius: '4px', background: '#ffffff', border: '1px solid #e2e8f0' }}>
-                    <span style={{ fontWeight: 900, fontSize: '0.95rem', color: '#111827', letterSpacing: '-0.5px' }}>
-                      bold<span style={{ color: '#ff2947' }}>.</span>
+              {/* CONTENIDO: TARJETA VÍA BOLD */}
+              {paymentSubtype === 'tarjeta' && (
+                <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '1.25rem', marginBottom: '1.2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Lock size={16} color="var(--accent)" /> Pago Seguro con Tarjeta Crédito o Débito
                     </span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                      Visa • Mastercard • Amex
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
+                    Al pulsar en <strong>Pagar con Tarjeta</strong> abajo, se abrirá la pasarela oficial protegida de <strong>Bold</strong> para ingresar tu tarjeta de forma 100% segura con cifrado bancario de extremo a extremo y diferir tus cuotas.
+                  </p>
+                </div>
+              )}
+
+              {/* SELLO DE SEGURIDAD BOLD (PARA PSE Y TARJETA) */}
+              {paymentSubtype !== 'nequi' && (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.6rem', padding: '0.6rem 0.8rem', background: 'rgba(0, 222, 133, 0.05)', borderRadius: '8px', border: '1px solid rgba(0, 222, 133, 0.2)', marginBottom: '1.2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    <ShieldCheck size={16} color="var(--accent)" />
+                    <span>Tus pagos son procesados de forma segura con</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0.1rem 0.45rem', borderRadius: '4px', background: '#ffffff', border: '1px solid #e2e8f0' }}>
+                      <span style={{ fontWeight: 900, fontSize: '0.95rem', color: '#111827', letterSpacing: '-0.5px' }}>
+                        bold<span style={{ color: '#ff2947' }}>.</span>
+                      </span>
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)' }}>
+                    ✓ Vigilado Superfinanciera
                   </span>
                 </div>
-                <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)' }}>
-                  ✓ Vigilado Superfinanciera
-                </span>
-              </div>
+              )}
 
               {/* SELECTOR MATRÍCULA INSTITUCIONAL ANUAL */}
               <div 
@@ -1080,158 +1208,22 @@ function CheckoutContent() {
                 </div>
               </div>
 
-              {/* BOTÓN CTA PRINCIPAL */}
-              {!showOtherMethods && (
-                <button 
-                  type="submit" 
-                  className="checkout-cta-btn"
-                  disabled={submitting}
-                >
-                  <Lock size={20} />
-                  {submitting 
-                    ? 'Procesando pago seguro...' 
-                    : `Pagar Inscripción ${formatCOP(totalPrice)} →`}
-                </button>
-              )}
-
-              {/* DESPLEGABLE: OTRAS FORMAS DE PAGO (NEQUI / BRE-B CON QR) */}
-              <div style={{ marginTop: '1.4rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1.2rem' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowOtherMethods(!showOtherMethods)}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    background: showOtherMethods ? 'rgba(0, 222, 133, 0.08)' : 'var(--bg-primary)',
-                    border: '1px solid var(--glass-border)',
-                    padding: '0.85rem 1rem',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    color: 'var(--text-primary)',
-                    fontSize: '0.88rem',
-                    fontWeight: 700,
-                    transition: 'all 0.2s ease'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <Smartphone size={18} color="var(--accent)" />
-                    <span>Otras formas de pago (Transferencia directa Nequi / Bre-B con QR)</span>
-                  </div>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {showOtherMethods ? '▲ Ocultar' : '▼ Desplegar'}
-                  </span>
-                </button>
-
-                {showOtherMethods && (
-                  <div style={{ marginTop: '1rem' }}>
-                    <div className="nequi-payment-box">
-                      
-                      {/* CÓDIGO QR OFICIAL DE /CENA */}
-                      <div style={{ textAlign: 'center', marginBottom: '1.2rem' }}>
-                        <div style={{
-                          width: '180px',
-                          height: '180px',
-                          background: '#ffffff',
-                          padding: '10px',
-                          borderRadius: '14px',
-                          margin: '0 auto 0.8rem auto',
-                          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: '1.5px solid var(--accent)'
-                        }}>
-                          <img 
-                            src="/images/qr.png" 
-                            alt="Código QR Nequi y Bre-B MPS" 
-                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
-                          />
-                        </div>
-                        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0 }}>
-                          Escanea desde tu app de <strong>Nequi</strong> o <strong>Bancolombia</strong> para transferir
-                        </p>
-                      </div>
-
-                      <div className="nequi-key-row">
-                        <div>
-                          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                            Llave Oficial Bre-B
-                          </div>
-                          <div className="nequi-key-value">@MIPRIMERSOL</div>
-                        </div>
-                        <button 
-                          type="button" 
-                          className={`copy-pill-btn ${copiedKey ? 'copied' : ''}`}
-                          onClick={() => handleCopy('@MIPRIMERSOL', 'key')}
-                        >
-                          {copiedKey ? <Check size={14} /> : <Copy size={14} />}
-                          {copiedKey ? '¡Copiado!' : 'Copiar Llave'}
-                        </button>
-                      </div>
-
-                      <div className="nequi-key-row">
-                        <div>
-                          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                            Línea Nequi Directa
-                          </div>
-                          <div className="nequi-key-value">302 355 77 60</div>
-                        </div>
-                        <button 
-                          type="button" 
-                          className={`copy-pill-btn ${copiedPhone ? 'copied' : ''}`}
-                          onClick={() => handleCopy('3023557760', 'phone')}
-                        >
-                          {copiedPhone ? <Check size={14} /> : <Copy size={14} />}
-                          {copiedPhone ? '¡Copiado!' : 'Copiar Celular'}
-                        </button>
-                      </div>
-
-                      {/* ADJUNTAR COMPROBANTE OPCIONAL */}
-                      <div style={{ marginTop: '1.2rem' }}>
-                        <label className="checkout-label">Adjuntar comprobante de pago (Opcional)</label>
-                        <div style={{
-                          border: '1.5px dashed var(--glass-border)',
-                          borderRadius: '10px',
-                          padding: '1rem',
-                          textAlign: 'center',
-                          background: 'var(--bg-primary)',
-                          cursor: 'pointer'
-                        }}>
-                          <input 
-                            type="file" 
-                            accept="image/*"
-                            id="comprobante-input"
-                            style={{ display: 'none' }}
-                            onChange={(e) => setComprobanteFile(e.target.files?.[0] || null)}
-                          />
-                          <label htmlFor="comprobante-input" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}>
-                            <FileCheck2 size={24} color="var(--accent)" />
-                            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>
-                              {comprobanteFile ? comprobanteFile.name : 'Haz clic para subir tu foto o captura del comprobante'}
-                            </span>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                              Formatos JPG, PNG o PDF
-                            </span>
-                          </label>
-                        </div>
-                      </div>
-
-                      <button 
-                        type="button" 
-                        onClick={(e) => handleSubmit(e, 'nequi')}
-                        className="checkout-cta-btn"
-                        disabled={submitting}
-                        style={{ marginTop: '1.2rem' }}
-                      >
-                        <Lock size={20} />
-                        {submitting ? 'Registrando...' : `Confirmar Transferencia ${formatCOP(totalPrice)} →`}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              {/* BOTÓN CTA PRINCIPAL - UBICADO ABAJO */}
+              <button 
+                type="submit" 
+                className="checkout-cta-btn"
+                disabled={submitting}
+                style={{ marginTop: '1.2rem', width: '100%' }}
+              >
+                <Lock size={20} />
+                {submitting 
+                  ? 'Procesando...' 
+                  : paymentSubtype === 'nequi'
+                    ? `Confirmar Pago por Bre-B / Nequi ${formatCOP(totalPrice)} →`
+                    : paymentSubtype === 'pse'
+                      ? `Pagar con PSE ${formatCOP(totalPrice)} →`
+                      : `Pagar con Tarjeta ${formatCOP(totalPrice)} →`}
+              </button>
 
               {/* SELLOS DE CONFIANZA Y GARANTÍA AL PAGAR */}
               <TrustBadges />
